@@ -6,24 +6,25 @@ namespace _Game.Core.DI
 {
     public class GameBootstrapper : MonoBehaviour
     {
-        [SerializeField] private SystemRunnerDriver runnerDriver;
+        [SerializeField] private GameInstaller gameInstallerPrefab;
+        [SerializeField] private SystemRunnerDriver runnerDriverPrefab;
 
         private void Awake()
         {
-            var container = new DIContainer();
 
             // Core Services
+            var container = new DIContainer();
             container.BindSingleton<IEventBus>(new EventBus());
             
+            //Gameplay
             var runner = new SystemRunner();
             container.BindSingleton<ISystemRunner>(runner);
+            var runnerDriver = Instantiate(runnerDriverPrefab);
             runnerDriver.Initialize(runner);
-
-            // Gameplay
-            // container.Bind<IExampleService, ExampleService>();
-
-            // Resolve and start
-            // var gameManager = container.Resolve<GameManager>();
+            
+            // Game Installer
+            var gameInstaller = Instantiate(gameInstallerPrefab);
+            gameInstaller.Initialize();
         }
     }
 }

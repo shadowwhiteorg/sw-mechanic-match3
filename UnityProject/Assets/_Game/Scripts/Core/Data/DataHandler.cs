@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using _Game.Systems.FinanceSystem;
 using UnityEngine;
 
-namespace _Game.Systems.Core.Data
+namespace _Game.Core.Data
 {
     public class DataHandler
     {
