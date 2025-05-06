@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _Game.Systems.Core.Data
+namespace _Game.Core.Data
 {
     [Serializable]
     public class ScoreEntry

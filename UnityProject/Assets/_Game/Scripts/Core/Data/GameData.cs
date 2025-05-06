@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using _Game.Systems.Core.Data;
 
-namespace _Game.Systems.FinanceSystem
+namespace _Game.Core.Data
 {
     [Serializable]
     public class GameData
