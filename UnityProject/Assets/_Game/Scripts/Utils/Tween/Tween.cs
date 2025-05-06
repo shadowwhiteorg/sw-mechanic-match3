@@ -27,6 +27,26 @@ namespace _Game.Utils
                 q => target.rotation = q,
                 target.rotation, to, duration, Easing.Get(ease), onComplete));
         }
+        
+        public static Coroutine Float(Action<float> setter, float from, float to, float duration, Ease ease = Ease.Linear, Action onComplete = null)
+        {
+            return CoroutineRunner.Instance.StartCoroutine(FloatRoutine(setter, from, to, duration, Easing.Get(ease), onComplete));
+        }
+
+        private static IEnumerator FloatRoutine(Action<float> setter, float from, float to, float duration, Func<float, float> ease, Action onComplete)
+        {
+            float time = 0f;
+            while (time < duration)
+            {
+                float t = ease(time / duration);
+                setter(Mathf.LerpUnclamped(from, to, t));
+                time += Time.deltaTime;
+                yield return null;
+            }
+            setter(to);
+            onComplete?.Invoke();
+        }
+
 
         private static IEnumerator TweenRoutine(Action<Vector3> setter, Vector3 from, Vector3 to, float duration, Func<float, float> ease, Action onComplete)
         {
