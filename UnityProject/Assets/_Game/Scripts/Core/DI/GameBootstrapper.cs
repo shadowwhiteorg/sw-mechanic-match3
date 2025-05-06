@@ -1,5 +1,10 @@
 ﻿using _Game.Core.Events;
 using _Game.Interfaces;
+using _Game.Scripts.Interfaces;
+using _Game.Systems;
+using _Game.Systems.GridSystem;
+using _Game.Systems.MatchSystem;
+using _Game.Utils;
 using UnityEngine;
 
 namespace _Game.Core.DI
@@ -14,7 +19,12 @@ namespace _Game.Core.DI
 
             // Core Services
             var container = new DIContainer();
-            container.BindSingleton<IEventBus>(new EventBus());
+            
+            var eventBus = new EventBus();
+            container.BindSingleton<IEventBus>(eventBus);
+            
+            var gameInstaller = Instantiate(gameInstallerPrefab);
+            gameInstaller.Initialize(container);
             
             //Gameplay
             var runner = new SystemRunner();
@@ -22,9 +32,14 @@ namespace _Game.Core.DI
             var runnerDriver = Instantiate(runnerDriverPrefab);
             runnerDriver.Initialize(runner);
             
-            // Game Installer
-            var gameInstaller = Instantiate(gameInstallerPrefab);
-            gameInstaller.Initialize();
+            var inputSystem = new InputSystem(Camera.main, container.Resolve<GridWorldHelper>(), container.Resolve<IEventBus>());
+            container.BindSingleton<IUpdatableSystem>(inputSystem);
+            runner.Register(inputSystem);
+            
+            var matchSys = new MatchSystem(container.Resolve<IGridHandler>(), eventBus);
+            container.BindSingleton(matchSys);
+            
+            
         }
     }
 }
