@@ -1,4 +1,4 @@
-﻿namespace _Game.Scripts.Interfaces
+﻿namespace _Game.Interfaces
 {
     public interface IUpdatableSystem
     {

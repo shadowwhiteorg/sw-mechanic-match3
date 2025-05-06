@@ -6,8 +6,8 @@ namespace _Game.Core.DI
 {
     public class GameBootstrapper : MonoBehaviour
     {
-        [SerializeField] private GameInstaller gameInstaller;
-        [SerializeField] private SystemRunnerDriver runnerDriver;
+        [SerializeField] private GameInstaller gameInstallerPrefab;
+        [SerializeField] private SystemRunnerDriver runnerDriverPrefab;
 
         private void Awake()
         {
@@ -18,10 +18,12 @@ namespace _Game.Core.DI
             
             //Gameplay
             var runner = new SystemRunner();
-            
             container.BindSingleton<ISystemRunner>(runner);
+            var runnerDriver = Instantiate(runnerDriverPrefab);
             runnerDriver.Initialize(runner);
             
+            // Game Installer
+            var gameInstaller = Instantiate(gameInstallerPrefab);
             gameInstaller.Initialize();
         }
     }

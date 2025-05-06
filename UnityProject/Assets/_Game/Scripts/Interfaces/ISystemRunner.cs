@@ -1,4 +1,4 @@
-﻿using _Game.Scripts.Interfaces;
+﻿using _Game.Interfaces;
 
 namespace _Game.Core
 {
