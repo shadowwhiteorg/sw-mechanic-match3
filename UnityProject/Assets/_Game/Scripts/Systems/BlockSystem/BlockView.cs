@@ -20,5 +20,10 @@ namespace _Game.Systems.BlockSystem
         {
             transform.position = worldPosition;
         }
+        
+        private Vector3 GetWorldPosition()
+        {
+            return transform.position;
+        }
     }
 }

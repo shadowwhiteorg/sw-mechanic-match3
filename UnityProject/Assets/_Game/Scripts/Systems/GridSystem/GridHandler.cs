@@ -1,15 +1,16 @@
-﻿using _Game.Systems.BlockSystem;
+﻿using _Game.Scripts.Interfaces;
+using _Game.Systems.BlockSystem;
 
 namespace _Game.Systems.GridSystem
 {
-    public class GridSystem
+    public class GridHandler : IGridHandler
     {
         private readonly BlockModel[,] _blocks;
 
         public int Rows    { get; }
         public int Columns { get; }
 
-        public GridSystem(int rows, int columns)
+        public GridHandler(int rows, int columns)
         {
             Rows    = rows;
             Columns = columns;

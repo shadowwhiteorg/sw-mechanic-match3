@@ -6,11 +6,11 @@ namespace _Game.Systems.GridSystem
 {
     public class GridInitializer
     {
-        private readonly GridSystem   _grid;
+        private readonly GridHandler   _grid;
         private readonly BlockFactory _factory;
         private readonly GridConfig   _config;
 
-        public GridInitializer(GridSystem grid, BlockFactory factory, GridConfig config)
+        public GridInitializer(GridHandler grid, BlockFactory factory, GridConfig config)
         {
             _grid    = grid;
             _factory = factory;
