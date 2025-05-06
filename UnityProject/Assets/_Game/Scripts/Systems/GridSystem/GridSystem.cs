@@ -1,4 +1,6 @@
-﻿namespace _Game.Systems.GridSystem
+﻿using _Game.Systems.BlockSystem;
+
+namespace _Game.Systems.GridSystem
 {
     public class GridSystem
     {
