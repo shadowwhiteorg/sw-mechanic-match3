@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace _Game.Systems.GridSystem
 {
-    // 1) Fired when player taps/clicks a block
     public struct BlockSelectedEvent : IGameEvent
     {
         public int Row { get; }
@@ -14,21 +13,20 @@ namespace _Game.Systems.GridSystem
         public BlockSelectedEvent(int row, int col)
         { 
             (Row, Col) = (row, col);
+            // Debug.Log($"BlockSelectedEvent: Row:{Row} Col:{Col}");
         }
     }
 
-    // 2) Fired when a match group of size>=2 is found
     public struct MatchFoundEvent : IGameEvent
     {
         public IReadOnlyList<BlockModel> Blocks { get; }
         public MatchFoundEvent(IReadOnlyList<BlockModel> blocks)
         { 
             Blocks = blocks;
-            Debug.Log($"MatchFoundEvent: Blocks:{Blocks.Count}");
+            // Debug.Log($"MatchFoundEvent: Blocks:{Blocks.Count}");
         }
     }
 
-    // 3) Fired when no valid match (group size<2)
     public struct NoMatchFoundEvent : IGameEvent
     {
         public int Row { get; }

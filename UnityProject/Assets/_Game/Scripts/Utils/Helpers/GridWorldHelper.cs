@@ -21,8 +21,8 @@ namespace _Game.Utils
 
         public Vector3 GetWorldPosition(int row, int col)
         {
-            float x = _origin.x + col * _config.BlockSize;
-            float y = _origin.y - row * _config.BlockSize;
+            float x = _origin.x + col * _config.BlockSize + _config.BlockSize * 0.5f;
+            float y = _origin.y - row * _config.BlockSize - _config.BlockSize * 0.5f;
             return new Vector3(x, y, _origin.z);
         }
 

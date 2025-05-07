@@ -24,7 +24,7 @@ namespace _Game.Core.DI
             container.BindSingleton<IEventBus>(eventBus);
             
             var gameInstaller = Instantiate(gameInstallerPrefab);
-            gameInstaller.Initialize(container);
+            gameInstaller.Initialize(container, eventBus);
             
             //Gameplay
             var runner = new SystemRunner();
