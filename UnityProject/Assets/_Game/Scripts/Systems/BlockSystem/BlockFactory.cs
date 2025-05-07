@@ -1,34 +1,45 @@
-﻿using UnityEngine;
+﻿// Systems/GridSystem/BlockFactory.cs
+using UnityEngine;
+using _Game.Data;
 using _Game.Enums;
+using _Game.Systems.BlockSystem;
+using _Game.Utils;
 
-namespace _Game.Systems.BlockSystem
+namespace _Game.Systems.GridSystem
 {
-    /// <summary>
-    /// Responsible for instantiating blocks of the correct type/color in the scene.
-    /// </summary>
     public class BlockFactory
     {
         private readonly BlockTypeConfig _typeConfig;
-        private readonly GameObject      _blockPrefab;
-        private readonly Transform       _parent;
+        private readonly ObjectPool<BlockView> _viewPool;
+        private readonly Transform _parent;
 
-        public BlockFactory(BlockTypeConfig typeConfig, GameObject blockPrefab, Transform parent)
+        public BlockFactory(
+            BlockTypeConfig typeConfig,
+            BlockView viewPrefab,
+            Transform parent,
+            int initialSize = 100)
         {
-            _typeConfig  = typeConfig;
-            _blockPrefab = blockPrefab;
+            _typeConfig = typeConfig;
             _parent      = parent;
+            _viewPool    = new ObjectPool<BlockView>(viewPrefab, initialSize, parent);
         }
 
-        /// <summary>Creates a block of a specific type at the given grid coords.</summary>
-        public BlockModel CreateBlock(BlockType type, int row, int column, Vector3 worldPosition)
+        public BlockModel CreateBlock(BlockType type, int row, int col, Vector3 worldPos)
         {
-            var go   = Object.Instantiate(_blockPrefab, worldPosition, Quaternion.identity, _parent);
-            var view = go.GetComponent<BlockView>();
+            var view = _viewPool.Get();
+            view.transform.SetParent(_parent, false);
             view.SetSprite(_typeConfig.GetSprite(type));
-            return new BlockModel(type, row, column, view);
+            view.SetPosition(worldPos);
+            view.gameObject.SetActive(true);
+            return new BlockModel(type, row, col, view);
         }
 
-        /// <summary>Creates a random‐type block.</summary>
+        public void RecycleBlock(BlockModel block)
+        {
+            block.View.gameObject.SetActive(false);
+            _viewPool.Return(block.View);
+        }
+        
         public BlockModel CreateRandomBlock(int row, int column, Vector3 worldPosition)
         {
             var values     = System.Enum.GetValues(typeof(BlockType));

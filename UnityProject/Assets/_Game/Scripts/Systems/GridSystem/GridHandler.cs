@@ -20,6 +20,7 @@ namespace _Game.Systems.GridSystem
         public void SetBlock(int row, int column, BlockModel block)
         {
             _blocks[row, column] = block;
+            if(block == null) return;
             block.SetGridPosition(row, column);
         }
 

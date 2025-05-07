@@ -16,10 +16,6 @@ namespace _Game.Systems.GridSystem
             _factory = factory;
             _config  = config;
         }
-
-        /// <summary>
-        /// Fills every cell with a randomly‐typed block.
-        /// </summary>
         public void InitializeGrid()
         {
             for (int r = 0; r < _config.Rows; r++)
