@@ -8,6 +8,7 @@ namespace _Game.Utils
     {
         private readonly GridConfig _config;
         private readonly Vector3 _origin; // bottom-left of grid in world space
+        public GridConfig GridConfig => _config;
 
         public GridWorldHelper(GridConfig config, Vector3 origin)
         {

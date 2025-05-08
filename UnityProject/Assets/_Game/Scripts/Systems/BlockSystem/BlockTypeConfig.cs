@@ -1,34 +1,44 @@
 ﻿using System;
-using _Game.Enums;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using _Game.Systems.GridSystem;
+using _Game.Enums;
+using _Game.Interfaces;
+using _Game.Systems.BehaviorSystem;
+using UnityEngine.EventSystems;
 
 namespace _Game.Systems.BlockSystem
 {
-    /// <summary>
-    /// Maps each BlockType to its Sprite.
-    /// </summary>
-    [CreateAssetMenu(menuName = "Configs/BlockTypeConfig", fileName = "BlockTypeConfig")]
+    [CreateAssetMenu(menuName="Game/Block Color Config", fileName="BlockTypeConfig")]
     public class BlockTypeConfig : ScriptableObject
     {
-        [Serializable]
-        public struct Entry
+        public BlockConfigEntry[] Entries;
+
+        private Dictionary<(BlockColor,BlockType),BlockConfigEntry> _map;
+        public void BuildLookup()
         {
-            public BlockType Type;
-            public Sprite Sprite;
+            _map = Entries
+                .ToDictionary(e => (BaseType: e.baseColor,SpecialType: e.type), e => e);
         }
 
-        [SerializeField] private Entry[] _entries;
-
-        /// <summary>Fetches the sprite for the given block type.</summary>
-        public Sprite GetSprite(BlockType type)
+        public BlockConfigEntry Get(BlockColor color, BlockType special)
         {
-            foreach (var e in _entries)
-                if (e.Type == type)
-                    return e.Sprite;
-
-            Debug.LogWarning($"[BlockTypeConfig] No sprite for {type}");
-            return null;
+            if (_map == null) BuildLookup();
+            if (_map.TryGetValue((color,special), out var e)) return e;
+            // fallback to plain
+            return _map[(color, BlockType.None)];
         }
     }
+
+    
+    
+    [Serializable]
+    public struct BlockConfigEntry
+    {
+        public BlockColor         baseColor;
+        public BlockType  type;
+        public Sprite            Sprite;
+        public IBlockBehavior[]  Behaviors;
+    }
+
 }

@@ -1,6 +1,6 @@
 ﻿using _Game.Systems.BlockSystem;
 
-namespace _Game.Scripts.Interfaces
+namespace _Game.Interfaces
 {
     public interface IGridHandler
     {
@@ -9,6 +9,7 @@ namespace _Game.Scripts.Interfaces
         void SetBlock(int row, int column, BlockModel block);
         BlockModel GetBlock(int row, int column);
         bool IsInside(int row, int column);
+        public bool TryGet(int row, int col, out BlockModel block);
 
     }
 }

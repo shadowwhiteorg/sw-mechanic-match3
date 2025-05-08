@@ -4,7 +4,7 @@ using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
 using UnityEngine;
 
-namespace _Game.Systems.GridSystem
+namespace _Game.Core.Events
 {
     public struct BlockSelectedEvent : IGameEvent
     {
@@ -19,11 +19,14 @@ namespace _Game.Systems.GridSystem
 
     public struct MatchFoundEvent : IGameEvent
     {
-        public IReadOnlyList<BlockModel> Blocks { get; }
-        public MatchFoundEvent(IReadOnlyList<BlockModel> blocks)
-        { 
+        public List<BlockModel> Blocks { get; }
+        public Vector2Int TouchOrigin { get; }
+
+        public MatchFoundEvent(List<BlockModel> blocks, int row, int col)
+        {
             Blocks = blocks;
-            // Debug.Log($"MatchFoundEvent: Blocks:{Blocks.Count}");
+            TouchOrigin = new Vector2Int(row, col);
+            Debug.Log($"MatchFoundEvent: Row:{row} Col:{col} Count:{blocks.Count}");
         }
     }
 
@@ -32,5 +35,11 @@ namespace _Game.Systems.GridSystem
         public int Row { get; }
         public int Col { get; }
         public NoMatchFoundEvent(int row, int col) => (Row, Col) = (row, col);
+    }
+    
+    public struct BlocksSettledEvent : IGameEvent
+    {
+        public IReadOnlyList<BlockModel> Blocks { get; }
+        public BlocksSettledEvent(IReadOnlyList<BlockModel> blocks) => Blocks = blocks;
     }
 }

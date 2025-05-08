@@ -1,42 +1,56 @@
-﻿using System.Collections.Generic;
-using _Game.Interfaces;
-using _Game.Systems.GridSystem;
+﻿// Systems/MatchSystem/ClearSystem.cs
+using System.Collections.Generic;
+using System.Linq;
 using _Game.Core.Events;
-using _Game.Scripts.Core.Events;
+using _Game.Enums;
+using _Game.Interfaces;
+using _Game.Systems.BlockSystem;
+using _Game.Systems.GridSystem;
 
-namespace _Game.Systems
+namespace _Game.Systems.MatchSystem
 {
     public class ClearSystem
     {
-        private readonly GridHandler _grid;
-        private readonly BlockFactory _factory;
-        private readonly IEventBus _eventBus;
+        private readonly IGridHandler _grid;
+        private readonly IBlockFactory _factory;
+        private readonly IEventBus _events;
+        private readonly List<(int, int)> _buffer = new();
 
-        public ClearSystem(
-            GridHandler grid,
-            BlockFactory factory,
-            IEventBus eventBus)
+        public ClearSystem(IGridHandler grid, IBlockFactory factory, IEventBus events)
         {
-            _grid      = grid;
-            _factory   = factory;
-            _eventBus  = eventBus;
-            _eventBus.Subscribe<MatchFoundEvent>(OnMatchFound);
+            _grid = grid;
+            _factory = factory;
+            _events = events;
+
+            _events.Subscribe<MatchFoundEvent>(OnMatch);
+            _events.Subscribe<ClearBlockEvent>(OnClear);
         }
 
-        private void OnMatchFound(MatchFoundEvent e)
+        private void OnMatch(MatchFoundEvent e)
         {
-            var cleared = new List<(int row,int col)>();
-
-            // recycle each matched block
-            foreach (var blk in e.Blocks)
+            foreach (var block in e.Blocks)
             {
-                cleared.Add((blk.Row, blk.Column));
-                _grid.SetBlock(blk.Row, blk.Column, null);
-                _factory.RecycleBlock(blk);
+                block.Matched();
+                _events.Fire(new ClearBlockEvent(block));
+            }
+        }
+
+        private void OnClear(ClearBlockEvent e)
+        {
+            var b = e.Block;
+            if (_grid.TryGet(b.Row, b.Column, out var live) && live == b)
+            {
+                _grid.SetBlock(b.Row, b.Column, null);
+                _factory.RecycleBlock(b);
+                _buffer.Add((b.Row, b.Column));
+                b.Cleared();
             }
 
-            // notify FallSystem
-            _eventBus.Fire(new BlocksClearedEvent(cleared));
+            if (_buffer.Count > 0)
+            {
+                _events.Fire(new BlocksClearedEvent(_buffer));
+                _buffer.Clear();
+            }
         }
     }
 }

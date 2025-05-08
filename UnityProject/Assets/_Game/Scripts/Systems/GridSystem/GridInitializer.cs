@@ -1,6 +1,4 @@
-﻿using _Game.Core.Data;
-using _Game.Systems.BlockSystem;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace _Game.Systems.GridSystem
 {
@@ -23,7 +21,7 @@ namespace _Game.Systems.GridSystem
                 for (int c = 0; c < _config.Columns; c++)
                 {
                     Vector3 pos = _config.GetWorldPosition(r, c);
-                    var block   = _factory.CreateRandomBlock(r, c, pos);
+                    var block   = _factory.CreateRandomBlock(r, c);
                     block.View.SetPosition(pos);
                     _grid.SetBlock(r, c, block);
                 }

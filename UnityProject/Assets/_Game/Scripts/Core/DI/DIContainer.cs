@@ -19,7 +19,7 @@ namespace _Game.Core.DI
             if (_transients.TryGetValue(typeof(T), out var implType)) 
                 return (T)Activator.CreateInstance(implType);
 
-            throw new Exception($"Type {typeof(T)} not registered.");
+            throw new Exception($"Color {typeof(T)} not registered.");
         }
     }
 }

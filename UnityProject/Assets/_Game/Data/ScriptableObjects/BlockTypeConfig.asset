@@ -12,14 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 842c7d7f3700433b95d876ad41150967, type: 3}
   m_Name: BlockTypeConfig
   m_EditorClassIdentifier: 
-  _entries:
-  - Type: 0
+  Entries:
+  - baseColor: 1
+    type: 0
     Sprite: {fileID: 21300000, guid: d5b09588fd691c84996dae5530352677, type: 3}
-  - Type: 1
+  - baseColor: 2
+    type: 0
     Sprite: {fileID: 21300000, guid: c1c17b78009e79e4b8ec2caf4b1b58ab, type: 3}
-  - Type: 2
+  - baseColor: 3
+    type: 0
     Sprite: {fileID: 21300000, guid: ffe2c53df84c81d44a850681eeab98f3, type: 3}
-  - Type: 3
+  - baseColor: 4
+    type: 0
     Sprite: {fileID: 21300000, guid: 50a47cb0fd099ad499ad9ab6df7a87fe, type: 3}
-  - Type: 4
+  - baseColor: 5
+    type: 0
     Sprite: {fileID: 21300000, guid: 27d8108c470016148922eea5bbe49c9c, type: 3}
+  - baseColor: 0
+    type: 1
+    Sprite: {fileID: 21300000, guid: 0bd99b7029db57b4ea4dd46c616cb027, type: 3}
+  - baseColor: 0
+    type: 2
+    Sprite: {fileID: 21300000, guid: 3b5e733024c05194ebd25dfa0f97f423, type: 3}
+  - baseColor: 0
+    type: 3
+    Sprite: {fileID: 21300000, guid: 51a517f0d915ffd4cb481615444972b6, type: 3}

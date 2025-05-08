@@ -1,50 +1,79 @@
-﻿// Systems/GridSystem/BlockFactory.cs
+﻿// === BlockFactory.cs ===
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using _Game.Data;
 using _Game.Enums;
+using _Game.Interfaces;
+using _Game.Systems.BehaviorSystem;
 using _Game.Systems.BlockSystem;
 using _Game.Utils;
 
 namespace _Game.Systems.GridSystem
 {
-    public class BlockFactory
+    public class BlockFactory : IBlockFactory
     {
-        private readonly BlockTypeConfig _typeConfig;
+        private readonly IGridHandler _grid;
+        private readonly GridWorldHelper _helper;
+        private readonly IEventBus _events;
         private readonly ObjectPool<BlockView> _viewPool;
+        private readonly BlockTypeConfig _config;
         private readonly Transform _parent;
+        private readonly BehaviorRegistry _registry;
+        private readonly System.Random _rng = new();
 
         public BlockFactory(
-            BlockTypeConfig typeConfig,
+            BlockTypeConfig config,
             BlockView viewPrefab,
             Transform parent,
-            int initialSize = 100)
+            GridWorldHelper helper,
+            IGridHandler grid,
+            IEventBus events,
+            BehaviorRegistry registry,
+            int initialPoolSize = 100)
         {
-            _typeConfig = typeConfig;
-            _parent      = parent;
-            _viewPool    = new ObjectPool<BlockView>(viewPrefab, initialSize, parent);
+            _config = config;
+            _parent = parent;
+            _helper = helper;
+            _grid = grid;
+            _events = events;
+            _registry = registry;
+            _viewPool = new ObjectPool<BlockView>(viewPrefab, initialPoolSize, parent);
         }
 
-        public BlockModel CreateBlock(BlockType type, int row, int col, Vector3 worldPos)
+        public BlockModel CreateBlock(BlockColor color, BlockType type, int row, int col)
         {
+            var entry = _config.Get(color, type);
             var view = _viewPool.Get();
             view.transform.SetParent(_parent, false);
-            view.SetSprite(_typeConfig.GetSprite(type));
-            view.SetPosition(worldPos);
-            view.gameObject.SetActive(true);
-            return new BlockModel(type, row, col, view);
+            view.transform.position = _helper.GetWorldPosition(row, col);
+            view.SetSprite(entry.Sprite);
+
+            var behaviors = new List<IBlockBehavior>();
+            foreach (var asset in _registry.GetBehaviorsFor(type))
+            {
+                asset.Initialize(_grid, this, _helper, _events);
+                behaviors.Add(asset);
+            }
+
+            var model = new BlockModel(color, type, row, col, view, behaviors);
+            _grid.SetBlock(row, col, model);
+            return model;
         }
 
-        public void RecycleBlock(BlockModel block)
+        public BlockModel CreateRandomBlock(int row, int col)
         {
-            block.View.gameObject.SetActive(false);
-            _viewPool.Return(block.View);
+            var color = Enum.GetValues(typeof(BlockColor)).Cast<BlockColor>().OrderBy(_ => _rng.Next()).First();
+            var type = BlockType.None;
+            if (color == BlockColor.None) color = BlockColor.Red;
+            return CreateBlock(color, type, row, col);
         }
-        
-        public BlockModel CreateRandomBlock(int row, int column, Vector3 worldPosition)
+
+        public void RecycleBlock(BlockModel model)
         {
-            var values     = System.Enum.GetValues(typeof(BlockType));
-            var randomType = (BlockType)values.GetValue(Random.Range(0, values.Length));
-            return CreateBlock(randomType, row, column, worldPosition);
+            _grid.SetBlock(model.Row, model.Column, null);
+            model.View.gameObject.SetActive(false);
+            _viewPool.Return(model.View);
         }
     }
 }

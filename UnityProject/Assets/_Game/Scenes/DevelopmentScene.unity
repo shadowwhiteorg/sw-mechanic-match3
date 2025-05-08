@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5970864269344206b0d2e288ff1245ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameInstallerPrefab: {fileID: 5774716335844981443, guid: 83675890fc0079a4f9207a24c354691d, type: 3}
+  installerPrefab: {fileID: 5774716335844981443, guid: 83675890fc0079a4f9207a24c354691d, type: 3}
   runnerDriverPrefab: {fileID: 2367913890814723972, guid: 714905656f3fe814eaf509ec1beecd4f, type: 3}
 --- !u!4 &244490711
 Transform:
@@ -314,8 +314,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

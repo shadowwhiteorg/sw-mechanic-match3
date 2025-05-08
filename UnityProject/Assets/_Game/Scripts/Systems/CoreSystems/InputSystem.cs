@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using _Game.Systems.GridSystem;
+﻿using _Game.Core.Events;
+using UnityEngine;
 using _Game.Interfaces;
 using _Game.Utils;
 
-namespace _Game.Systems
+namespace _Game.Systems.CoreSystems
 {
     public class InputSystem : IUpdatableSystem
     {

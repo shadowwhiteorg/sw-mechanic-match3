@@ -52,7 +52,7 @@ namespace Project.Editor.Diagnostics
             }
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Search Component Type", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Search Component Color", EditorStyles.boldLabel);
             componentSearchQuery = EditorGUILayout.TextField("Search", componentSearchQuery);
 
             filteredComponentTypes = allComponentTypes
@@ -129,7 +129,7 @@ namespace Project.Editor.Diagnostics
 
             if (type == null || !typeof(Component).IsAssignableFrom(type))
             {
-                Debug.LogError($"'{fullTypeName}' is not a valid Component type.");
+                Debug.LogError($"'{fullTypeName}' is not a valid Component Color.");
                 return;
             }
 

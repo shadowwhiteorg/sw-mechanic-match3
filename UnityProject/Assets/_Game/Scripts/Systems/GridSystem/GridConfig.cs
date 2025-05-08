@@ -8,6 +8,7 @@ namespace _Game.Systems.GridSystem
         [Min(1)] public int Rows = 8;
         [Min(1)] public int Columns = 8;
         [Min(0.1f)] public float BlockSize = 1f;
+        [Min(2)]public int MatchThreshold;
         
         public Vector3 GetWorldPosition(int row, int column)
         {

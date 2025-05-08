@@ -1,6 +1,6 @@
 ﻿using _Game.Interfaces;
 
-namespace _Game.Core
+namespace _Game.Interfaces
 {
     public interface ISystemRunner
     {
