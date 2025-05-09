@@ -20,5 +20,7 @@ namespace _Game.Interfaces
         void OnCleared(BlockModel block);
         void OnFell(BlockModel block);
         void OnTurnStart(BlockModel block);
+        void OnTurnEnd();
+        bool CanClear(BlockModel block);
     }
 }

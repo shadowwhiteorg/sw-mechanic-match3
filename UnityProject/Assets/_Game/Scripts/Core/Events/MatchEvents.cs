@@ -26,7 +26,7 @@ namespace _Game.Core.Events
         {
             Blocks = blocks;
             TouchOrigin = new Vector2Int(row, col);
-            Debug.Log($"MatchFoundEvent: Row:{row} Col:{col} Count:{blocks.Count}");
+            // Debug.Log($"MatchFoundEvent: Row:{row} Col:{col} Count:{blocks.Count}");
         }
     }
 

@@ -7,6 +7,7 @@ using _Game.Enums;
 using _Game.Interfaces;
 using _Game.Systems.BehaviorSystem;
 using _Game.Systems.BlockSystem;
+using _Game.Systems.MatchSystem;
 using _Game.Utils;
 
 namespace _Game.Systems.GridSystem
@@ -21,6 +22,7 @@ namespace _Game.Systems.GridSystem
         private readonly Transform _parent;
         private readonly BehaviorRegistry _registry;
         private readonly System.Random _rng = new();
+        private ClearSystem _clearSystem;
 
         public BlockFactory(
             BlockTypeConfig config,
@@ -56,7 +58,7 @@ namespace _Game.Systems.GridSystem
                 behaviors.Add(asset);
             }
 
-            var model = new BlockModel(color, type, row, col, view, behaviors);
+            var model = new BlockModel(color, type, row, col, view, behaviors, _clearSystem);
             _grid.SetBlock(row, col, model);
             return model;
         }
@@ -66,7 +68,7 @@ namespace _Game.Systems.GridSystem
             var color = Enum.GetValues(typeof(BlockColor)).Cast<BlockColor>().OrderBy(_ => _rng.Next()).First();
             var type = BlockType.None;
             // if (color == BlockColor.None) color = BlockColor.Red;
-            if (color == BlockColor.None) type = BlockType.Bomb;
+            if (color == BlockColor.None) type = BlockType.Duck;
             return CreateBlock(color, type, row, col);
         }
 
@@ -75,6 +77,11 @@ namespace _Game.Systems.GridSystem
             _grid.SetBlock(model.Row, model.Column, null);
             model.View.gameObject.SetActive(false);
             _viewPool.Return(model.View);
+        }
+
+        public void RegisterClearSystem(ClearSystem system)
+        {
+            _clearSystem = system;
         }
     }
 }

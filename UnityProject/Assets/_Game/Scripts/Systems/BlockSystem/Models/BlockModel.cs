@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _Game.Enums;
 using _Game.Interfaces;
+using _Game.Systems.MatchSystem;
 
 namespace _Game.Systems.BlockSystem
 {
@@ -14,12 +15,20 @@ namespace _Game.Systems.BlockSystem
         public BlockView View { get; }
 
         private readonly List<IBlockBehavior> _behaviors;
+        private ClearSystem _clearSystem;
         private bool _isClearing = false;
         private bool _isSettled = false;
+        private bool _canClear = true;
+        public bool CanClear
+        {
+            get => _canClear;
+            set => _canClear = value;
+        }
         public bool IsSettled => _isSettled;
+        public ClearSystem ClearSystem => _clearSystem;
         
 
-        public BlockModel(BlockColor color, BlockType type, int row, int col, BlockView view, IEnumerable<IBlockBehavior> behaviors)
+        public BlockModel(BlockColor color, BlockType type, int row, int col, BlockView view, IEnumerable<IBlockBehavior> behaviors, ClearSystem clearSystem)
         {
             Color = color;
             Type = type;
@@ -27,6 +36,7 @@ namespace _Game.Systems.BlockSystem
             Column = col;
             View = view;
             _behaviors = new List<IBlockBehavior>(behaviors);
+            _clearSystem = clearSystem;
 
             foreach (var b in _behaviors)
                 b.OnPlaced(this);
@@ -63,6 +73,10 @@ namespace _Game.Systems.BlockSystem
         public void TurnStart()
         {
             foreach (var b in _behaviors) b.OnTurnStart(this);
+        }
+        public void TurnEnd()
+        {
+            foreach (var b in _behaviors) b.OnTurnEnd();
         }
         
         public void Settle( bool isSettled)

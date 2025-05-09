@@ -58,6 +58,11 @@ namespace _Game.Systems.MatchSystem
             if (!_grid.TryGet(blk.Row, blk.Column, out var live) || live != blk)
                 return;
 
+            RemoveFromGrid(blk);
+        }
+
+        public void RemoveFromGrid(BlockModel blk)
+        {
             // 1) remove from grid
             _grid.SetBlock(blk.Row, blk.Column, null);
             // 2) recycle its view

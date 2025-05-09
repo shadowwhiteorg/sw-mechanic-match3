@@ -121,7 +121,7 @@ namespace _Game.Systems.MatchSystem
                 .ToList();
 
             int toSpawn = emptyRows.Count;
-            Debug.Log($"[Fall] Column {col} → empties: {string.Join(",", emptyRows)} → toSpawn={toSpawn}");
+            // Debug.Log($"[Fall] Column {col} → empties: {string.Join(",", emptyRows)} → toSpawn={toSpawn}");
             if (toSpawn == 0) return;
 
             // spawn one per empty slot
@@ -162,8 +162,9 @@ namespace _Game.Systems.MatchSystem
 
         private void TryFireSettledEvent()
         {
+            Debug.Log($"[Fall] Active animations: {_activeAnimations}");
             if (_activeAnimations <= 0)
-                _events.Fire(new BlocksSettledEvent());
+                _events.Fire(new TurnEndedEvent());
         }
     }
 }

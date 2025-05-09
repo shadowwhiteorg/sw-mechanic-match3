@@ -2,9 +2,15 @@
 
 namespace _Game.Core.Events
 {
-    public class GameStartedEvent : IGameEvent
+    public struct GameStartedEvent : IGameEvent
     {
         public string Message { get; }
         public GameStartedEvent(string message) => Message = message;
+    }
+    public struct TurnStartedEvent : IGameEvent
+    {
+    }
+    public struct TurnEndedEvent : IGameEvent
+    {
     }
 }

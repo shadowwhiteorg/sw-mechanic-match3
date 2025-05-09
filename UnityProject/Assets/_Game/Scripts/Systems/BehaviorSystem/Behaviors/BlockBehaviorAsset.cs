@@ -1,9 +1,6 @@
-﻿// --- BlockBehaviorAsset.cs ---
-
-using _Game.Enums;
+﻿using _Game.Enums;
 using UnityEngine;
 using _Game.Interfaces;
-using _Game.Systems.GridSystem;
 using _Game.Systems.BlockSystem;
 using _Game.Utils;
 
@@ -36,5 +33,10 @@ namespace _Game.Systems.BehaviorSystem
         public virtual void OnCleared(BlockModel block)      {}
         public virtual void OnFell(BlockModel block)         {}
         public virtual void OnTurnStart(BlockModel block)    {}
+        public virtual void OnTurnEnd()    {}
+        public virtual bool CanClear(BlockModel block)
+        {
+            return block.CanClear;
+        }
     }
 }
