@@ -1,6 +1,4 @@
-﻿using _Game.Interfaces;
-using _Game.Systems.BlockSystem;
-using _Game.Systems.GridSystem;
+﻿using _Game.Systems.BlockSystem;
 using _Game.Utils;
 
 namespace _Game.Interfaces
@@ -15,8 +13,8 @@ namespace _Game.Interfaces
         );
 
         void OnPlaced(BlockModel block);
-        void OnActivated(BlockModel block); // NEW: tap or programmatic activation
-        void OnMatched(BlockModel block);// match‐group activation
+        void OnActivated(BlockModel block);
+        void OnMatched(BlockModel block);
         void OnCleared(BlockModel block);
         void OnFell(BlockModel block);
         void OnTurnStart(BlockModel block);

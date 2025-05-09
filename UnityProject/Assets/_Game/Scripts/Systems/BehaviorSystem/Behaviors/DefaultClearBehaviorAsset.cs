@@ -15,7 +15,6 @@ namespace _Game.Systems.BehaviorSystem
         public override void OnMatched(BlockModel block)
         {
             Events.Fire(new ClearBlockEvent(block));
-            block.ClearSystem.RemoveFromGrid(block);
         }
 
         // optional VFX/SFX on clear

@@ -37,3 +37,6 @@ MonoBehaviour:
   - baseColor: 0
     type: 3
     Sprite: {fileID: 21300000, guid: 51a517f0d915ffd4cb481615444972b6, type: 3}
+  - baseColor: 0
+    type: 4
+    Sprite: {fileID: 21300000, guid: 9ab6129d553f005429f426ff61c8b2a3, type: 3}

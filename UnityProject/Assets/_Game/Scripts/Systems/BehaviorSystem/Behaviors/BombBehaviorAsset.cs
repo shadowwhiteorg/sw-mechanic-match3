@@ -28,9 +28,6 @@ namespace _Game.Systems.BehaviorSystem
             Explode(block);
         }
 
-        // Also no-op for match; activation flows through clear
-        public override void OnMatched(BlockModel block) { }
-
         public override void OnCleared(BlockModel block)
         {
             // Only explode once per block

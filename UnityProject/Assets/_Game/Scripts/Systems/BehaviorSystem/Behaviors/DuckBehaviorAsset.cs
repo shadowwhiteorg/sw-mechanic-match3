@@ -35,24 +35,20 @@ public class DuckBehaviorAsset : BlockBehaviorAsset
     public override bool CanClear(BlockModel block)
     {
         // allow removal only if there are no blocks below
-        // int c = block.Column;
-        // for (int r = block.Row + 1; r < _grid.Rows; r++)
-        //     if (_grid.GetBlock(r, c) != null)
-        //         return false;
+        int c = block.Column;
+        for (int r = block.Row + 1; r < _grid.Rows; r++)
+            if (_grid.GetBlock(r, c) != null)
+                return false;
         return true;
     }
 
     public override void OnCleared(BlockModel block)
     {
-        // fire a delivery event
-        // _events.Fire(new DuckDeliveredEvent(block));
-        Debug.Log($"Duck cleared at {block.Row}, {block.Column}");
+        // Debug.Log($"Duck cleared at {block.Row}, {block.Column}");
     }
 
     public override void OnTurnEnd()
     {
-        Debug.Log($"Duck turn end at {_grid.Rows}, {_grid.Columns}");
-        // after every fall, re-fire ClearBlockEvent for any ducks now clearable
         for (int r = 0; r < _grid.Rows; r++)
         {
             for (int c = 0; c < _grid.Columns; c++)

@@ -162,7 +162,6 @@ namespace _Game.Systems.MatchSystem
 
         private void TryFireSettledEvent()
         {
-            Debug.Log($"[Fall] Active animations: {_activeAnimations}");
             if (_activeAnimations <= 0)
                 _events.Fire(new TurnEndedEvent());
         }

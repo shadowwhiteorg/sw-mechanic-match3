@@ -1,4 +1,6 @@
 ﻿// Systems/MatchSystem/ClearSystem.cs
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using _Game.Core.Events;
@@ -6,6 +8,7 @@ using _Game.Enums;
 using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
 using _Game.Systems.GridSystem;
+using Unity.VisualScripting;
 
 namespace _Game.Systems.MatchSystem
 {
@@ -36,9 +39,10 @@ namespace _Game.Systems.MatchSystem
 
         private void OnMatchFound(MatchFoundEvent e)
         {
-            foreach (var blk in e.Blocks)
-                _events.Fire(new ClearBlockEvent(blk));
+            CoroutineRunner.instance.StartCoroutine(WaitAndClearBlocks(e));
         }
+
+        
 
         private void OnBlockSelected(BlockSelectedEvent e)
         {
@@ -78,6 +82,14 @@ namespace _Game.Systems.MatchSystem
                 _events.Fire(new BlocksClearedEvent(_pending.ToList()));
                 _pending.Clear();
             }
+        }
+        
+        private IEnumerator WaitAndClearBlocks(MatchFoundEvent e)
+        {
+            yield return null;
+            foreach (var blk in e.Blocks)
+                _events.Fire(new ClearBlockEvent(blk));
+
         }
     }
 }

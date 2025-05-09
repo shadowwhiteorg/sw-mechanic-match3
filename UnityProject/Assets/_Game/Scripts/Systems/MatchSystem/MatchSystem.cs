@@ -37,10 +37,15 @@ namespace _Game.Systems.MatchSystem
         private List<BlockModel> DetectGroup(int row, int col, BlockColor color)
         {
             var result = new List<BlockModel>();
-            var visited = new bool[_grid.Rows, _grid.Columns];
+            var visited = new bool[_grid.Rows][];
+            for (int index = 0; index < _grid.Rows; index++)
+            {
+                visited[index] = new bool[_grid.Columns];
+            }
+
             var queue = new Queue<(int r, int c)>();
             queue.Enqueue((row, col));
-            visited[row, col] = true;
+            visited[row][col] = true;
 
             while (queue.Count > 0)
             {
@@ -51,9 +56,9 @@ namespace _Game.Systems.MatchSystem
                 result.Add(b);
                 foreach (var (nr, nc) in new[] { (r - 1, c), (r + 1, c), (r, c - 1), (r, c + 1) })
                 {
-                    if (_grid.IsInside(nr, nc) && !visited[nr, nc])
+                    if (_grid.IsInside(nr, nc) && !visited[nr][nc])
                     {
-                        visited[nr, nc] = true;
+                        visited[nr][nc] = true;
                         queue.Enqueue((nr, nc));
                     }
                 }
