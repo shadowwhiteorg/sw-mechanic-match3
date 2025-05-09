@@ -23,7 +23,9 @@ namespace _Game.Systems.GridSystem
                     Vector3 pos = _config.GetWorldPosition(r, c);
                     var block   = _factory.CreateRandomBlock(r, c);
                     block.View.SetPosition(pos);
+                    block.Settle(true);
                     _grid.SetBlock(r, c, block);
+                    
                 }
             }
         }

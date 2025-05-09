@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,28 +13,33 @@ namespace _Game.Systems.MatchSystem
 {
     public class FallSystem
     {
-        private readonly IGridHandler _grid;
-        private readonly GridWorldHelper _helper;
-        private readonly IBlockFactory _factory;
-        private readonly IEventBus _events;
-        private readonly float _fallSpeed = 7.5f;
+        private readonly IGridHandler       _grid;
+        private readonly GridWorldHelper    _helper;
+        private readonly IBlockFactory      _factory;
+        private readonly IEventBus          _events;
+        private readonly float              _fallSpeed;
+        private int                          _activeAnimations;
 
-        private int _activeAnimations;
+        public FallSystem(
+            IGridHandler    grid,
+            GridWorldHelper helper,
+            IBlockFactory   factory,
+            IEventBus       events,
+            float           fallSpeed = 7.5f
+        ) {
+            _grid      = grid;
+            _helper    = helper;
+            _factory   = factory;
+            _events    = events;
+            _fallSpeed = fallSpeed;
 
-        public FallSystem(IGridHandler grid, GridWorldHelper helper, IBlockFactory factory, IEventBus events)
-        {
-            _grid = grid;
-            _helper = helper;
-            _factory = factory;
-            _events = events;
             _events.Subscribe<BlocksClearedEvent>(OnBlocksCleared);
         }
 
-        private void OnBlocksCleared(BlocksClearedEvent e)
+        private void OnBlocksCleared(BlocksClearedEvent evt)
         {
-            var columns = e.ClearedPositions.Select(p => p.Item2).Distinct().ToList();
-
-            foreach (int col in columns)
+            // handle each affected column
+            foreach (int col in evt.ClearedPositions.Select(p => p.col).Distinct())
             {
                 CoroutineRunner.Instance.StartCoroutine(HandleColumnFall(col));
             }
@@ -43,13 +47,16 @@ namespace _Game.Systems.MatchSystem
 
         private IEnumerator HandleColumnFall(int col)
         {
+            // 1) slide existing blocks downward
             var moved = SlideDown(col);
-            AnimateMoves(moved);
+            AnimateSlides(col, moved);
 
-            int toSpawn = CountEmptySlots(col);
-            SpawnNewBlocks(col, toSpawn);
+            // 2) wait for all slide tweens to finish
+            // yield return new WaitUntil(() => _activeAnimations == 0);
+            yield return null;
 
-            yield break;
+            // 3) spawn brand-new blocks into the holes
+            SpawnNewBlocks(col);
         }
 
         private List<BlockModel> SlideDown(int col)
@@ -58,72 +65,98 @@ namespace _Game.Systems.MatchSystem
 
             for (int row = _grid.Rows - 1; row >= 0; row--)
             {
-                if (_grid.GetBlock(row, col) != null) continue;
+                if (_grid.GetBlock(row, col) != null)
+                    continue;
 
+                // find the next block above
                 int above = row - 1;
                 while (above >= 0 && _grid.GetBlock(above, col) == null)
                     above--;
 
-                if (above < 0) break;
+                if (above < 0)
+                    continue;  // no more blocks above → keep looking for other holes
 
-                var block = _grid.GetBlock(above, col);
-                _grid.SetBlock(row, col, block);
-                _grid.SetBlock(above, col, null);
-                block.SetGridPosition(row, col);
-                moved.Add(block);
+                // move it down
+                var blk = _grid.GetBlock(above, col);
+                _grid.SetBlock(row,    col, blk);
+                _grid.SetBlock(above,  col, null);
+                blk.SetGridPosition(row, col);
+                moved.Add(blk);
             }
 
             return moved;
         }
 
-        private void AnimateMoves(List<BlockModel> moved)
+        private void AnimateSlides(int col, List<BlockModel> moved)
         {
-            foreach (var block in moved)
+            foreach (var blk in moved)
             {
-                var targetPos = _helper.GetWorldPosition(block.Row, block.Column);
-                float duration = Vector3.Distance(block.View.transform.position, targetPos) / _fallSpeed;
+                Vector3 from = blk.View.transform.position;
+                Vector3 to   = _helper.GetWorldPosition(blk.Row, blk.Column);
+                float   dur  = Vector3.Distance(from, to) / _fallSpeed;
 
                 _activeAnimations++;
-                Tween.Position(block.View.transform, targetPos, duration, Ease.OutQuad, () =>
-                {
-                    block.Fell();
-                    _activeAnimations--;
-                    TryFireSettledEvent();
-                });
+                Tween.Position(
+                    blk.View.transform,
+                    to,
+                    dur,
+                    Ease.OutQuad,
+                    onComplete: () =>
+                    {
+                        blk.Fell();
+                        _activeAnimations--;
+                        TryFireSettledEvent();
+                    }
+                );
             }
         }
 
-        private int CountEmptySlots(int col)
+        private void SpawnNewBlocks(int col)
         {
-            int count = 0;
-            for (int row = 0; row < _grid.Rows; row++)
+            // find which rows are still empty, in ascending order
+            var emptyRows = Enumerable
+                .Range(0, _grid.Rows)
+                .Where(r => _grid.GetBlock(r, col) == null)
+                .OrderBy(r => r)
+                .ToList();
+
+            int toSpawn = emptyRows.Count;
+            Debug.Log($"[Fall] Column {col} → empties: {string.Join(",", emptyRows)} → toSpawn={toSpawn}");
+            if (toSpawn == 0) return;
+
+            // spawn one per empty slot
+            for (int i = 0; i < toSpawn; i++)
             {
-                if (_grid.GetBlock(row, col) == null) count++;
-            }
-            return count;
-        }
+                // the row we need to fill
+                int targetRow   = emptyRows[i];
+                // compute a negative spawnRow so blocks start off-grid
+                int spawnRow    = i - toSpawn-1;   // yields [-toSpawn, …, -1]
+                Vector3 spawnPos = _helper.GetWorldPosition(spawnRow, col);
 
-        private void SpawnNewBlocks(int col, int count)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                int targetRow = i;
-                int spawnRow = i - count;
-
-                var spawnPos = _helper.GetWorldPosition(spawnRow, col);
-                var block = _factory.CreateRandomBlock(targetRow, col);
-                block.View.transform.position = spawnPos;
-
-                var targetPos = _helper.GetWorldPosition(targetRow, col);
-                float duration = Vector3.Distance(spawnPos, targetPos) / _fallSpeed;
+                // create & place off-grid
+                var blk = _factory.CreateRandomBlock(targetRow, col);
+                _grid.SetBlock(targetRow, col, blk);
+                blk.View.transform.position = spawnPos;
+                
+                // animate into place
+                Vector3 targetPos = _helper.GetWorldPosition(targetRow, col);
+                float   dur       = Vector3.Distance(spawnPos, targetPos) / _fallSpeed;
 
                 _activeAnimations++;
-                Tween.Position(block.View.transform, targetPos, duration, Ease.OutQuad, () =>
-                {
-                    block.Fell();
-                    _activeAnimations--;
-                    TryFireSettledEvent();
-                });
+                blk.Settle(false);
+                Tween.Position(
+                    blk.View.transform,
+                    targetPos,
+                    dur,
+                    Ease.OutQuad,
+                    onComplete: () =>
+                    {
+                        blk.Fell();
+                        blk.Settle(true);
+                        _activeAnimations--;
+                        TryFireSettledEvent();
+                    }
+                );
             }
         }
 

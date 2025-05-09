@@ -15,6 +15,9 @@ namespace _Game.Systems.BlockSystem
 
         private readonly List<IBlockBehavior> _behaviors;
         private bool _isClearing = false;
+        private bool _isSettled = false;
+        public bool IsSettled => _isSettled;
+        
 
         public BlockModel(BlockColor color, BlockType type, int row, int col, BlockView view, IEnumerable<IBlockBehavior> behaviors)
         {
@@ -46,6 +49,11 @@ namespace _Game.Systems.BlockSystem
             _isClearing = true;
             foreach (var b in _behaviors) b.OnCleared(this);
         }
+        
+        public void Activated()
+        {
+            foreach (var b in _behaviors) b.OnActivated(this);
+        }
 
         public void Fell()
         {
@@ -55,6 +63,12 @@ namespace _Game.Systems.BlockSystem
         public void TurnStart()
         {
             foreach (var b in _behaviors) b.OnTurnStart(this);
+        }
+        
+        public void Settle( bool isSettled)
+        {
+            _isSettled = isSettled;
+            
         }
     }
 }

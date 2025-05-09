@@ -9,47 +9,69 @@ using _Game.Systems.GridSystem;
 
 namespace _Game.Systems.MatchSystem
 {
+    /// <summary>
+    /// Handles both group‐clear (matches) and tap‐activation (special blocks),
+    /// with a safety guard so blocks mid‐fall cannot be cleared until they’ve landed.
+    /// </summary>
     public class ClearSystem
     {
-        private readonly IGridHandler _grid;
-        private readonly IBlockFactory _factory;
-        private readonly IEventBus _events;
-        private readonly List<(int, int)> _buffer = new();
+        private readonly IGridHandler           _grid;
+        private readonly IBlockFactory          _factory;
+        private readonly IEventBus              _events;
+        private readonly List<(int row, int col)> _pending = new();
 
-        public ClearSystem(IGridHandler grid, IBlockFactory factory, IEventBus events)
+        public ClearSystem(
+            IGridHandler   grid,
+            IBlockFactory  factory,
+            IEventBus      events)
         {
-            _grid = grid;
+            _grid    = grid;
             _factory = factory;
-            _events = events;
+            _events  = events;
 
-            _events.Subscribe<MatchFoundEvent>(OnMatch);
-            _events.Subscribe<ClearBlockEvent>(OnClear);
+            _events.Subscribe<MatchFoundEvent>(   OnMatchFound);
+            _events.Subscribe<BlockSelectedEvent>(OnBlockSelected);
+            _events.Subscribe<ClearBlockEvent>(   OnClearBlock);
         }
 
-        private void OnMatch(MatchFoundEvent e)
+        private void OnMatchFound(MatchFoundEvent e)
         {
-            foreach (var block in e.Blocks)
-            {
-                block.Matched();
-                _events.Fire(new ClearBlockEvent(block));
-            }
+            foreach (var blk in e.Blocks)
+                _events.Fire(new ClearBlockEvent(blk));
         }
 
-        private void OnClear(ClearBlockEvent e)
+        private void OnBlockSelected(BlockSelectedEvent e)
         {
-            var b = e.Block;
-            if (_grid.TryGet(b.Row, b.Column, out var live) && live == b)
-            {
-                _grid.SetBlock(b.Row, b.Column, null);
-                _factory.RecycleBlock(b);
-                _buffer.Add((b.Row, b.Column));
-                b.Cleared();
-            }
+            if (!_grid.TryGet(e.Row, e.Col, out var blk) || blk == null)
+                return;
+            blk.Activated();
+        }
 
-            if (_buffer.Count > 0)
+        private void OnClearBlock(ClearBlockEvent e)
+        {
+            var blk = e.Block;
+            // ◀── Safety check: ignore any clear request while the block is still falling
+            if (!blk.IsSettled)
+                return;
+
+            // ensure it’s still in the grid at that spot
+            if (!_grid.TryGet(blk.Row, blk.Column, out var live) || live != blk)
+                return;
+
+            // 1) remove from grid
+            _grid.SetBlock(blk.Row, blk.Column, null);
+            // 2) recycle its view
+            _factory.RecycleBlock(blk);
+            // 3) buffer for fall
+            _pending.Add((blk.Row, blk.Column));
+            // 4) run VFX/SFX hooks
+            blk.Cleared();
+
+            // 5) flush once per batch
+            if (_pending.Count > 0)
             {
-                _events.Fire(new BlocksClearedEvent(_buffer));
-                _buffer.Clear();
+                _events.Fire(new BlocksClearedEvent(_pending.ToList()));
+                _pending.Clear();
             }
         }
     }

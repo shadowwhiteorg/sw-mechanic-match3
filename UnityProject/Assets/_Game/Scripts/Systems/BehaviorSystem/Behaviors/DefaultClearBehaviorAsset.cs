@@ -11,18 +11,16 @@ namespace _Game.Systems.BehaviorSystem
     [CreateAssetMenu(menuName = "Blast/Behaviors/Default Clear")]
     public class DefaultClearBehaviorAsset : BlockBehaviorAsset
     {
-        public override BlockType Type => BlockType.None;
-
-        private IEventBus _eventBus;
-        
+        // When a normal block is matched in a group, clear it:
         public override void OnMatched(BlockModel block)
         {
             Events.Fire(new ClearBlockEvent(block));
         }
 
+        // optional VFX/SFX on clear
         public override void OnCleared(BlockModel block)
         {
-            // You can add VFX or SFX here later if needed
+            // e.g. Instantiate(clearParticles, block.View.transform.position, Quaternion.identity);
         }
     }
 }
