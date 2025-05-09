@@ -4,80 +4,116 @@ using UnityEngine;
 using _Game.Core.Events;
 using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
-using _Game.Systems.GridSystem;
 using _Game.Utils;
+using CoroutineRunner = Unity.VisualScripting.CoroutineRunner;
 
 namespace _Game.Systems.BehaviorSystem
 {
-    [CreateAssetMenu(menuName = "Blast/Behaviors/RocketBehavior")]
+    [CreateAssetMenu(menuName = "Blast/Behaviors/Rocket")]
     public class RocketBehaviorAsset : BlockBehaviorAsset
     {
-        [Header("Clearing")] [Tooltip("Time between clearing each successive block")] [SerializeField]
-        private float perBlockDelay = 0.05f;
+        [SerializeField] private GameObject _trailPrefab;
+        [SerializeField] private int _trailPoolSize = 8;
+        [SerializeField] private float _perCellDelay = 0.05f;
 
-        [Header("Appearance")] [Tooltip("Color to tint rocket blocks")] 
-        [SerializeField] private Color rocketTint = Color.yellow;
-
-        [Tooltip("Rotation (z) for vertical rockets")] [SerializeField]
-        private float verticalRotationZ = 90f;
-
-        // injected at Initialize(...)
+        private GameObjectPool _trailPool;
         private IGridHandler _grid;
         private IEventBus _events;
+        private Transform _origin;
 
-        // per-instance state
-        private readonly Dictionary<BlockModel, Vector2> _directions = new();
-
-        public override void OnPlaced(BlockModel block)
+        public override void Initialize(
+            IGridHandler grid, IBlockFactory factory, GridWorldHelper helper, IEventBus eventBus)
         {
-            // choose horizontal or vertical
-            bool horiz = Random.value < 0.5f;
-            var dir = horiz ? Vector2.right : Vector2.up;
-            _directions[block] = dir;
-
-            // tint & rotate the view so you can see it’s a rocket
-            var sr = block.View.GetComponent<SpriteRenderer>();
-            if (sr != null) sr.color = rocketTint;
-
-            block.View.transform.rotation =
-                Quaternion.Euler(0, 0, horiz ? 0f : verticalRotationZ);
+            base.Initialize(grid, factory, helper, eventBus);
+            _grid = grid;
+            _events = eventBus;
+            // _origin = helper.OriginTransform; // where trails live in the hierarchy
+            if (_trailPrefab)
+                _trailPool = new GameObjectPool(_trailPrefab, _trailPoolSize, _origin);
         }
 
-        public override void OnMatched(BlockModel block)
+        public override void OnActivated(BlockModel block)
         {
-            // start blasting outwards in both +dir and –dir
-            CoroutineRunner.Instance.StartCoroutine(BlastSequence(block));
+            // decide axis & rotate block.view…
+            bool horizontal = Random.value < 0.5f;
+            block.View.transform.rotation = Quaternion.Euler(0, 0, horizontal ? 0f : 90f);
+            Vector2 axis = horizontal ? Vector2.right : Vector2.up;
+
+            // launch two trails:
+            SpawnTrail(block, axis, +1);
+            SpawnTrail(block, axis, -1);
+
+            // then sweep & clear
+            CoroutineRunner.instance.StartCoroutine(SweepAndClear(block, axis));
         }
 
-        private IEnumerator BlastSequence(BlockModel block)
+        private void SpawnTrail(BlockModel block, Vector2 axis, int sign)
         {
-            if (!_directions.TryGetValue(block, out var dir))
-                yield break;
+            if (_trailPool == null) return;
+            var go = _trailPool.Get();
+            go.transform.SetParent(_origin, false);
+            go.transform.position = block.View.transform.position;
+            float ang = (axis == Vector2.right) ? 0f : 90f;
+            go.transform.rotation = Quaternion.Euler(0, 0, ang);
 
-            int max = dir.x != 0 ? _grid.Columns : _grid.Rows;
+            CoroutineRunner.instance.StartCoroutine(AnimateTrail(go, axis * (sign * 3f)));
+        }
 
-            // for each step away from the center
+        private IEnumerator AnimateTrail(GameObject go, Vector3 offset)
+        {
+            Vector3 start = go.transform.position;
+            Vector3 end = start + offset;
+            float t = 0f, dur = 0.3f;
+
+            while (t < dur)
+            {
+                go.transform.position = Vector3.Lerp(start, end, t / dur);
+                t += Time.deltaTime;
+                yield return null;
+            }
+
+            go.transform.position = end;
+            _trailPool.Return(go);
+        }
+
+        private IEnumerator SweepAndClear(BlockModel block, Vector2 axis)
+        {
+            int max = axis == Vector2.right ? _grid.Columns : _grid.Rows;
+            var blocksToRemove = new List<BlockModel>();
+            block.View.gameObject.SetActive(false);
             for (int i = 1; i < max; i++)
             {
-                yield return new WaitForSeconds(perBlockDelay);
+                yield return new WaitForSeconds(_perCellDelay);
 
-                int r = block.Row + (int)(dir.y * i);
-                int c = block.Column + (int)(dir.x * i);
+                int r = block.Row + (int)(axis.y * i);
+                int c = block.Column + (int)(axis.x * i);
+                if (_grid.TryGet(r, c, out var t))
+                {
+                    t.View.gameObject.SetActive(false);
+                    blocksToRemove.Add(t);
+                    // _events.Fire(new ClearBlockEvent(t));
+                }
 
-                // if there’s a block, ask to clear it
-                if (_grid.TryGet(r, c, out var target))
-                    _events.Fire(new ClearBlockEvent(target));
-                else
-                    break; // off grid → stop
+                r = block.Row - (int)(axis.y * i);
+                c = block.Column - (int)(axis.x * i);
+                if (_grid.TryGet(r, c, out t))
+                {
+                    t.View.gameObject.SetActive(false);
+                    blocksToRemove.Add(t);
+                    // _events.Fire(new ClearBlockEvent(t));
+                }
             }
+
+            _events.Fire(new ClearBlockEvent(block));
+            foreach (var blk in blocksToRemove)
+                _events.Fire(new ClearBlockEvent(blk));
+            
         }
+
+        public override bool CanClear(BlockModel block) => true;
 
         public override void OnCleared(BlockModel block)
         {
-            // rocket itself will be cleared by ClearSystem when you fire the first ClearBlockEvent
-            _directions.Remove(block);
         }
-        
     }
 }
-

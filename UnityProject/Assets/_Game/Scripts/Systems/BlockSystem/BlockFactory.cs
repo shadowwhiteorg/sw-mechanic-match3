@@ -67,7 +67,7 @@ namespace _Game.Systems.GridSystem
             var color = Enum.GetValues(typeof(BlockColor)).Cast<BlockColor>().OrderBy(_ => _rng.Next()).First();
             var type = BlockType.None;
             // if (color == BlockColor.None) color = BlockColor.Red;
-            if (color == BlockColor.None) type = BlockType.Balloon;
+            if (color == BlockColor.None) type = BlockType.Rocket;
             return CreateBlock(color, type, row, col);
         }
 
