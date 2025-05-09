@@ -5,10 +5,7 @@ using _Game.Core.Events;
 using _Game.Enums;
 using _Game.Interfaces;
 using _Game.systems.BlockSystem;
-using _Game.Systems.BlockSystem;
-using _Game.Systems.GridSystem;
 using _Game.Utils;
-using UnityEngine;
 
 namespace _Game.Systems.MatchSystem
 {

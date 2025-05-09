@@ -34,6 +34,15 @@ namespace _Game.Systems.BehaviorSystem
 
         public override void OnActivated(BlockModel block)
         {
+            Launch(block);
+        }
+        
+        public override void OnCleared(BlockModel block)
+        {
+        }
+        
+        private void Launch(BlockModel block)
+        {
             // decide axis & rotate block.view…
             bool horizontal = Random.value < 0.5f;
             block.View.transform.rotation = Quaternion.Euler(0, 0, horizontal ? 0f : 90f);
@@ -110,10 +119,6 @@ namespace _Game.Systems.BehaviorSystem
             
         }
 
-        public override bool CanClear(BlockModel block) => true;
-
-        public override void OnCleared(BlockModel block)
-        {
-        }
+       
     }
 }
