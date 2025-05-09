@@ -13,16 +13,13 @@ namespace _Game.Systems.BehaviorSystem
         [Header("Clear Radius (Chebyshev)")]
         [SerializeField] private int radius = 1;
 
-        // Tracks which bombs have already exploded this lifecycle
         private readonly HashSet<BlockModel> _exploded = new HashSet<BlockModel>();
 
         public override void OnPlaced(BlockModel block)
         {
-            // When a bomb is placed (or spawned), clear its exploded flag
             _exploded.Remove(block);
         }
 
-        // We no longer do anything here—explosion happens in OnCleared
         public override void OnActivated(BlockModel block)
         {
             Explode(block);
@@ -30,7 +27,6 @@ namespace _Game.Systems.BehaviorSystem
 
         public override void OnCleared(BlockModel block)
         {
-            // Only explode once per block
             if (!_exploded.Add(block))
                 return;
 
@@ -40,8 +36,7 @@ namespace _Game.Systems.BehaviorSystem
 
         private IEnumerator DelayedExplode(BlockModel block)
         {
-            // Wait one frame so the current ClearBlockEvent unwind completes
-            // yield return new WaitForEndOfFrame();
+
             Explode(block);
             yield return null;
         }

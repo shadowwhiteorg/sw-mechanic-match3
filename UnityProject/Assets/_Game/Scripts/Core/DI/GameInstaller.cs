@@ -7,6 +7,7 @@ using _Game.Systems.MatchSystem;
 using _Game.Systems.CoreSystems;
 using _Game.Core.Events;
 using _Game.Systems.BehaviorSystem;
+using _Game.systems.BlockSystem;
 using _Game.Utils;
 
 namespace _Game.Core.DI
@@ -18,6 +19,7 @@ namespace _Game.Core.DI
         [SerializeField] private GridConfig gridConfig;
         [SerializeField] private BlockTypeConfig blockTypeConfig;
         [SerializeField] private BehaviorConfig behaviorConfig;
+        [SerializeField] private SpecialBlockSpawnConfig specialBlockSpawnConfig;
         [SerializeField] private BlockView blockPrefab;
         [SerializeField] private Transform blockParent;
 
@@ -37,14 +39,18 @@ namespace _Game.Core.DI
             container.BindSingleton<IBlockFactory>(factory);
 
             // Core systems
-            var clearSystem = new ClearSystem(grid, factory, eventBus);
+            var clearSystem = new ClearSystem(grid, factory, eventBus, specialBlockSpawnConfig);
             container.BindSingleton(clearSystem);
+
+            var matchSystem = new MatchSystem(grid, eventBus, gridConfig.MatchThreshold);
+            container.BindSingleton<IUpdatableSystem>(matchSystem);
+
 
             var fallSystem = new FallSystem(grid, helper, factory, eventBus);
             container.BindSingleton(fallSystem);
 
-            var matchSystem = new MatchSystem(grid, eventBus, gridConfig.MatchThreshold);
-            container.BindSingleton<IUpdatableSystem>(matchSystem);
+            // var matchSystem = new MatchSystem(grid, eventBus, gridConfig.MatchThreshold);
+            // container.BindSingleton<IUpdatableSystem>(matchSystem);
 
             // Initial grid spawn
             var initializer = new GridInitializer(grid, factory, gridConfig);

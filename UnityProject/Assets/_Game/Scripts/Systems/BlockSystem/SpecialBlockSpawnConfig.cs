@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using _Game.Enums;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using _Game.Enums;
 
-namespace _Game.Systems.BlockSystem
+namespace _Game.systems.BlockSystem
 {
     [CreateAssetMenu(menuName = "Configs/SpecialBlockSpawnConfig")]
     public class SpecialBlockSpawnConfig : ScriptableObject
@@ -18,8 +19,8 @@ namespace _Game.Systems.BlockSystem
             return BlockType.None;
         }
     }
-    
-    [System.Serializable]
+
+    [Serializable]
     public class SpecialBlockSpawnRule
     {
         public int matchSize;

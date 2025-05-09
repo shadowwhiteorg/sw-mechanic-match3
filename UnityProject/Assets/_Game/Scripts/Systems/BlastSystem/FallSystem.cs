@@ -6,7 +6,6 @@ using _Game.Core.Events;
 using _Game.Enums;
 using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
-using _Game.Systems.GridSystem;
 using _Game.Utils;
 
 namespace _Game.Systems.MatchSystem
@@ -47,15 +46,9 @@ namespace _Game.Systems.MatchSystem
 
         private IEnumerator HandleColumnFall(int col)
         {
-            // 1) slide existing blocks downward
             var moved = SlideDown(col);
             AnimateSlides(col, moved);
-
-            // 2) wait for all slide tweens to finish
-            // yield return new WaitUntil(() => _activeAnimations == 0);
             yield return null;
-
-            // 3) spawn brand-new blocks into the holes
             SpawnNewBlocks(col);
         }
 
@@ -68,15 +61,13 @@ namespace _Game.Systems.MatchSystem
                 if (_grid.GetBlock(row, col) != null)
                     continue;
 
-                // find the next block above
                 int above = row - 1;
                 while (above >= 0 && _grid.GetBlock(above, col) == null)
                     above--;
 
                 if (above < 0)
-                    continue;  // no more blocks above → keep looking for other holes
+                    continue;
 
-                // move it down
                 var blk = _grid.GetBlock(above, col);
                 _grid.SetBlock(row,    col, blk);
                 _grid.SetBlock(above,  col, null);
@@ -113,7 +104,6 @@ namespace _Game.Systems.MatchSystem
 
         private void SpawnNewBlocks(int col)
         {
-            // find which rows are still empty, in ascending order
             var emptyRows = Enumerable
                 .Range(0, _grid.Rows)
                 .Where(r => _grid.GetBlock(r, col) == null)
@@ -121,13 +111,10 @@ namespace _Game.Systems.MatchSystem
                 .ToList();
 
             int toSpawn = emptyRows.Count;
-            // Debug.Log($"[Fall] Column {col} → empties: {string.Join(",", emptyRows)} → toSpawn={toSpawn}");
             if (toSpawn == 0) return;
 
-            // spawn one per empty slot
             for (int i = 0; i < toSpawn; i++)
             {
-                // the row we need to fill
                 int targetRow   = emptyRows[i];
                 // compute a negative spawnRow so blocks start off-grid
                 int spawnRow    = i - toSpawn-1;   // yields [-toSpawn, …, -1]

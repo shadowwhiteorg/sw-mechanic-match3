@@ -1,10 +1,8 @@
-﻿// Systems/MatchSystem/MatchSystem.cs
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using _Game.Core.Events;
 using _Game.Enums;
 using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
-using _Game.Systems.GridSystem;
 
 namespace _Game.Systems.MatchSystem
 {
@@ -31,7 +29,7 @@ namespace _Game.Systems.MatchSystem
 
             var group = DetectGroup(e.Row, e.Col, block.Color);
             if (group.Count >= _matchThreshold)
-                _events.Fire(new MatchFoundEvent(group,e.Row, e.Col));
+                _events.Fire(new MatchFoundEvent(group, e.Row, e.Col));
         }
 
         private List<BlockModel> DetectGroup(int row, int col, BlockColor color)
@@ -54,7 +52,7 @@ namespace _Game.Systems.MatchSystem
                 if (b == null || b.Color != color) continue;
 
                 result.Add(b);
-                foreach (var (nr, nc) in new[] { (r - 1, c), (r + 1, c), (r, c - 1), (r, c + 1) })
+                foreach (var (nr, nc) in new[] {(r - 1, c), (r + 1, c), (r, c - 1), (r, c + 1)})
                 {
                     if (_grid.IsInside(nr, nc) && !visited[nr][nc])
                     {
