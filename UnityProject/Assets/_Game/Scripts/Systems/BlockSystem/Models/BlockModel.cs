@@ -15,7 +15,6 @@ namespace _Game.Systems.BlockSystem
         public BlockView View { get; }
 
         private readonly List<IBlockBehavior> _behaviors;
-        private ClearSystem _clearSystem;
         private bool _isClearing = false;
         private bool _isSettled = false;
         private bool _canClear = true;
@@ -25,10 +24,9 @@ namespace _Game.Systems.BlockSystem
             set => _canClear = value;
         }
         public bool IsSettled => _isSettled;
-        public ClearSystem ClearSystem => _clearSystem;
         
 
-        public BlockModel(BlockColor color, BlockType type, int row, int col, BlockView view, IEnumerable<IBlockBehavior> behaviors, ClearSystem clearSystem)
+        public BlockModel(BlockColor color, BlockType type, int row, int col, BlockView view, IEnumerable<IBlockBehavior> behaviors)
         {
             Color = color;
             Type = type;
@@ -36,7 +34,6 @@ namespace _Game.Systems.BlockSystem
             Column = col;
             View = view;
             _behaviors = new List<IBlockBehavior>(behaviors);
-            _clearSystem = clearSystem;
 
             foreach (var b in _behaviors)
                 b.OnPlaced(this);

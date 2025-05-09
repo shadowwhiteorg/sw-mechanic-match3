@@ -22,7 +22,6 @@ namespace _Game.Systems.GridSystem
         private readonly Transform _parent;
         private readonly BehaviorRegistry _registry;
         private readonly System.Random _rng = new();
-        private ClearSystem _clearSystem;
 
         public BlockFactory(
             BlockTypeConfig config,
@@ -58,7 +57,7 @@ namespace _Game.Systems.GridSystem
                 behaviors.Add(asset);
             }
 
-            var model = new BlockModel(color, type, row, col, view, behaviors, _clearSystem);
+            var model = new BlockModel(color, type, row, col, view, behaviors);
             _grid.SetBlock(row, col, model);
             return model;
         }
@@ -77,11 +76,6 @@ namespace _Game.Systems.GridSystem
             _grid.SetBlock(model.Row, model.Column, null);
             model.View.gameObject.SetActive(false);
             _viewPool.Return(model.View);
-        }
-
-        public void RegisterClearSystem(ClearSystem system)
-        {
-            _clearSystem = system;
         }
     }
 }
