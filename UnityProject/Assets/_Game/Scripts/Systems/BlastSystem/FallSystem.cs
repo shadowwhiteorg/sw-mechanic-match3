@@ -24,7 +24,7 @@ namespace _Game.Systems.MatchSystem
             GridWorldHelper helper,
             IBlockFactory   factory,
             IEventBus       events,
-            float           fallSpeed = 7.5f
+            float           fallSpeed = 15f
         ) {
             _grid      = grid;
             _helper    = helper;

@@ -44,23 +44,29 @@ namespace _Game.Systems.BehaviorSystem
         private void Explode(BlockModel block)
         {
             Debug.Log($"Bomb activated at {block.Row}, {block.Column}");
+
             int r0 = block.Row;
             int c0 = block.Column;
-            
-            // Chebyshev radius: includes diagonals
+
             for (int dr = -radius; dr <= radius; dr++)
             {
                 for (int dc = -radius; dc <= radius; dc++)
                 {
                     if (Mathf.Max(Mathf.Abs(dr), Mathf.Abs(dc)) > radius)
                         continue;
-            
-                    if (Grid.TryGet(r0 + dr, c0 + dc, out var neighbor))
+
+                    int rr = r0 + dr;
+                    int cc = c0 + dc;
+
+                    if (Grid.TryGet(rr, cc, out var neighbor))
+                    {
                         Events.Fire(new ClearBlockEvent(neighbor));
-                        // neighbor.View.transform.localScale*=0.5f;
+                        // Optional VFX or debug:
+                        // neighbor.View.transform.localScale *= 0.5f;
+                    }
                 }
             }
-            
         }
+
     }
 }

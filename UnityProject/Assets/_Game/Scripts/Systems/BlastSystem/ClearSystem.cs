@@ -5,23 +5,28 @@ using _Game.Core.Events;
 using _Game.Enums;
 using _Game.Interfaces;
 using _Game.systems.BlockSystem;
+using _Game.Systems.BlockSystem;
+using _Game.Systems.GridSystem;
 using _Game.Utils;
+using UnityEngine;
 
 namespace _Game.Systems.MatchSystem
 {
     public class ClearSystem
     {
-        private readonly IGridHandler             _grid;
-        private readonly IBlockFactory            _factory;
-        private readonly IEventBus                _events;
-        private readonly SpecialBlockSpawnConfig  _spawnConfig;
+        private readonly IGridHandler            _grid;
+        private readonly IBlockFactory           _factory;
+        private readonly IEventBus               _events;
+        private readonly SpecialBlockSpawnConfig _spawnConfig;
+
         private readonly List<(int row, int col)> _pending = new();
-        private bool                               _batching;
+        private bool _batching = false;
+        private bool _flushScheduled = false;
 
         public ClearSystem(
-            IGridHandler            grid,
-            IBlockFactory           factory,
-            IEventBus               events,
+            IGridHandler grid,
+            IBlockFactory factory,
+            IEventBus events,
             SpecialBlockSpawnConfig spawnConfig)
         {
             _grid        = grid;
@@ -33,7 +38,8 @@ namespace _Game.Systems.MatchSystem
             _events.Subscribe<BlockSelectedEvent>(OnBlockSelected);
             _events.Subscribe<ClearBlockEvent>(   OnClearBlock);
         }
-        
+
+        // MatchFound starts a coroutine that clears the match and spawns the special
         private void OnMatchFound(MatchFoundEvent e)
         {
             CoroutineRunner.Instance.StartCoroutine(ClearMatchAndSpawnSpecial(e));
@@ -46,47 +52,56 @@ namespace _Game.Systems.MatchSystem
             foreach (var blk in e.Blocks)
                 _events.Fire(new ClearBlockEvent(blk));
 
-            // wait one frame so OnClearBlock has actually removed them from the grid
-            yield return null;
+            yield return null; // wait a frame to finish all clears
 
-            // spawn the special, if any
             var specialType = _spawnConfig.GetTypeForMatch(e.Blocks.Count);
             if (specialType != BlockType.None)
             {
-                // here you can choose color; e.TapOrigin gives you the match origin
                 var color = BlockColor.None;
                 var special = _factory.CreateBlock(color, specialType, e.TouchOrigin.x, e.TouchOrigin.y);
-                special.Settle(true); // mark it settled so fall doesn’t clear it
+                special.Settle(true); // protect from falling
             }
 
-            // now flush exactly once for that whole batch
             FlushPending();
-
             _batching = false;
         }
 
+        // Special blocks like bombs/rockets/ducks trigger here
         private void OnBlockSelected(BlockSelectedEvent e)
         {
-            if (!_grid.TryGet(e.Row, e.Col, out var blk) || blk == null) return;
+            if (!_grid.TryGet(e.Row, e.Col, out var blk) || blk == null)
+                return;
             blk.Activated();
         }
 
+        // Called for every block cleared by match or special
         private void OnClearBlock(ClearBlockEvent e)
         {
             var blk = e.Block;
-            if (!blk.IsSettled) return;
 
+            if (!blk.IsSettled) return;
             if (!_grid.TryGet(blk.Row, blk.Column, out var live) || live != blk)
                 return;
 
-            // remove & buffer
+            // Remove from grid and buffer
             _grid.SetBlock(blk.Row, blk.Column, null);
             _factory.RecycleBlock(blk);
             _pending.Add((blk.Row, blk.Column));
             blk.Cleared();
 
-            if (!_batching)
-                FlushPending();
+            // If not inside match-batch, flush at end of frame (once)
+            if (!_batching && !_flushScheduled)
+            {
+                _flushScheduled = true;
+                CoroutineRunner.Instance.StartCoroutine(FlushNextFrame());
+            }
+        }
+
+        private IEnumerator FlushNextFrame()
+        {
+            yield return null;
+            FlushPending();
+            _flushScheduled = false;
         }
 
         private void FlushPending()
