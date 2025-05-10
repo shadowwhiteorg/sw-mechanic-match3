@@ -131,7 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 244490711}
-  - component: {fileID: 244490710}
+  - component: {fileID: 244490712}
   m_Layer: 0
   m_Name: GameBootstrapper
   m_TagString: Untagged
@@ -139,20 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &244490710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 244490709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5970864269344206b0d2e288ff1245ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  installerPrefab: {fileID: 5774716335844981443, guid: 83675890fc0079a4f9207a24c354691d, type: 3}
-  runnerDriverPrefab: {fileID: 2367913890814723972, guid: 714905656f3fe814eaf509ec1beecd4f, type: 3}
 --- !u!4 &244490711
 Transform:
   m_ObjectHideFlags: 0
@@ -168,6 +154,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &244490712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244490709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5970864269344206b0d2e288ff1245ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  installerPrefab: {fileID: 8133937177708654612, guid: 83675890fc0079a4f9207a24c354691d, type: 3}
+  runnerDriverPrefab: {fileID: 3633889325765068228, guid: 714905656f3fe814eaf509ec1beecd4f, type: 3}
+  levelManager: {fileID: 8818634224012817393, guid: 344dd794f07bd94439c0e8c3372a201b, type: 3}
+  fallbackLevel: {fileID: 11400000, guid: a7911f56d15213b4dbe30c8e659ee4b7, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

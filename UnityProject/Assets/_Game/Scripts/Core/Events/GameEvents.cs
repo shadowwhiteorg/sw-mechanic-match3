@@ -30,4 +30,12 @@ namespace _Game.Core.Events
     }
 
     public struct LevelCompleteEvent : IGameEvent { }
+    
+    public struct GameOverEvent: IGameEvent { }
+    
+    public struct MoveUpdatedEvent : IGameEvent
+    {
+        public int MovesLeft { get; }
+        public MoveUpdatedEvent(int movesLeft) => MovesLeft = movesLeft;
+    }
 }
