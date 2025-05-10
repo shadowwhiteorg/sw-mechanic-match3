@@ -29,4 +29,8 @@ namespace _Game.Core.Events
         public ClearBlockEvent(BlockModel block) => Block = block;
     }
     
+    public struct BlockActivatedEvent : IGameEvent{}
+    public struct BlockDeactivatedEvent : IGameEvent{}
+    
+    
 }

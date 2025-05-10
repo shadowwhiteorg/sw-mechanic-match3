@@ -6,6 +6,7 @@ using _Game.Enums;
 using _Game.Interfaces;
 using _Game.systems.BlockSystem;
 using _Game.Utils;
+using UnityEngine;
 
 namespace _Game.Systems.MatchSystem
 {
@@ -17,6 +18,7 @@ namespace _Game.Systems.MatchSystem
         private readonly SpecialBlockSpawnConfig _spawnConfig;
 
         private readonly List<(int row, int col)> _pending = new();
+        private int _activeBlockCount = 0;
         private bool _batching = false;
         private bool _flushScheduled = false;
 
@@ -34,6 +36,8 @@ namespace _Game.Systems.MatchSystem
             _events.Subscribe<MatchFoundEvent>(   OnMatchFound);
             _events.Subscribe<BlockSelectedEvent>(OnBlockSelected);
             _events.Subscribe<ClearBlockEvent>(   OnClearBlock);
+            _events.Subscribe<BlockActivatedEvent>(@event=>_activeBlockCount++);
+            _events.Subscribe<BlockDeactivatedEvent>(@event=>_activeBlockCount--);
         }
 
         // MatchFound starts a coroutine that clears the match and spawns the special
@@ -59,7 +63,7 @@ namespace _Game.Systems.MatchSystem
                 special.Settle(true); // protect from falling
             }
 
-            FlushPending();
+            Flush();
             _batching = false;
         }
 
@@ -90,22 +94,37 @@ namespace _Game.Systems.MatchSystem
             if (!_batching && !_flushScheduled)
             {
                 _flushScheduled = true;
-                CoroutineRunner.Instance.StartCoroutine(FlushNextFrame());
+                // CoroutineRunner.Instance.StartCoroutine(FlushCoroutine());
+                Flush();
             }
         }
 
-        private IEnumerator FlushNextFrame()
+        private IEnumerator FlushCoroutine()
         {
-            yield return null;
-            FlushPending();
+            yield return new WaitUntil(() => _activeBlockCount == 0);
+            _events.Fire(new BlocksClearedEvent(_pending.ToList()));
+            if (_pending.Count != 0)
+                _pending.Clear();
             _flushScheduled = false;
+            
         }
 
-        private void FlushPending()
+        private void Flush()
         {
-            if (_pending.Count == 0) return;
-            _events.Fire(new BlocksClearedEvent(_pending.ToList()));
-            _pending.Clear();
+            CoroutineRunner.Instance.StartCoroutine(FlushCoroutine());
         }
+
+        // private void FlushPending()
+        // {
+        //     if (_pending.Count == 0) return;
+        //     CoroutineRunner.Instance.StartCoroutine(WaitActiveBlocksAndFlush());
+        // }
+        //
+        // private IEnumerator WaitActiveBlocksAndFlush()
+        // {
+        //     yield return new WaitUntil(() => _activeBlockCount == 0);
+        //     _events.Fire(new BlocksClearedEvent(_pending.ToList()));
+        //     _pending.Clear();
+        // }
     }
 }

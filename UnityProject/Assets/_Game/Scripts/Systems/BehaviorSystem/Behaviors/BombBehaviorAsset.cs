@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using _Game.Core.Events;
+using _Game.Enums;
 using _Game.Systems.BlockSystem;
 using _Game.Utils;
 
@@ -22,11 +23,7 @@ namespace _Game.Systems.BehaviorSystem
 
         public override void OnActivated(BlockModel block)
         {
-            Explode(block);
-        }
-
-        public override void OnCleared(BlockModel block)
-        {
+            base.OnActivated(block);
             if (!_exploded.Add(block))
                 return;
 
@@ -34,9 +31,18 @@ namespace _Game.Systems.BehaviorSystem
             CoroutineRunner.Instance.StartCoroutine(DelayedExplode(block));
         }
 
+        public override void OnCleared(BlockModel block)
+        {
+            // if (!_exploded.Add(block))
+            //     return;
+            //
+            // // Schedule the actual blast for next frame
+            // CoroutineRunner.Instance.StartCoroutine(DelayedExplode(block));
+        }
+
         private IEnumerator DelayedExplode(BlockModel block)
         {
-
+            Events.Fire(new BlockActivatedEvent());
             Explode(block);
             yield return null;
         }
@@ -60,13 +66,26 @@ namespace _Game.Systems.BehaviorSystem
 
                     if (Grid.TryGet(rr, cc, out var neighbor))
                     {
-                        Events.Fire(new ClearBlockEvent(neighbor));
+                        // if (neighbor.Type != BlockType.None)
+                        //     CoroutineRunner.Instance.StartCoroutine(WaitAndActivateBlock(rr, cc)); 
+                        if (neighbor.Type != BlockType.None)
+                            Events.Fire(new BlockSelectedEvent(rr,cc));
+                        else
+                            Events.Fire(new ClearBlockEvent(neighbor));
                         // Optional VFX or debug:
                         // neighbor.View.transform.localScale *= 0.5f;
                     }
                 }
             }
+            Events.Fire(new BlockDeactivatedEvent());
+            Events.Fire(new ClearBlockEvent(block));
         }
 
+        private IEnumerator WaitAndActivateBlock(int row, int column)
+        {
+            yield return new WaitForSeconds(0.5f);
+            Events.Fire(new BlockSelectedEvent(row,column));
+        }
     }
+    
 }

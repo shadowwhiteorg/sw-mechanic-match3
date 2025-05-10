@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: RocketBehavior
   m_EditorClassIdentifier: 
   type: 2
-  _trailPrefab: {fileID: 7096760517467135333, guid: 3dd6322410190c94fb8b905632553fcd, type: 3}
-  _trailPoolSize: 8
-  _perCellDelay: 0.05
+  trailPrefab: {fileID: 7096760517467135333, guid: 3dd6322410190c94fb8b905632553fcd, type: 3}
+  trailPoolSize: 8
+  perCellDelay: 0.05

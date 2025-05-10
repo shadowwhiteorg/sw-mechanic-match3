@@ -14,6 +14,7 @@ namespace _Game.Systems.BehaviorSystem
         protected IBlockFactory Factory;
         protected GridWorldHelper Helper;
         protected IEventBus Events;
+        protected bool IsActivated;
         public virtual BlockType Type => type;
         public virtual void Initialize(
             IGridHandler grid,
@@ -25,10 +26,16 @@ namespace _Game.Systems.BehaviorSystem
             Factory = factory;
             Helper  = helper;
             Events  = eventBus;
+            IsActivated = false;
         }
 
         public virtual void OnPlaced(BlockModel block)       {}
-        public virtual void OnActivated(BlockModel block)    {} // default no‐op
+
+        public virtual void OnActivated(BlockModel block)
+        {
+            if(IsActivated) return;
+            IsActivated = true;
+        } 
         public virtual void OnMatched(BlockModel block)      {}
         public virtual void OnCleared(BlockModel block)      {}
         public virtual void OnFell(BlockModel block)         {}
