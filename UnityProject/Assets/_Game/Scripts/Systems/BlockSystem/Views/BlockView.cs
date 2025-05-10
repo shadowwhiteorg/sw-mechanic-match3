@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _Game.Systems.BlockSystem
 {
     [RequireComponent(typeof(SpriteRenderer))]
     public class BlockView : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer spriteRenderer;
+        [SerializeField] protected SpriteRenderer spriteRenderer;
 
         public void SetSprite(Sprite sprite)
         {

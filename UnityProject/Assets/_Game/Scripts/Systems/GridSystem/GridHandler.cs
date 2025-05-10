@@ -1,4 +1,4 @@
-﻿using _Game.Scripts.Interfaces;
+﻿using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
 
 namespace _Game.Systems.GridSystem
@@ -32,6 +32,17 @@ namespace _Game.Systems.GridSystem
         public bool IsInside(int row, int column)
         {
             return row >= 0 && row < Rows && column >= 0 && column < Columns;
+        }
+        public bool TryGet(int row, int col, out BlockModel block)
+        {
+            if (row < 0 || row >= Rows || col < 0 || col >= Columns)
+            {
+                block = null;
+                return false;
+            }
+
+            block = GetBlock(row, col);
+            return block != null;
         }
     }
 }

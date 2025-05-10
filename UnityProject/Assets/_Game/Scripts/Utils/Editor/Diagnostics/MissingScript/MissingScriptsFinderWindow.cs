@@ -64,7 +64,7 @@ namespace _Game.Utils.Editor.Diagnostics.MissingScript
 
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                Debug.Log($"[MissingScriptFinder] Cleaned {results.Count} entries.");
+                Debug.Log($"[MissingScriptFinder] Cleaned {results.Count} Entries.");
                 results.Clear();
             }
 

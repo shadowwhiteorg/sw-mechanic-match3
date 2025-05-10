@@ -2,10 +2,11 @@
 {
     public enum BlockType
     {
-        Red,
-        Blue,
-        Green,
-        Yellow,
-        Purple
+        None = 0, 
+        Bomb = 1,
+        Rocket = 2,
+        Duck = 3,
+        Balloon = 4
+        /* …plus future ones*/
     }
 }

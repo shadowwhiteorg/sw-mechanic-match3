@@ -46,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridConfig: {fileID: 11400000, guid: e92b76ced8f2f3641a002f3bc0a928b6, type: 2}
-  blockTypeConfig: {fileID: 11400000, guid: b204c7d3916a2e74b8a6ff4ec9f077e5, type: 2}
+  blockTypeConfig: {fileID: 11400000, guid: 749be8a3500d3dd47bd8c49d462702f5, type: 2}
+  behaviorConfig: {fileID: 11400000, guid: 0cb245fbe9ee1a54c87a9c797806a86b, type: 2}
+  specialBlockSpawnConfig: {fileID: 11400000, guid: b2b6c8881f5a7d64d938abc91b7fd347, type: 2}
   blockPrefab: {fileID: 7885456264223199524, guid: af47bfa835f60d446b01c3009bf9fec3, type: 3}
   blockParent: {fileID: 5774716336245329584}
 --- !u!1 &5774716336245329585

@@ -1,45 +1,44 @@
-﻿using _Game.Core.Events;
-using _Game.Interfaces;
-using _Game.Scripts.Interfaces;
-using _Game.Systems;
-using _Game.Systems.GridSystem;
-using _Game.Systems.MatchSystem;
-using _Game.Utils;
+﻿// Core/DI/GameBootstrapper.cs
+
+using System.Collections.Generic;
 using UnityEngine;
+using _Game.Interfaces;
+using _Game.Core.Events;
+using _Game.Utils;
+using _Game.Systems.CoreSystems;
+using _Game.Systems.MatchSystem;
+using _Game.Systems.GridSystem;
 
 namespace _Game.Core.DI
 {
     public class GameBootstrapper : MonoBehaviour
     {
-        [SerializeField] private GameInstaller gameInstallerPrefab;
+        [SerializeField] private GameInstaller installerPrefab;
         [SerializeField] private SystemRunnerDriver runnerDriverPrefab;
 
         private void Awake()
         {
-
-            // Core Services
+            // Core DI container & event bus
             var container = new DIContainer();
-            
             var eventBus = new EventBus();
             container.BindSingleton<IEventBus>(eventBus);
-            
-            var gameInstaller = Instantiate(gameInstallerPrefab);
-            gameInstaller.Initialize(container, eventBus);
-            
-            //Gameplay
+
+            // Install core game systems
+            var installer = Instantiate(installerPrefab);
+            installer.Initialize(container, eventBus);
+
+            // Runner and driver
             var runner = new SystemRunner();
             container.BindSingleton<ISystemRunner>(runner);
-            var runnerDriver = Instantiate(runnerDriverPrefab);
-            runnerDriver.Initialize(runner);
+
+            var driver = Instantiate(runnerDriverPrefab);
+            driver.Initialize(runner);
             
-            var inputSystem = new InputSystem(Camera.main, container.Resolve<GridWorldHelper>(), container.Resolve<IEventBus>());
-            container.BindSingleton<IUpdatableSystem>(inputSystem);
-            runner.Register(inputSystem);
-            
-            var matchSys = new MatchSystem(container.Resolve<IGridHandler>(), eventBus);
-            container.BindSingleton(matchSys);
-            
-            
+
+            // InputSystem is registered manually
+            var input = new InputSystem(Camera.main, container.Resolve<GridWorldHelper>(), eventBus);
+            container.BindSingleton<IUpdatableSystem>(input);
+            runner.Register(input);
         }
     }
 }

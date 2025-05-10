@@ -1,130 +1,156 @@
-﻿// Systems/FallSystem.cs
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using _Game.Interfaces;
-using _Game.Systems.GridSystem;
 using _Game.Core.Events;
-using _Game.Utils;
 using _Game.Enums;
-using _Game.Scripts.Core.Events;
+using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
+using _Game.Utils;
 
-namespace _Game.Systems
+namespace _Game.Systems.MatchSystem
 {
     public class FallSystem
     {
-        private readonly GridHandler _grid;
-        private readonly GridWorldHelper _helper;
-        private readonly BlockFactory _factory;
-        private readonly IEventBus _eventBus;
-        private readonly GridConfig _gridConfig;
-        private readonly float _fallSpeed = 4f;
+        private readonly IGridHandler       _grid;
+        private readonly GridWorldHelper    _helper;
+        private readonly IBlockFactory      _factory;
+        private readonly IEventBus          _events;
+        private readonly float              _fallSpeed;
+        private int                          _activeAnimations;
 
         public FallSystem(
-            GridHandler grid,
+            IGridHandler    grid,
             GridWorldHelper helper,
-            BlockFactory factory,
-            IEventBus eventBus,
-            GridConfig gridConfig)
-        {
-            _grid = grid;
-            _helper = helper;
-            _factory = factory;
-            _eventBus = eventBus;
-            _eventBus.Subscribe<BlocksClearedEvent>(OnBlocksCleared);
-            _gridConfig = gridConfig;
+            IBlockFactory   factory,
+            IEventBus       events,
+            float           fallSpeed = 15f
+        ) {
+            _grid      = grid;
+            _helper    = helper;
+            _factory   = factory;
+            _events    = events;
+            _fallSpeed = fallSpeed;
+
+            _events.Subscribe<BlocksClearedEvent>(OnBlocksCleared);
         }
 
-        private void OnBlocksCleared(BlocksClearedEvent e)
+        private void OnBlocksCleared(BlocksClearedEvent evt)
         {
-            // for each distinct column that had clears
-            foreach (int col in e.ClearedPositions.Select(p => p.col).Distinct())
-                HandleColumnFall(col);
+            // handle each affected column
+            foreach (int col in evt.ClearedPositions.Select(p => p.col).Distinct())
+            {
+                CoroutineRunner.Instance.StartCoroutine(HandleColumnFall(col));
+            }
         }
 
-        public void HandleColumnFall(int col)
+        private IEnumerator HandleColumnFall(int col)
         {
-            // 1) Slide down all existing blocks
-            var moved = SlideExistingBlocks(col);
-
-            // 2) Animate those slides
-            AnimateBlockSlides(moved);
-
-            // 3) Figure out how many new blocks we need
-            int toSpawn = ComputeSpawnCount(col);
-
-            // 4) Spawn & animate new blocks
-            SpawnNewBlocks(col, toSpawn);
+            var moved = SlideDown(col);
+            AnimateSlides(col, moved);
+            yield return null;
+            SpawnNewBlocks(col);
         }
 
-        // 1) Pull any block above each empty down into it
-        private List<BlockModel> SlideExistingBlocks(int col)
+        private List<BlockModel> SlideDown(int col)
         {
             var moved = new List<BlockModel>();
-            int rows = _grid.Rows;
 
-            for (int row = rows - 1; row >= 0; row--)
+            for (int row = _grid.Rows - 1; row >= 0; row--)
             {
-                if (_grid.GetBlock(row, col) != null) continue;
+                if (_grid.GetBlock(row, col) != null)
+                    continue;
 
-                // find first non-null above
                 int above = row - 1;
                 while (above >= 0 && _grid.GetBlock(above, col) == null)
                     above--;
 
-                if (above >= 0)
-                {
-                    var blk = _grid.GetBlock(above, col);
-                    _grid.SetBlock(row, col, blk);
-                    _grid.SetBlock(above, col, null);
-                    blk.SetGridPosition(row, col);
-                    moved.Add(blk);
-                }
+                if (above < 0)
+                    continue;
+
+                var blk = _grid.GetBlock(above, col);
+                _grid.SetBlock(row,    col, blk);
+                _grid.SetBlock(above,  col, null);
+                blk.SetGridPosition(row, col);
+                moved.Add(blk);
             }
 
             return moved;
         }
 
-        // 2) Tween each moved block into its new world-position
-        private void AnimateBlockSlides(List<BlockModel> moved)
+        private void AnimateSlides(int col, List<BlockModel> moved)
         {
             foreach (var blk in moved)
             {
-                Vector3 target = _helper.GetWorldPosition(blk.Row, blk.Column);
-                float duration = Vector3.Distance(blk.View.transform.position, target) / _fallSpeed;
-                Tween.Position(blk.View.transform, target, duration, Ease.OutQuad);
+                Vector3 from = blk.View.transform.position;
+                Vector3 to   = _helper.GetWorldPosition(blk.Row, blk.Column);
+                float   dur  = Vector3.Distance(from, to) / _fallSpeed;
+
+                _activeAnimations++;
+                Tween.Position(
+                    blk.View.transform,
+                    to,
+                    dur,
+                    Ease.OutQuad,
+                    onComplete: () =>
+                    {
+                        blk.Fell();
+                        _activeAnimations--;
+                        TryFireSettledEvent();
+                    }
+                );
             }
         }
 
-        // 3) Count how many empty slots remain (always at the top once slides are done)
-        private int ComputeSpawnCount(int col)
+        private void SpawnNewBlocks(int col)
         {
-            int filled = 0, rows = _grid.Rows;
-            for (int r = 0; r < rows; r++)
-                if (_grid.GetBlock(r, col) != null)
-                    filled++;
-            return rows - filled;
-        }
+            var emptyRows = Enumerable
+                .Range(0, _grid.Rows)
+                .Where(r => _grid.GetBlock(r, col) == null)
+                .OrderBy(r => r)
+                .ToList();
 
-        // 4) Spawn exactly `count` new blocks above the grid and tween them down
-        private void SpawnNewBlocks(int col, int count)
-        {
-            int rows = _grid.Rows;
+            int toSpawn = emptyRows.Count;
+            if (toSpawn == 0) return;
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < toSpawn; i++)
             {
-                int targetRow = i; // 0 → top empty, 1 → next, etc.
-                int spawnRow = targetRow - count; // negative rows → off-grid above
-
+                int targetRow   = emptyRows[i];
+                // compute a negative spawnRow so blocks start off-grid
+                int spawnRow    = i - toSpawn-1;   // yields [-toSpawn, …, -1]
                 Vector3 spawnPos = _helper.GetWorldPosition(spawnRow, col);
-                var blk = _factory.CreateRandomBlock(targetRow, col, spawnPos);
-                _grid.SetBlock(targetRow, col, blk);
 
-                Vector3 worldTarget = _helper.GetWorldPosition(targetRow, col);
-                float duration = Vector3.Distance(spawnPos, worldTarget) / _fallSpeed;
-                Tween.Position(blk.View.transform, worldTarget, duration, Ease.OutQuad);
+                // create & place off-grid
+                var blk = _factory.CreateRandomBlock(targetRow, col);
+                _grid.SetBlock(targetRow, col, blk);
+                blk.View.transform.position = spawnPos;
+                
+                // animate into place
+                Vector3 targetPos = _helper.GetWorldPosition(targetRow, col);
+                float   dur       = Vector3.Distance(spawnPos, targetPos) / _fallSpeed;
+
+                _activeAnimations++;
+                blk.Settle(false);
+                Tween.Position(
+                    blk.View.transform,
+                    targetPos,
+                    dur,
+                    Ease.OutQuad,
+                    onComplete: () =>
+                    {
+                        blk.Fell();
+                        blk.Settle(true);
+                        _activeAnimations--;
+                        TryFireSettledEvent();
+                    }
+                );
             }
+        }
+
+        private void TryFireSettledEvent()
+        {
+            if (_activeAnimations <= 0)
+                _events.Fire(new TurnEndedEvent());
         }
     }
 }
