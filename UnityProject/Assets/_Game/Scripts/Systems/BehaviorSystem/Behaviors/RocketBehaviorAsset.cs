@@ -95,18 +95,22 @@ namespace _Game.Systems.BehaviorSystem
                 int c = block.Column + (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out var t))
                 {
-                    t.View.gameObject.SetActive(false);
-                    blocksToRemove.Add(t);
-                    // _events.Fire(new ClearBlockEvent(t));
+                    if (t.CanClear())
+                    {
+                        t.View.gameObject.SetActive(false);
+                        blocksToRemove.Add(t);
+                    }
                 }
 
                 r = block.Row - (int)(axis.y * i);
                 c = block.Column - (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out t))
                 {
-                    t.View.gameObject.SetActive(false);
-                    blocksToRemove.Add(t);
-                    // _events.Fire(new ClearBlockEvent(t));
+                    if (t.CanClear())
+                    {
+                        t.View.gameObject.SetActive(false);
+                        blocksToRemove.Add(t);
+                    }
                 }
             }
             

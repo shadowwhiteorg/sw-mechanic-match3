@@ -79,7 +79,7 @@ namespace _Game.Systems.MatchSystem
         private void OnClearBlock(ClearBlockEvent e)
         {
             var blk = e.Block;
-
+            if(!blk.CanClear()) return;
             if (!blk.IsSettled) return;
             if (!_grid.TryGet(blk.Row, blk.Column, out var live) || live != blk)
                 return;

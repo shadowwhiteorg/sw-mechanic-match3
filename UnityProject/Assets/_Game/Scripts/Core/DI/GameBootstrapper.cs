@@ -1,44 +1,45 @@
-﻿// Core/DI/GameBootstrapper.cs
-
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using _Game.Interfaces;
 using _Game.Core.Events;
 using _Game.Utils;
-using _Game.Systems.CoreSystems;
-using _Game.Systems.MatchSystem;
-using _Game.Systems.GridSystem;
+using _Game.Systems.GameLoop;
 
 namespace _Game.Core.DI
 {
     public class GameBootstrapper : MonoBehaviour
     {
-        [SerializeField] private GameInstaller installerPrefab;
-        [SerializeField] private SystemRunnerDriver runnerDriverPrefab;
+        [Header("Prefabs & Configs")]
+        [SerializeField] private GameInstaller        installerPrefab;
+        [SerializeField] private SystemRunnerDriver   runnerDriverPrefab;
+        [SerializeField] private LevelManager         levelManager;
+        [SerializeField] private LevelData            fallbackLevel;
 
         private void Awake()
         {
-            // Core DI container & event bus
             var container = new DIContainer();
-            var eventBus = new EventBus();
+            var eventBus  = new EventBus();
             container.BindSingleton<IEventBus>(eventBus);
+            container.BindSingleton(container);
+            container.BindSingleton(CoroutineRunner.Instance);
 
-            // Install core game systems
+            // System runner
+            var runner = new SystemRunner();
+            container.BindSingleton<ISystemRunner>(runner);
+            var driver = Instantiate(runnerDriverPrefab);
+            driver.Initialize(runner);
+
+            // Level Manager & LevelData
+            container.BindSingleton(levelManager);
+            var levelData = levelManager.CurrentLevel ?? fallbackLevel;
+            container.BindSingleton(levelData);
+
+            // Install core systems
             var installer = Instantiate(installerPrefab);
             installer.Initialize(container, eventBus);
 
-            // Runner and driver
-            var runner = new SystemRunner();
-            container.BindSingleton<ISystemRunner>(runner);
-
-            var driver = Instantiate(runnerDriverPrefab);
-            driver.Initialize(runner);
-            
-
-            // InputSystem is registered manually
-            var input = new InputSystem(Camera.main, container.Resolve<GridWorldHelper>(), eventBus);
-            container.BindSingleton<IUpdatableSystem>(input);
-            runner.Register(input);
+            // Load level
+            var loader = new LevelLoader(container);
+            loader.LoadLevel(levelData);
         }
     }
 }

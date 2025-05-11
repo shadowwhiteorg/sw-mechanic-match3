@@ -43,7 +43,7 @@ namespace _Game.Systems.BehaviorSystem
         public virtual void OnTurnEnd()    {}
         public virtual bool CanClear(BlockModel block)
         {
-            return block.CanClear;
+            return true;
         }
     }
 }
