@@ -47,7 +47,10 @@ namespace _Game.Systems.GameLoop
 
             // Check for completion
             if (IsLevelComplete())
+            {
                 _events.Fire(new LevelCompleteEvent());
+                Debug.Log("Level complete!");
+            }
         }
 
 

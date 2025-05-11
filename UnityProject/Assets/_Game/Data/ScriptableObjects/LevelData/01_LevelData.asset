@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eaee2ffca5f4dc396a6af9f622558b4, type: 3}
   m_Name: 01_LevelData
   m_EditorClassIdentifier: 
-  Rows: 5
-  Columns: 5
+  Rows: 8
+  Columns: 8
   MoveLimit: 20
   ColorGoals:
   - Color: 1
-    Count: 6
+    Count: 0
   TypeGoals:
   - Type: 3
-    Count: 8
+    Count: 0
   InitialBlocks:
   - Color: 0
     Type: 3
@@ -62,6 +62,84 @@ MonoBehaviour:
     Type: 0
   - Color: 0
     Type: 3
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
+  - Color: 0
+    Type: 0
   - Color: 0
     Type: 0
   - Color: 0
