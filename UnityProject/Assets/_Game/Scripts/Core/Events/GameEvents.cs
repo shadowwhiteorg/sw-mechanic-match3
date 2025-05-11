@@ -1,5 +1,6 @@
 ﻿using _Game.Interfaces;
 using _Game.Systems.GameLoop;
+using UnityEngine;
 
 namespace _Game.Core.Events
 {

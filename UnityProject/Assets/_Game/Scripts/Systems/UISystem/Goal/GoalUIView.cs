@@ -20,23 +20,41 @@ namespace _Game.Systems.UISystem
 
         protected override void OnBind()
         {
-            foreach (var colorState in ((GoalUIModel)Model).ColorStates)
-            {
-                var view = Instantiate(_itemPrefab, _goalContainer);
-                _colorViews[colorState.Color] = view;
-            }
-
-            foreach (var typeState in ((GoalUIModel)Model).TypeStates)
-            {
-                var view = Instantiate(_itemPrefab, _goalContainer);
-                _typeViews[typeState.Type] = view;
-            }
-
-            RefreshAll();
+            // foreach (var colorState in ((GoalUIModel)Model).ColorStates)
+            // {
+            //     var view = Instantiate(_itemPrefab, _goalContainer);
+            //     _colorViews[colorState.Color] = view;
+            //     Debug.Log(colorState.Color + ": " + view);
+            // }
+            //
+            // foreach (var typeState in ((GoalUIModel)Model).TypeStates)
+            // {
+            //     var view = Instantiate(_itemPrefab, _goalContainer);
+            //     _typeViews[typeState.Type] = view;
+            //     Debug.Log(typeState.Type + ": " + view);
+            // }
+            //
+            // RefreshAll();
         }
 
         protected override void OnViewUpdated()
         {
+            var model = (GoalUIModel)Model;
+            // instantiate only when states appear
+            if (_colorViews.Count < model.ColorStates.Count ||
+                _typeViews .Count < model.TypeStates .Count)
+            {
+                foreach (var c in model.ColorStates)
+                    if (!_colorViews.ContainsKey(c.Color))
+                        _colorViews[c.Color] = Instantiate(_itemPrefab, _goalContainer);
+
+                foreach (var t in model.TypeStates)
+                    if (!_typeViews.ContainsKey(t.Type))
+                        _typeViews[t.Type] = Instantiate(_itemPrefab, _goalContainer);
+            }
+
+            // now safe to refresh
+            RefreshAll();
             RefreshAll();
         }
 

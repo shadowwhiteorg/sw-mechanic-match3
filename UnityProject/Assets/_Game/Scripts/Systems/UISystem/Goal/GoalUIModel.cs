@@ -16,6 +16,7 @@ namespace _Game.Systems.UISystem
         public void SetGoals(IEnumerable<LevelData.ColorGoal> colorGoals, IEnumerable<LevelData.TypeGoal> typeGoals)
         {
             _colorStates.Clear();
+            
             _colorStates.AddRange(colorGoals.Select(g => new ColorState
             {
                 Color = g.Color,

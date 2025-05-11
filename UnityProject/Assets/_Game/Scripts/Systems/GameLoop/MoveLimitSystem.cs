@@ -20,7 +20,6 @@ namespace _Game.Systems.GameLoop
         {
             
             MovesLeft = Mathf.Max(0, MovesLeft - 1);
-            Debug.Log($"Moves left: {MovesLeft}");
             _events.Fire(new MoveUpdatedEvent(MovesLeft));
             if (MovesLeft == 0)
                 _events.Fire(new GameOverEvent());

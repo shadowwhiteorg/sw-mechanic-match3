@@ -30,7 +30,7 @@ namespace _Game.Systems.UISystem
 
             eventBus.Subscribe<LevelCompleteEvent>(_ =>
             {
-                Hide();
+                //Hide();
             });
         }
     }

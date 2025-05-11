@@ -3,16 +3,18 @@ using _Game.Interfaces;
 using _Game.Core.Events;
 using _Game.Utils;
 using _Game.Systems.GameLoop;
+using _Game.Systems.UISystem;
 
 namespace _Game.Core.DI
 {
     public class GameBootstrapper : MonoBehaviour
     {
         [Header("Prefabs & Configs")]
-        [SerializeField] private GameInstaller        installerPrefab;
-        [SerializeField] private SystemRunnerDriver   runnerDriverPrefab;
-        [SerializeField] private LevelManager         levelManager;
-        [SerializeField] private LevelData            fallbackLevel;
+        [SerializeField] private GameInstaller installerPrefab;
+        [SerializeField] private UIInstaller uiInstaller;
+        [SerializeField] private SystemRunnerDriver runnerDriverPrefab;
+        [SerializeField] private LevelManager levelManager;
+        [SerializeField] private LevelData  fallbackLevel;
 
         private void Awake()
         {
@@ -33,13 +35,16 @@ namespace _Game.Core.DI
             var levelData = levelManager.CurrentLevel ?? fallbackLevel;
             container.BindSingleton(levelData);
 
-            // Install core systems
+            // Initialize core systems
             var installer = Instantiate(installerPrefab);
             installer.Initialize(container, eventBus);
+            // var uiInstaller = Instantiate(uiInstallerPrefab);
+            uiInstaller.Initialize(container, eventBus);
 
             // Load level
             var loader = new LevelLoader(container);
             loader.LoadLevel(levelData);
+            eventBus.Fire(new LevelInitializedEvent(levelManager.CurrentLevelIndex,levelManager.CurrentLevel));
         }
     }
 }

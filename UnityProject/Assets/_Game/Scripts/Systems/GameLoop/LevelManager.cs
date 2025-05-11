@@ -9,6 +9,7 @@ namespace _Game.Systems.GameLoop
         [Tooltip("Assign in build order.")]
         [SerializeField] private List<LevelData> allLevels;
         private int _currentIndex;
+        public int CurrentLevelIndex => _currentIndex = PlayerPrefs.GetInt(GameConstants.PlayerPrefsLevel, 0);
 
         public LevelData CurrentLevel =>
             (_currentIndex >= 0 && _currentIndex < allLevels.Count)
@@ -17,7 +18,7 @@ namespace _Game.Systems.GameLoop
 
         void Awake()
         {
-            _currentIndex = PlayerPrefs.GetInt(GameConstants.PlayerPrefsLevel, 0);
+            _currentIndex = CurrentLevelIndex;
             _currentIndex = Mathf.Clamp(_currentIndex, 0, allLevels.Count - 1);
             DontDestroyOnLoad(this);
         }

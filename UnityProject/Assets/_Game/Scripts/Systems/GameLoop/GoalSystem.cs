@@ -58,14 +58,12 @@ namespace _Game.Systems.GameLoop
         {
             _events.Fire(new GoalUpdatedEvent(
                 GoalUpdatedEvent.GoalCategory.Color, (int)color, remaining));
-            Debug.Log($"Color goal {color} updated to {remaining}");
         }
 
         private void UpdateTypeGoal(BlockType type, int remaining)
         {
             _events.Fire(new GoalUpdatedEvent(
                 GoalUpdatedEvent.GoalCategory.Type, (int)type, remaining));
-            Debug.Log($"Type goal {type} updated to {remaining}");
         }
 
         private bool IsLevelComplete()
