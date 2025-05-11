@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using _Game.Core.Events;
 using _Game.Enums;
 using _Game.Interfaces;
 using _Game.Utils;
@@ -11,12 +12,16 @@ namespace _Game.Systems.GameLoop
         private readonly IGridHandler    _grid;
         private readonly IBlockFactory   _factory;
         private readonly GridWorldHelper _helper;
+        private readonly IEventBus      _eventBus;
 
-        public LevelLoader(IDIContainer container)
+        public LevelLoader(IDIContainer container, IEventBus eventBus)
         {
             _grid    = container.Resolve<IGridHandler>();
             _factory = container.Resolve<IBlockFactory>();
             _helper  = container.Resolve<GridWorldHelper>();
+            _eventBus = eventBus;
+            _eventBus.Subscribe<LevelCompleteEvent>(e=>ClearLevel());
+            _eventBus.Subscribe<GameOverEvent>(e=>ClearLevel());
         }
 
         public void LoadLevel(LevelData level)
@@ -50,6 +55,17 @@ namespace _Game.Systems.GameLoop
                 blk.View.transform.position = _helper.GetWorldPosition(r, c);
                 blk.Settle(true);
             }
+        }
+        
+        private void ClearLevel()
+        {
+            for (int r = 0; r < _grid.Rows; r++)
+            for (int c = 0; c < _grid.Columns; c++)
+                if (_grid.TryGet(r, c, out var b))
+                {
+                    _factory.RecycleBlock(b);
+                    _grid.SetBlock(r, c, null);
+                }
         }
 
         private BlockColor RandomColor()

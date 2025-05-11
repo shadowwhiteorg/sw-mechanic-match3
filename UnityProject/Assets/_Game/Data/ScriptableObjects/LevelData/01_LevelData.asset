@@ -17,10 +17,10 @@ MonoBehaviour:
   MoveLimit: 20
   ColorGoals:
   - Color: 4
-    Count: 1
+    Count: 3
   TypeGoals:
   - Type: 3
-    Count: 1
+    Count: 3
   InitialBlocks:
   - Color: 0
     Type: 3

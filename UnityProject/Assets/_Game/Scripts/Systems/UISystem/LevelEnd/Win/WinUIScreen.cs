@@ -18,7 +18,6 @@ namespace _Game.Systems.UISystem
 
             // Buttons
             view.OnNextClicked  += () => eventBus.Fire(new NextLevelEvent());
-            view.OnRetryClicked += () => eventBus.Fire(new RetryLevelEvent());
         }
     }
 }

@@ -454,6 +454,14 @@ PrefabInstance:
       propertyPath: canvasRoot
       value: 
       objectReference: {fileID: 1710491787}
+    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
+      propertyPath: winUIScreenPrefab
+      value: 
+      objectReference: {fileID: 827742806331483711, guid: ed06e8c47176bcc428c701d322e11adc, type: 3}
+    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
+      propertyPath: loseUIScreenPrefab
+      value: 
+      objectReference: {fileID: 1550325458992486005, guid: e42ab76bcfe3db447ada51d4037dac45, type: 3}
     - target: {fileID: 1959331372316502458, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
       propertyPath: m_RootOrder
       value: 0

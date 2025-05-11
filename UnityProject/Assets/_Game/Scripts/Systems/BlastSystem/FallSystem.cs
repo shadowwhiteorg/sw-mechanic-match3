@@ -17,7 +17,8 @@ namespace _Game.Systems.MatchSystem
         private readonly IBlockFactory      _factory;
         private readonly IEventBus          _events;
         private readonly float              _fallSpeed;
-        private int                          _activeAnimations;
+        private int _activeAnimations;
+        private bool _canSpawnNewBlocks = true;
 
         public FallSystem(
             IGridHandler    grid,
@@ -31,12 +32,16 @@ namespace _Game.Systems.MatchSystem
             _factory   = factory;
             _events    = events;
             _fallSpeed = fallSpeed;
-
+            _events.Subscribe<LevelCompleteEvent>(e => ActivateDeactivate(false));
+            _events.Subscribe<GameOverEvent>(e => ActivateDeactivate(false));
+            _events.Subscribe<LevelInitializedEvent>(e => ActivateDeactivate(true));
             _events.Subscribe<BlocksClearedEvent>(OnBlocksCleared);
+            
         }
 
         private void OnBlocksCleared(BlocksClearedEvent evt)
         {
+            if (!_canSpawnNewBlocks) return;
             // handle each affected column
             foreach (int col in evt.ClearedPositions.Select(p => p.col).Distinct())
             {
@@ -145,6 +150,11 @@ namespace _Game.Systems.MatchSystem
                     }
                 );
             }
+        }
+
+        private void ActivateDeactivate(bool active)
+        {
+            _canSpawnNewBlocks = active;
         }
 
         private void TryFireSettledEvent()

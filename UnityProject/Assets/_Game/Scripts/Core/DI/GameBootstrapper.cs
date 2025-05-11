@@ -42,7 +42,7 @@ namespace _Game.Core.DI
             uiInstaller.Initialize(container, eventBus);
 
             // Load level
-            var loader = new LevelLoader(container);
+            var loader = new LevelLoader(container,eventBus);
             loader.LoadLevel(levelData);
             eventBus.Fire(new LevelInitializedEvent(levelManager.CurrentLevelIndex,levelManager.CurrentLevel));
         }
