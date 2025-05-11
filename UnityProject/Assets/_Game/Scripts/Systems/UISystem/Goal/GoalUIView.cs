@@ -9,8 +9,7 @@ namespace _Game.Systems.UISystem
     public class GoalUIView : BaseUIView
     {
         [Header("Layout")]
-        [SerializeField] private Transform _colorGoalContainer;
-        [SerializeField] private Transform _typeGoalContainer;
+        [SerializeField] private Transform _goalContainer;
         [SerializeField] private GoalItemView _itemPrefab;
 
         [Header("Config")]
@@ -23,13 +22,13 @@ namespace _Game.Systems.UISystem
         {
             foreach (var colorState in ((GoalUIModel)Model).ColorStates)
             {
-                var view = Instantiate(_itemPrefab, _colorGoalContainer);
+                var view = Instantiate(_itemPrefab, _goalContainer);
                 _colorViews[colorState.Color] = view;
             }
 
             foreach (var typeState in ((GoalUIModel)Model).TypeStates)
             {
-                var view = Instantiate(_itemPrefab, _typeGoalContainer);
+                var view = Instantiate(_itemPrefab, _goalContainer);
                 _typeViews[typeState.Type] = view;
             }
 
@@ -43,16 +42,16 @@ namespace _Game.Systems.UISystem
 
         private void RefreshAll()
         {
-            foreach (var colorState in ((GoalUIModel)Model).ColorStates)
+            foreach (var state in ((GoalUIModel)Model).ColorStates)
             {
-                var entry = _blockTypeConfig.Get(colorState.Color, BlockType.None);
-                _colorViews[colorState.Color].Set(colorState.Remaining, entry.Sprite);
+                var entry = _blockTypeConfig.Get(state.Color, BlockType.None);
+                _colorViews[state.Color].Set(state.Remaining, entry.Sprite);
             }
 
-            foreach (var typeState in ((GoalUIModel)Model).TypeStates)
+            foreach (var state in ((GoalUIModel)Model).TypeStates)
             {
-                var entry = _blockTypeConfig.Get(BlockColor.None, typeState.Type);
-                _typeViews[typeState.Type].Set(typeState.Remaining, entry.Sprite);
+                var entry = _blockTypeConfig.Get(BlockColor.None, state.Type);
+                _typeViews[state.Type].Set(state.Remaining, entry.Sprite);
             }
         }
     }

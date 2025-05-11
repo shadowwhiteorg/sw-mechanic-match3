@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eaee2ffca5f4dc396a6af9f622558b4, type: 3}
   m_Name: 01_LevelData
   m_EditorClassIdentifier: 
-  Rows: 8
-  Columns: 8
+  Rows: 6
+  Columns: 6
   MoveLimit: 20
   ColorGoals:
   - Color: 1
@@ -62,62 +62,6 @@ MonoBehaviour:
     Type: 0
   - Color: 0
     Type: 3
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
   - Color: 0
     Type: 0
   - Color: 0
