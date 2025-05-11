@@ -1,4 +1,5 @@
 ﻿using _Game.Interfaces;
+using _Game.Systems.GameLoop;
 
 namespace _Game.Core.Events
 {
@@ -6,6 +7,17 @@ namespace _Game.Core.Events
     {
         public string Message { get; }
         public GameStartedEvent(string message) => Message = message;
+    }
+    public struct LevelInitializedEvent : IGameEvent
+    {
+        public int Level { get; }
+        public LevelData LevelData { get; }
+
+        public LevelInitializedEvent(int level, LevelData levelData)
+        {
+            Level = level;
+            LevelData = levelData;
+        }
     }
     public struct TurnStartedEvent : IGameEvent
     {
