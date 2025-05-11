@@ -16,10 +16,13 @@ namespace _Game.Systems.BlockSystem
         private bool _isClearing = false;
         private bool _isSettled = false;
         private bool _canClear = true;
-        public bool CanClear
+        public bool CanClear()
         {
-            get => _canClear;
-            set => _canClear = value;
+            foreach (var bhv in _behaviors)
+            {
+                if (!bhv.CanClear(this)) return false;
+            }
+            return true;
         }
         public bool IsSettled => _isSettled;
         

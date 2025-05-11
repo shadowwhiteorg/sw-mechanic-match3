@@ -38,8 +38,13 @@ namespace _Game.Systems.GameLoop
                 int c = i % cols;
 
                 var def = level.InitialBlocks[i];
-                var color = def.Color == BlockColor.None ? RandomColor() : def.Color;
+                var color = def.Color;
                 var type  = def.Type;
+                if(type == BlockType.None && color == BlockColor.None)
+                {
+                    type = BlockType.None;
+                    color = RandomColor();
+                }
 
                 var blk = _factory.CreateBlock(color, type, r, c);
                 blk.View.transform.position = _helper.GetWorldPosition(r, c);
