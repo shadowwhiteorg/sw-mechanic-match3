@@ -2,6 +2,7 @@
 using _Game.Core.Events;
 using _Game.Enums;
 using _Game.Interfaces;
+using UnityEngine;
 
 namespace _Game.Systems.GameLoop
 {
@@ -22,37 +23,46 @@ namespace _Game.Systems.GameLoop
         {
             var b = e.Block;
 
-            // handle the player goals
-            var cg = _level.ColorGoals.FirstOrDefault(x => x.Color == b.Color && x.Count > 0);
-            if (cg.Count > 0)
+            // Update color goals
+            int colorIndex = _level.ColorGoals.FindIndex(g => g.Color == b.Color && g.Count > 0);
+            if (colorIndex >= 0)
             {
-                cg.Count--;
-                UpdateColorGoal(cg.Color, cg.Count);
+                var goal = _level.ColorGoals[colorIndex];
+                goal.Count--;
+                _level.ColorGoals[colorIndex] = goal;
+                UpdateColorGoal(goal.Color, goal.Count);
+                Debug.Log($"Goal {goal.Color} Updated: {goal.Count}");
             }
 
-            // handle type goals
-            var tg = _level.TypeGoals.FirstOrDefault(x => x.Type == b.Type && x.Count > 0);
-            if (tg.Count > 0)
+            // Update type goals
+            int typeIndex = _level.TypeGoals.FindIndex(g => g.Type == b.Type && g.Count > 0);
+            if (typeIndex >= 0)
             {
-                tg.Count--;
-                UpdateTypeGoal(tg.Type, tg.Count);
+                var goal = _level.TypeGoals[typeIndex];
+                goal.Count--;
+                _level.TypeGoals[typeIndex] = goal;
+                UpdateTypeGoal(goal.Type, goal.Count);
+                Debug.Log($"Goal {goal.Type} Updated: {goal.Count}");
             }
 
-            // check for level completion
+            // Check for completion
             if (IsLevelComplete())
                 _events.Fire(new LevelCompleteEvent());
         }
+
 
         private void UpdateColorGoal(BlockColor color, int remaining)
         {
             _events.Fire(new GoalUpdatedEvent(
                 GoalUpdatedEvent.GoalCategory.Color, (int)color, remaining));
+            Debug.Log($"Color goal {color} updated to {remaining}");
         }
 
         private void UpdateTypeGoal(BlockType type, int remaining)
         {
             _events.Fire(new GoalUpdatedEvent(
                 GoalUpdatedEvent.GoalCategory.Type, (int)type, remaining));
+            Debug.Log($"Type goal {type} updated to {remaining}");
         }
 
         private bool IsLevelComplete()

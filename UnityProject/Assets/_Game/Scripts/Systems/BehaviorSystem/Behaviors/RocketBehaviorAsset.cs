@@ -97,7 +97,6 @@ namespace _Game.Systems.BehaviorSystem
                 {
                     if (t.CanClear())
                     {
-                        Debug.Log($"Clearing block at {t.Row}, {t.Column}, type: {t.Type}");
                         t.View.gameObject.SetActive(false);
                         blocksToRemove.Add(t);
                     }
