@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using _Game.Core.Constants;
+using _Game.Interfaces;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _Game.Systems.GameLoop
 {
@@ -19,8 +21,11 @@ namespace _Game.Systems.GameLoop
         void Awake()
         {
             _currentIndex = CurrentLevelIndex;
-            _currentIndex = Mathf.Clamp(_currentIndex, 0, allLevels.Count - 1);
+            // loop through levels
+            
+            _currentIndex = (_currentIndex - 1 + allLevels.Count) % allLevels.Count;
             DontDestroyOnLoad(this);
+            
         }
 
         public bool LoadNext()
@@ -29,11 +34,11 @@ namespace _Game.Systems.GameLoop
             _currentIndex++;
             PlayerPrefs.SetInt(GameConstants.PlayerPrefsLevel, _currentIndex);
             PlayerPrefs.Save();
-            // reload the scene or tell Bootstrapper to re‐run
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             return true;
         }
 
-        public void Reload() => LoadLevel(_currentIndex);
+        public void Reload() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
         public bool LoadLevel(int index)
         {
@@ -42,6 +47,11 @@ namespace _Game.Systems.GameLoop
             PlayerPrefs.SetInt(GameConstants.PlayerPrefsLevel, _currentIndex);
             PlayerPrefs.Save();
             return true;
+        }
+
+        public void RegisterEvents(IEventBus events)
+        {
+            // events.Subscribe<LevelInitializedEvent>(OnLevelInitialized);
         }
     }
 }

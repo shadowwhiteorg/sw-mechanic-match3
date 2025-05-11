@@ -13,15 +13,20 @@ namespace _Game.Systems.GameLoop
         private readonly IBlockFactory   _factory;
         private readonly GridWorldHelper _helper;
         private readonly IEventBus      _eventBus;
+        private readonly LevelManager    _levelManager;
 
-        public LevelLoader(IDIContainer container, IEventBus eventBus)
+        public LevelLoader(IDIContainer container, IEventBus eventBus, LevelManager levelManager)
         {
             _grid    = container.Resolve<IGridHandler>();
             _factory = container.Resolve<IBlockFactory>();
             _helper  = container.Resolve<GridWorldHelper>();
             _eventBus = eventBus;
+            _levelManager = levelManager;
             _eventBus.Subscribe<LevelCompleteEvent>(e=>ClearLevel());
             _eventBus.Subscribe<GameOverEvent>(e=>ClearLevel());
+            _eventBus.Subscribe<LevelInitializedEvent>(e=>LoadLevel(levelManager.CurrentLevel));
+            _eventBus.Subscribe<NextLevelEvent>(e=>_levelManager.LoadNext());
+            _eventBus.Subscribe<RetryLevelEvent>(e => _levelManager.Reload());
         }
 
         public void LoadLevel(LevelData level)
