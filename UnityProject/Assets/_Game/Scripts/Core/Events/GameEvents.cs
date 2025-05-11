@@ -51,4 +51,10 @@ namespace _Game.Core.Events
         public int MovesLeft { get; }
         public MoveUpdatedEvent(int movesLeft) => MovesLeft = movesLeft;
     }
+    public struct NextLevelEvent : IGameEvent
+    {
+        public int Level { get; }
+        public NextLevelEvent(int level) => Level = level;
+    }
+    public struct RetryLevelEvent : IGameEvent{}
 }
