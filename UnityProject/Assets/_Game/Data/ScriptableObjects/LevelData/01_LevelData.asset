@@ -16,11 +16,11 @@ MonoBehaviour:
   Columns: 6
   MoveLimit: 20
   ColorGoals:
-  - Color: 1
-    Count: 0
+  - Color: 4
+    Count: 1
   TypeGoals:
   - Type: 3
-    Count: 0
+    Count: 1
   InitialBlocks:
   - Color: 0
     Type: 3
