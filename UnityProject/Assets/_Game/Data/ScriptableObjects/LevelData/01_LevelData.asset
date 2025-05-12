@@ -20,77 +20,115 @@ MonoBehaviour:
     Count: 0
   TypeGoals:
   - Type: 3
-    Count: 48
+    Count: 34
+  - Type: 4
+    Count: 0
   InitialBlocks:
   - Color: 0
-    Type: 3
+    Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 3
+    Direction: 0
   - Color: 0
     Type: 3
+    Direction: 0
+  - Color: 1
+    Type: 2
+    Direction: 1
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 3
+    Direction: 0
+  - Color: 0
+    Type: 3
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
   - Color: 0
     Type: 4
+    Direction: 0
   - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 3
+    Type: 2
+    Direction: 1
   - Color: 0
     Type: 3
+    Direction: 0
+  - Color: 0
+    Type: 2
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
   - Color: 0
     Type: 4
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 3
+    Direction: 0
   - Color: 0
     Type: 3
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
+  - Color: 1
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
   - Color: 0
     Type: 4
+    Direction: 0
   - Color: 0
-    Type: 3
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
+    Type: 2
+    Direction: 2
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
   - Color: 0
     Type: 4
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
-  - Color: 0
-    Type: 4
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 0
+    Direction: 0
