@@ -115,7 +115,7 @@ namespace _Game.Systems.BehaviorSystem
             Events.Fire(new ClearBlockEvent(block));
             foreach (var blk in blocksToRemove)
             {
-                if (blk.Type != BlockType.None)
+                if (blk.Type != BlockType.None && blk.Direction != block.Direction)
                     Events.Fire(new BlockSelectedEvent(blk.Row, blk.Column));
                 else
                     Events.Fire(new ClearBlockEvent(blk));
