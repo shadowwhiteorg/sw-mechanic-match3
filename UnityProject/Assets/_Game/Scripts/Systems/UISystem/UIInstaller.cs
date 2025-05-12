@@ -20,6 +20,9 @@ namespace _Game.Systems.UISystem
         [Header("SFX References")]
         [SerializeField] private GameObject audioSourcePrefab;
 
+        [SerializeField] private AudioSource sceneAudioSource;
+        [SerializeField] private AudioClip goalCollectedAudioClip;
+
         [SerializeField] private Canvas canvasRoot;
         [SerializeField] private BlockTypeConfig blockTypeConfig;
 
@@ -117,7 +120,9 @@ namespace _Game.Systems.UISystem
                 blockTypeConfig,
                 helper,
                 sfxPools,
-                runner
+                runner,
+                sceneAudioSource,
+                goalCollectedAudioClip
             );
             container.BindSingleton(sfxService);
         }

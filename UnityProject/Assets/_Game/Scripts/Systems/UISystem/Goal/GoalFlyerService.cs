@@ -77,8 +77,11 @@ namespace _Game.Systems.UISystem
                 target,
                 duration: 0.5f,
                 ease: Ease.OutQuad,
-                onComplete: () => _pool.Return(go)
-            );
+                onComplete: () =>
+                {
+                    _events.Fire(new GoalCollectedEvent());
+                    _pool.Return(go);
+                });
         }
     }
 }

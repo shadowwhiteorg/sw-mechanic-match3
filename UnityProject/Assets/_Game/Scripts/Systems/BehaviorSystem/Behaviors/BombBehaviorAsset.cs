@@ -30,15 +30,7 @@ namespace _Game.Systems.BehaviorSystem
             // Schedule the actual blast for next frame
             CoroutineRunner.Instance.StartCoroutine(DelayedExplode(block));
         }
-
-        public override void OnCleared(BlockModel block)
-        {
-            // if (!_exploded.Add(block))
-            //     return;
-            //
-            // // Schedule the actual blast for next frame
-            // CoroutineRunner.Instance.StartCoroutine(DelayedExplode(block));
-        }
+        
 
         private IEnumerator DelayedExplode(BlockModel block)
         {

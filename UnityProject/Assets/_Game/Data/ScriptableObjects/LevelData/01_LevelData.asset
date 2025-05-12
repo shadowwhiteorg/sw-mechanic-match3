@@ -20,7 +20,7 @@ MonoBehaviour:
     Count: 0
   TypeGoals:
   - Type: 3
-    Count: 5
+    Count: 48
   InitialBlocks:
   - Color: 0
     Type: 3
@@ -35,7 +35,7 @@ MonoBehaviour:
   - Color: 0
     Type: 3
   - Color: 0
-    Type: 0
+    Type: 4
   - Color: 0
     Type: 0
   - Color: 0
@@ -47,7 +47,7 @@ MonoBehaviour:
   - Color: 0
     Type: 0
   - Color: 0
-    Type: 0
+    Type: 4
   - Color: 0
     Type: 0
   - Color: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
   - Color: 0
     Type: 0
   - Color: 0
-    Type: 0
+    Type: 4
   - Color: 0
     Type: 3
   - Color: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
   - Color: 0
     Type: 0
   - Color: 0
-    Type: 0
+    Type: 4
   - Color: 0
     Type: 0
   - Color: 0
@@ -83,7 +83,7 @@ MonoBehaviour:
   - Color: 0
     Type: 0
   - Color: 0
-    Type: 0
+    Type: 4
   - Color: 0
     Type: 0
   - Color: 0

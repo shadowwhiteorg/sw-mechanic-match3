@@ -33,12 +33,6 @@ namespace _Game.Systems.BehaviorSystem
             base.OnActivated(block);
             Events.Fire(new BlockActivatedEvent());
             Launch(block);
-            
-        }
-        
-        public override void OnCleared(BlockModel block)
-        {
-            // Launch(block);
         }
         
         private void Launch(BlockModel block)

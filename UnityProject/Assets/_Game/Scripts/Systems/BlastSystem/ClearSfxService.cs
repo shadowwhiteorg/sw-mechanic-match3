@@ -18,21 +18,28 @@ namespace _Game.Systems.MatchSystem
         readonly GridWorldHelper _helper;
         readonly IDictionary<AudioClip, GameObjectPool> _pools;
         readonly CoroutineRunner _runner;
+        private AudioSource _audioSource;
+        private AudioClip _clip;
 
         public ClearSfxService(
             IEventBus events,
             BlockTypeConfig config,
             GridWorldHelper helper,
             IDictionary<AudioClip, GameObjectPool> pools,
-            CoroutineRunner runner)
+            CoroutineRunner runner,
+            AudioSource source ,
+            AudioClip clip)
         {
             _events  = events;
             _config  = config;
             _helper  = helper;
             _pools   = pools;
             _runner  = runner;
+            _audioSource = source;
+            _clip = clip;
 
             _events.Subscribe<ClearBlockEvent>(OnBlockCleared);
+            _events.Subscribe<GoalCollectedEvent>(e=>OnGoalCollected());
         }
 
         private void OnBlockCleared(ClearBlockEvent e)
@@ -53,6 +60,11 @@ namespace _Game.Systems.MatchSystem
 
             // Return to pool after clip duration
             _runner.StartCoroutine(ReturnAfter(go, pool, clip.length));
+        }
+
+        private void OnGoalCollected()
+        {
+            _audioSource.PlayOneShot(_clip);
         }
 
         private IEnumerator ReturnAfter(GameObject go, GameObjectPool pool, float delay)

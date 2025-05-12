@@ -17,35 +17,44 @@ MonoBehaviour:
     type: 0
     Sprite: {fileID: 21300000, guid: d5b09588fd691c84996dae5530352677, type: 3}
     ClearParticlePrefab: {fileID: 8887787612402079592, guid: 2ae234b5adc3ad84b8d4bc6ac42622f0, type: 3}
+    ClearSfxClip: {fileID: 8300000, guid: 9fe1dc1902cc80e46bbf3df213534475, type: 3}
   - baseColor: 2
     type: 0
     Sprite: {fileID: 21300000, guid: c1c17b78009e79e4b8ec2caf4b1b58ab, type: 3}
     ClearParticlePrefab: {fileID: 8887787612402079592, guid: 2ae234b5adc3ad84b8d4bc6ac42622f0, type: 3}
+    ClearSfxClip: {fileID: 8300000, guid: 9fe1dc1902cc80e46bbf3df213534475, type: 3}
   - baseColor: 3
     type: 0
     Sprite: {fileID: 21300000, guid: ffe2c53df84c81d44a850681eeab98f3, type: 3}
     ClearParticlePrefab: {fileID: 8887787612402079592, guid: 2ae234b5adc3ad84b8d4bc6ac42622f0, type: 3}
+    ClearSfxClip: {fileID: 8300000, guid: 9fe1dc1902cc80e46bbf3df213534475, type: 3}
   - baseColor: 4
     type: 0
     Sprite: {fileID: 21300000, guid: 50a47cb0fd099ad499ad9ab6df7a87fe, type: 3}
     ClearParticlePrefab: {fileID: 8887787612402079592, guid: 2ae234b5adc3ad84b8d4bc6ac42622f0, type: 3}
+    ClearSfxClip: {fileID: 8300000, guid: 9fe1dc1902cc80e46bbf3df213534475, type: 3}
   - baseColor: 5
     type: 0
     Sprite: {fileID: 21300000, guid: 27d8108c470016148922eea5bbe49c9c, type: 3}
     ClearParticlePrefab: {fileID: 8887787612402079592, guid: 2ae234b5adc3ad84b8d4bc6ac42622f0, type: 3}
+    ClearSfxClip: {fileID: 8300000, guid: 9fe1dc1902cc80e46bbf3df213534475, type: 3}
   - baseColor: 0
     type: 1
     Sprite: {fileID: 21300000, guid: 7dd97cff19c97bc49ace5648ac47f5a8, type: 3}
     ClearParticlePrefab: {fileID: 19849376, guid: d3c323970e4fea44d847e56510c9f65a, type: 3}
+    ClearSfxClip: {fileID: 8300000, guid: 9fe1dc1902cc80e46bbf3df213534475, type: 3}
   - baseColor: 0
     type: 2
     Sprite: {fileID: 21300000, guid: 3b5e733024c05194ebd25dfa0f97f423, type: 3}
     ClearParticlePrefab: {fileID: 0}
+    ClearSfxClip: {fileID: 8300000, guid: 9fe1dc1902cc80e46bbf3df213534475, type: 3}
   - baseColor: 0
     type: 3
     Sprite: {fileID: 21300000, guid: 51a517f0d915ffd4cb481615444972b6, type: 3}
     ClearParticlePrefab: {fileID: 0}
+    ClearSfxClip: {fileID: 8300000, guid: 8abb988af31d3c942acdb42de1ed0ad2, type: 3}
   - baseColor: 0
     type: 4
     Sprite: {fileID: 21300000, guid: 9ab6129d553f005429f426ff61c8b2a3, type: 3}
     ClearParticlePrefab: {fileID: 0}
+    ClearSfxClip: {fileID: 8300000, guid: 58e5b4c185319d742b5c84de1c8a346a, type: 3}
