@@ -10,6 +10,7 @@ namespace _Game.Interfaces
         BlockModel GetBlock(int row, int column);
         bool IsInside(int row, int column);
         public bool TryGet(int row, int col, out BlockModel block);
+        void ClearAllColoredBlocks();
 
     }
 }

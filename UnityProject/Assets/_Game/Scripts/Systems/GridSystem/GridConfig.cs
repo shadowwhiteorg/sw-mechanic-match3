@@ -9,6 +9,7 @@ namespace _Game.Systems.GridSystem
         [Min(1)] public int Columns = 8;
         [Min(0.1f)] public float BlockSize = 1f;
         [Min(2)]public int MatchThreshold;
+        public float ShuffleDuration = 0.5f;
         
         public Vector3 GetWorldPosition(int row, int column)
         {
