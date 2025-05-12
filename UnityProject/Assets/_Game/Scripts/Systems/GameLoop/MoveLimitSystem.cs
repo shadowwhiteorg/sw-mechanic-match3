@@ -31,7 +31,6 @@ namespace _Game.Systems.GameLoop
         private void Activate(bool active)
         {
             _canCount = active;
-            Debug.Log($"Active Goal {active}");
         }
     }
 

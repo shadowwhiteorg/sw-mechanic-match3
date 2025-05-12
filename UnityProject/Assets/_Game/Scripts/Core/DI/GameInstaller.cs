@@ -65,7 +65,16 @@ namespace _Game.Core.DI
             var input = new InputSystem(Camera.main, helper, eventBus);
             container.BindSingleton<IUpdatableSystem>(input);
             container.Resolve<ISystemRunner>().Register(input);
-
+            
+            var shuffle = new ShuffleSystem(
+                grid,
+                eventBus,
+                gridConfig,
+                factory,
+                container.Resolve<GridWorldHelper>()
+            );
+            container.BindSingleton(shuffle);
+            
             // Prepare grid
             var init = new GridInitializer(grid, factory, gridConfig);
             init.InitializeGrid();

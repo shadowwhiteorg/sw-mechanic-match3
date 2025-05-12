@@ -1,4 +1,5 @@
-﻿using _Game.Interfaces;
+﻿using _Game.Enums;
+using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
 
 namespace _Game.Systems.GridSystem
@@ -43,6 +44,19 @@ namespace _Game.Systems.GridSystem
 
             block = GetBlock(row, col);
             return block != null;
+        }
+
+        public void ClearAllColoredBlocks()
+        {
+            for (int row = 0; row < Rows; row++)
+            {
+                for (int col = 0; col < Columns; col++)
+                {
+                    if(GetBlock(row,col).Type != BlockType.None) continue;
+                    SetBlock(row, col, null);
+                }
+            }
+            
         }
     }
 }
