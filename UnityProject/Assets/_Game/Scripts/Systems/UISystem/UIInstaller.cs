@@ -17,6 +17,8 @@ namespace _Game.Systems.UISystem
         [SerializeField] private WinUIScreen winUIScreenPrefab;
         [SerializeField] private LoseUIScreen loseUIScreenPrefab;
         [SerializeField] private MoveUIScreen moveUIScreenPrefab;
+        [Header("SFX References")]
+        [SerializeField] private GameObject audioSourcePrefab;
 
         [SerializeField] private Canvas canvasRoot;
         [SerializeField] private BlockTypeConfig blockTypeConfig;
@@ -28,6 +30,7 @@ namespace _Game.Systems.UISystem
             InstallLoseUI(container, eventBus);
             InstallMoveUI(container, eventBus);
             InstallClearParticles(eventBus, container);
+            InstallClearSFXs(container, eventBus);
         }
 
         private void InstallGoalUI(DIContainer container, IEventBus eventBus)
@@ -84,6 +87,39 @@ namespace _Game.Systems.UISystem
                 particlePools
             );
             container.BindSingleton(clearParticleSvc);
+        }
+
+        private void InstallClearSFXs(DIContainer container, IEventBus eventBus)
+        {
+            var sfxPools = new Dictionary<AudioClip, GameObjectPool>();
+            foreach (var entry in blockTypeConfig.Entries)  // or your config’s list
+            {
+                var clip = entry.ClearSfxClip;
+                if (clip != null && !sfxPools.ContainsKey(clip))
+                {
+                    // audioSourcePrefab is a prefab with an AudioSource component, spatialBlend=0 for 2D
+                    var pool = new GameObjectPool(
+                        audioSourcePrefab,   // assign in inspector
+                        10,
+                        parent: this.transform
+                    );
+                    sfxPools[clip] = pool;
+                }
+            }
+
+            // 2) Resolve helper and runner
+            var helper = container.Resolve<GridWorldHelper>();
+            var runner = container.Resolve<CoroutineRunner>();
+
+            // 3) Bind service
+            var sfxService = new ClearSfxService(
+                eventBus,
+                blockTypeConfig,
+                helper,
+                sfxPools,
+                runner
+            );
+            container.BindSingleton(sfxService);
         }
 
         private void InstallWinUI(DIContainer container, IEventBus eventBus)

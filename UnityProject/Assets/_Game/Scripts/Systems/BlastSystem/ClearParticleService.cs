@@ -14,7 +14,6 @@ namespace _Game.Systems.MatchSystem
     /// </summary>
     public class ClearParticleService
     {
-        private readonly IEventBus                                _events;
         private readonly BlockTypeConfig                          _config;
         private readonly GridWorldHelper                          _helper;
         private readonly IDictionary<ParticleSystem, GameObjectPool> _pools;
@@ -25,12 +24,11 @@ namespace _Game.Systems.MatchSystem
             GridWorldHelper helper,
             IDictionary<ParticleSystem, GameObjectPool> pools)
         {
-            _events  = events;
             _config  = config;
             _helper  = helper;
             _pools   = pools;
 
-            _events.Subscribe<ClearBlockEvent>(OnBlockCleared);
+            events.Subscribe<ClearBlockEvent>(OnBlockCleared);
         }
 
         private void OnBlockCleared(ClearBlockEvent e)
