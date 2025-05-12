@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpecialBlockSpawnConfig
   m_EditorClassIdentifier: 
   rules:
-  - matchSize: 4
+  - matchSize: 5
     type: 2
   - matchSize: 3
     type: 1

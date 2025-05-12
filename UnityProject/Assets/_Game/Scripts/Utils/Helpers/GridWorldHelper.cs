@@ -24,7 +24,8 @@ namespace _Game.Utils
         {
             float x = _origin.x + col * _config.BlockSize + _config.BlockSize * 0.5f;
             float y = _origin.y - row * _config.BlockSize - _config.BlockSize * 0.5f;
-            return new Vector3(x, y, _origin.z);
+            float z = _origin.z + row * 0.1f;
+            return new Vector3(x, y, z);
         }
 
         public bool TryGetGridPosition(Vector3 worldPos, out int row, out int col)

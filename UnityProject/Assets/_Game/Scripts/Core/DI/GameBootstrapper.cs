@@ -10,7 +10,7 @@ namespace _Game.Core.DI
     public class GameBootstrapper : MonoBehaviour
     {
         [Header("Prefabs & Configs")]
-        [SerializeField] private GameInstaller installerPrefab;
+        [SerializeField] private GameInstaller gameInstaller;
         [SerializeField] private UIInstaller uiInstaller;
         [SerializeField] private SystemRunnerDriver runnerDriverPrefab;
         [SerializeField] private LevelManager levelManager;
@@ -32,12 +32,12 @@ namespace _Game.Core.DI
 
             // Level Manager & LevelData
             container.BindSingleton(levelManager);
+            levelManager.Initialize();
             var levelData = levelManager.CurrentLevel ?? fallbackLevel;
             container.BindSingleton(levelData);
 
             // Initialize core systems
-            var installer = Instantiate(installerPrefab);
-            installer.Initialize(container, eventBus, levelManager);
+            gameInstaller.Initialize(container, eventBus, levelManager);
             // var uiInstaller = Instantiate(uiInstallerPrefab);
             uiInstaller.Initialize(container, eventBus);
 

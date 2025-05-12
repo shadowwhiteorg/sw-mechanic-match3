@@ -10,18 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7eaee2ffca5f4dc396a6af9f622558b4, type: 3}
-  m_Name: 01_LevelData
+  m_Name: 00_LevelData
   m_EditorClassIdentifier: 
   Rows: 6
   Columns: 6
   MoveLimit: 20
   ColorGoals:
-  - Color: 4
-    Count: 10
-  TypeGoals: []
+  - Color: 2
+    Count: 5
+  TypeGoals:
+  - Type: 3
+    Count: 3
+  - Type: 4
+    Count: 6
   InitialBlocks:
   - Color: 0
+    Type: 4
+    Direction: 0
+  - Color: 0
     Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 3
+    Direction: 0
+  - Color: 0
+    Type: 4
     Direction: 0
   - Color: 0
     Type: 0
@@ -39,7 +61,7 @@ MonoBehaviour:
     Type: 0
     Direction: 0
   - Color: 0
-    Type: 0
+    Type: 4
     Direction: 0
   - Color: 0
     Type: 0
@@ -48,16 +70,16 @@ MonoBehaviour:
     Type: 0
     Direction: 0
   - Color: 0
-    Type: 0
-    Direction: 0
+    Type: 2
+    Direction: 1
   - Color: 0
     Type: 0
     Direction: 0
   - Color: 0
-    Type: 0
+    Type: 3
     Direction: 0
   - Color: 0
-    Type: 0
+    Type: 4
     Direction: 0
   - Color: 0
     Type: 0
@@ -66,7 +88,16 @@ MonoBehaviour:
     Type: 1
     Direction: 0
   - Color: 0
-    Type: 1
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 4
     Direction: 0
   - Color: 0
     Type: 0
@@ -81,37 +112,10 @@ MonoBehaviour:
     Type: 0
     Direction: 0
   - Color: 0
-    Type: 1
+    Type: 3
     Direction: 0
   - Color: 0
-    Type: 1
-    Direction: 0
-  - Color: 0
-    Type: 0
-    Direction: 0
-  - Color: 0
-    Type: 0
-    Direction: 0
-  - Color: 0
-    Type: 0
-    Direction: 0
-  - Color: 0
-    Type: 0
-    Direction: 0
-  - Color: 0
-    Type: 0
-    Direction: 0
-  - Color: 0
-    Type: 0
-    Direction: 0
-  - Color: 0
-    Type: 0
-    Direction: 0
-  - Color: 0
-    Type: 0
-    Direction: 0
-  - Color: 0
-    Type: 0
+    Type: 4
     Direction: 0
   - Color: 0
     Type: 0

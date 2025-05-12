@@ -1,4 +1,6 @@
-﻿using _Game.Interfaces;
+﻿using _Game.Enums;
+using _Game.Interfaces;
+using _Game.Utils;
 using UnityEngine;
 
 namespace _Game.Systems.UISystem
@@ -36,9 +38,11 @@ namespace _Game.Systems.UISystem
         {
             if (_canvasGroup != null)
             {
-                _canvasGroup.alpha = 1;
-                _canvasGroup.interactable = true;
-                _canvasGroup.blocksRaycasts = true;
+                Tween.Float(value => _canvasGroup.alpha = value, _canvasGroup.alpha, 1f, 1f, Ease.Linear, () =>
+                {
+                    _canvasGroup.interactable = true;
+                    _canvasGroup.blocksRaycasts = true;
+                });
             }
         }
 

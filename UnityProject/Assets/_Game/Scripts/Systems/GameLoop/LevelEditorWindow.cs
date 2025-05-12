@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Game.Core.Data;
 using _Game.Enums;
 using UnityEditor;
 using UnityEngine;
+using _Game.Systems.GameLoop;   // for LevelData and nested ColorGoal/TypeGoal
+using _Game.Utils;              // for LevelDataFileHandler
 
 namespace _Game.Systems.GameLoop
 {
@@ -37,13 +40,21 @@ namespace _Game.Systems.GameLoop
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Initial Blocks", EditorStyles.boldLabel);
 
-            // Wrap the grid in a scroll view so large layouts can scroll
+            // Wrap the grid in a scroll view
             _scrollPos = EditorGUILayout.BeginScrollView(
                 _scrollPos,
                 GUILayout.ExpandHeight(true)
             );
             DrawInitialBlocks();
             EditorGUILayout.EndScrollView();
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("JSON Export", EditorStyles.boldLabel);
+            if (GUILayout.Button("Export Level to JSON"))
+            {
+                var fileName = _level.name;
+                LevelDataFileHandler.Save(_level, fileName);
+            }
 
             if (GUI.changed)
                 EditorUtility.SetDirty(_level);
@@ -108,15 +119,15 @@ namespace _Game.Systems.GameLoop
         {
             int rows    = _level.Rows;
             int columns = _level.Columns;
-            _level.OnValidateTrigger(); // ensure InitialBlocks list length
+            _level.OnValidateTrigger(); // ensure list length
 
             for (int r = 0; r < rows; r++)
             {
                 EditorGUILayout.BeginHorizontal();
                 for (int c = 0; c < columns; c++)
                 {
-                    int index = r * columns + c;
-                    var bd    = _level.InitialBlocks[index];
+                    int   index = r * columns + c;
+                    var bd      = _level.InitialBlocks[index];
 
                     EditorGUILayout.BeginVertical(
                         "box",
@@ -126,36 +137,17 @@ namespace _Game.Systems.GameLoop
                         GUILayout.ExpandHeight(false)
                     );
 
-                    // 1) Block Type (always)
-                    bd.Type = ColorCodedEnumPopup(
+                    bd.Type      = ColorCodedEnumPopup(
                         bd.Type,
                         GUILayout.Width(CellWidth - 10)
                     );
-
-                    // 2) Color only for plain blocks
-                    ConditionalField(
-                        show: bd.Type == BlockType.None,
-                        drawField: () =>
-                        {
-                            bd.Color = ColorCodedEnumPopup(
-                                bd.Color,
-                                GUILayout.Width(CellWidth - 10)
-                            );
-                        },
-                        width: CellWidth - 10
+                    bd.Color     = ColorCodedEnumPopup(
+                        bd.Color,
+                        GUILayout.Width(CellWidth - 10)
                     );
-
-                    // 3) Direction only for rockets
-                    ConditionalField(
-                        show: bd.Type == BlockType.Rocket,
-                        drawField: () =>
-                        {
-                            bd.Direction = (BlockDirection)EditorGUILayout.EnumPopup(
-                                bd.Direction,
-                                GUILayout.Width(CellWidth - 10)
-                            );
-                        },
-                        width: CellWidth - 10
+                    bd.Direction = (BlockDirection)EditorGUILayout.EnumPopup(
+                        bd.Direction,
+                        GUILayout.Width(CellWidth - 10)
                     );
 
                     _level.InitialBlocks[index] = bd;
@@ -166,25 +158,14 @@ namespace _Game.Systems.GameLoop
         }
 
         /// <summary>
-        /// Draws either the given field or a spacer of equal width to keep columns aligned.
-        /// </summary>
-        private void ConditionalField(bool show, Action drawField, float width)
-        {
-            if (show)
-                drawField();
-            else
-                GUILayout.Space(width + 4); // +4 for padding/margin
-        }
-
-        /// <summary>
         /// Renders an EnumPopup with a background color mapped to the enum value.
         /// </summary>
         private T ColorCodedEnumPopup<T>(T value, params GUILayoutOption[] options) where T : Enum
         {
-            var prevColor = GUI.backgroundColor;
+            var prev = GUI.backgroundColor;
             GUI.backgroundColor = GetColorFor(value);
             value = (T)EditorGUILayout.EnumPopup(value, options);
-            GUI.backgroundColor = prevColor;
+            GUI.backgroundColor = prev;
             return value;
         }
 
@@ -203,6 +184,7 @@ namespace _Game.Systems.GameLoop
                     BlockColor.Purple => new Color(0.6f, 0, 0.6f),
                     _                 => Color.white
                 };
+
             if (enumVal is BlockType type)
                 return type switch
                 {
@@ -212,6 +194,7 @@ namespace _Game.Systems.GameLoop
                     BlockType.Balloon   => Color.magenta,
                     _                => Color.white
                 };
+
             return Color.white;
         }
     }

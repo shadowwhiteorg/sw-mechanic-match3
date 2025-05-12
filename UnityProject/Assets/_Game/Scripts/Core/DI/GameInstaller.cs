@@ -8,6 +8,7 @@ using _Game.Systems.BehaviorSystem;
 using _Game.systems.BlockSystem;
 using _Game.Systems.GameLoop;
 using _Game.Utils;
+using UnityEngine.UI;
 
 namespace _Game.Core.DI
 {
@@ -20,6 +21,9 @@ namespace _Game.Core.DI
 
         [Header("Visuals")] [SerializeField] private BlockView blockPrefab;
         [SerializeField] private Transform blockParent;
+        [SerializeField] private Image gridBackground;
+        [SerializeField] private Camera mainCamera;
+        
         
 
         public void Initialize(IDIContainer container, IEventBus eventBus, LevelManager levelManager)
@@ -29,6 +33,11 @@ namespace _Game.Core.DI
             // Override grid config with LevelData
             gridConfig.Rows = level.Rows;
             gridConfig.Columns = level.Columns;
+            mainCamera.orthographicSize = gridConfig.Columns + 1.5f;
+            // gridBackground.rectTransform.sizeDelta = new Vector2(
+            //     gridConfig.Columns * 100,
+            //     gridConfig.Rows * 100
+            // );
 
             // Grid + helper
             var grid = new GridHandler(gridConfig.Rows, gridConfig.Columns);
@@ -58,6 +67,7 @@ namespace _Game.Core.DI
                 new MatchSystem(grid, eventBus, gridConfig.MatchThreshold));
 
             // Gameplay systems
+            
             container.BindSingleton(new GoalSystem(level, eventBus,levelManager));
             container.BindSingleton(new MoveLimitSystem(level.MoveLimit, eventBus));
 
