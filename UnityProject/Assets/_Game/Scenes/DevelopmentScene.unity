@@ -434,11 +434,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!223 &1710491787 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 9120868713113707968, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
-  m_PrefabInstance: {fileID: 1803501581}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1803501581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -450,26 +445,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIInstaller
       objectReference: {fileID: 0}
-    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
-      propertyPath: canvasRoot
-      value: 
-      objectReference: {fileID: 1710491787}
-    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
-      propertyPath: goalFlyerPrefab
-      value: 
-      objectReference: {fileID: 7885456264223199525, guid: db7697de77db7f342ae6720c8fc910f2, type: 3}
-    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
-      propertyPath: winUIScreenPrefab
-      value: 
-      objectReference: {fileID: 827742806331483711, guid: ed06e8c47176bcc428c701d322e11adc, type: 3}
-    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
-      propertyPath: loseUIScreenPrefab
-      value: 
-      objectReference: {fileID: 1550325458992486005, guid: e42ab76bcfe3db447ada51d4037dac45, type: 3}
-    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
-      propertyPath: moveUIScreenPrefab
-      value: 
-      objectReference: {fileID: 4113550760660983485, guid: ab940a966063a2c4989cf1ef4883155c, type: 3}
     - target: {fileID: 1959331372316502458, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -514,9 +489,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9120868713113707968, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 963194227}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}

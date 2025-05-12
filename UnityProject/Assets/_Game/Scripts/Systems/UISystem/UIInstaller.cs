@@ -1,6 +1,8 @@
-﻿using _Game.Core.DI;
+﻿using System.Collections.Generic;
+using _Game.Core.DI;
 using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
+using _Game.Systems.MatchSystem;
 using _Game.Systems.UISystem.Move;
 using _Game.Utils;
 using UnityEngine;
@@ -25,6 +27,7 @@ namespace _Game.Systems.UISystem
             InstallWinUI(container, eventBus);
             InstallLoseUI(container, eventBus);
             InstallMoveUI(container, eventBus);
+            InstallClearParticles(eventBus, container);
         }
 
         private void InstallGoalUI(DIContainer container, IEventBus eventBus)
@@ -52,6 +55,35 @@ namespace _Game.Systems.UISystem
                 model,
                 pool
             );
+        }
+
+        private void InstallClearParticles(IEventBus eventBus, DIContainer container)
+        {
+            // 1) Build a pool for each ClearParticlePrefab in your config
+            var particlePools = new Dictionary<ParticleSystem, GameObjectPool>();
+            foreach (var entry in blockTypeConfig.Entries)  // replace Entries with your actual collection
+            {
+                var psPrefab = entry.ClearParticlePrefab;
+                if (psPrefab != null && !particlePools.ContainsKey(psPrefab))
+                {
+                    // create a pool of GameObjects (each with a ParticleSystem component)
+                    var pool = new GameObjectPool(
+                        psPrefab.gameObject,
+                         10,
+                        parent: this.transform
+                    );
+                    particlePools[psPrefab] = pool;
+                }
+            }
+
+
+            var clearParticleSvc = new ClearParticleService(
+                eventBus,
+                blockTypeConfig,
+                container.Resolve<GridWorldHelper>(),
+                particlePools
+            );
+            container.BindSingleton(clearParticleSvc);
         }
 
         private void InstallWinUI(DIContainer container, IEventBus eventBus)

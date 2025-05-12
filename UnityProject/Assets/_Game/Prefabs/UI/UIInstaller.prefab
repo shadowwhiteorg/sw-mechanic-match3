@@ -46,6 +46,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goalUIScreenPrefab: {fileID: 6396083939999044170, guid: 5e60964f6cada9d47bd51c4015da3a5c, type: 3}
+  goalFlyerPrefab: {fileID: 0}
+  winUIScreenPrefab: {fileID: 0}
+  loseUIScreenPrefab: {fileID: 0}
+  moveUIScreenPrefab: {fileID: 0}
   canvasRoot: {fileID: 7323737300703490942, guid: bc89c7e59e5496349af47bb01065877c, type: 3}
   blockTypeConfig: {fileID: 11400000, guid: 749be8a3500d3dd47bd8c49d462702f5, type: 2}
 --- !u!1001 &1959331372189898430

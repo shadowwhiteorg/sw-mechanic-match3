@@ -62,14 +62,14 @@ namespace _Game.Systems.BehaviorSystem
             float ang = (axis == Vector2.right) ? 0f : 90f;
             go.transform.rotation = Quaternion.Euler(0, 0, ang);
 
-            CoroutineRunner.instance.StartCoroutine(AnimateTrail(go, axis * (sign * 3f)));
+            CoroutineRunner.instance.StartCoroutine(AnimateTrail(go, axis * (sign * 15f)));
         }
 
         private IEnumerator AnimateTrail(GameObject go, Vector3 offset)
         {
             Vector3 start = go.transform.position;
             Vector3 end = start + offset;
-            float t = 0f, dur = 0.3f;
+            float t = 0f, dur = 0.75f;
 
             while (t < dur)
             {
@@ -79,6 +79,7 @@ namespace _Game.Systems.BehaviorSystem
             }
 
             go.transform.position = end;
+            yield return new WaitForSeconds(2f);
             _trailPool.Return(go);
         }
 
