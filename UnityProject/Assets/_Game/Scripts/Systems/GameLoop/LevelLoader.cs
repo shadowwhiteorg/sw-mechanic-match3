@@ -22,12 +22,9 @@ namespace _Game.Systems.GameLoop
             
             eventBus.Subscribe<LevelCompleteEvent>(e=>ClearLevel());
             eventBus.Subscribe<LevelCompleteEvent>(e=>levelManager.LevelUp());
-            eventBus.Subscribe<GameOverEvent>(e=>ClearLevel());
             eventBus.Subscribe<LevelInitializedEvent>(e=>LoadLevel(levelManager.CurrentLevel));
             eventBus.Subscribe<NextLevelEvent>(e=>levelManager.LoadLevelScene());
             eventBus.Subscribe<RetryLevelEvent>(e => levelManager.LoadLevelScene());
-            eventBus.Subscribe<NextLevelEvent>(e=>eventBus.Clear());
-            eventBus.Subscribe<RetryLevelEvent>(e => eventBus.Clear());
         }
 
         public void LoadLevel(LevelData level)

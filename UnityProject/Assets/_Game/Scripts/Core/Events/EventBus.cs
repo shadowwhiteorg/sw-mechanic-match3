@@ -32,11 +32,5 @@ namespace _Game.Core.Events
                 (handler as Action<T>)?.Invoke(eventData);
             }
         }
-        
-        public void Clear()
-        {
-            _handlers.Clear();
-        }
-        
     }
 }

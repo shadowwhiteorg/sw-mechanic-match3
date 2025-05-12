@@ -13,19 +13,9 @@ namespace _Game.Systems.GameLoop
         private int _currentIndex;
         public int CurrentLevelIndex => _currentIndex = PlayerPrefs.GetInt(GameConstants.PlayerPrefsLevel, 0);
 
-        public LevelData CurrentLevel =>
-            (_currentIndex >= 0 && _currentIndex < allLevels.Count)
-                ? allLevels[_currentIndex]
-                : null;
+        public LevelData CurrentLevel => allLevels[(_currentIndex - 1 + allLevels.Count) % allLevels.Count];
 
-        void Awake()
-        {
-            _currentIndex = CurrentLevelIndex;
-            // loop through levels
-            _currentIndex = (_currentIndex - 1 + allLevels.Count) % allLevels.Count;
-            // DontDestroyOnLoad(this);
-            
-        }
+        
 
         public void LoadLevelScene()=> SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 

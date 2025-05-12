@@ -7,6 +7,5 @@ namespace _Game.Interfaces
         void Subscribe<T>(Action<T> handler) where T : IGameEvent;
         void Unsubscribe<T>(Action<T> handler) where T : IGameEvent;
         void Fire<T>(T eventData) where T : IGameEvent;
-        void Clear();
     }
 }
