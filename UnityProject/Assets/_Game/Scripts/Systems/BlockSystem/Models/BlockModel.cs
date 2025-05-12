@@ -8,6 +8,7 @@ namespace _Game.Systems.BlockSystem
     {
         public BlockColor Color { get; }
         public BlockType Type { get; }
+        public BlockDirection Direction { get; }
         public int Row { get; private set; }
         public int Column { get; private set; }
         public BlockView View { get; }
@@ -27,10 +28,11 @@ namespace _Game.Systems.BlockSystem
         public bool IsSettled => _isSettled;
         
 
-        public BlockModel(BlockColor color, BlockType type, int row, int col, BlockView view, IEnumerable<IBlockBehavior> behaviors)
+        public BlockModel(BlockColor color, BlockType type, int row, int col, BlockView view, IEnumerable<IBlockBehavior> behaviors, BlockDirection direction)
         {
             Color = color;
             Type = type;
+            Direction = direction;
             Row = row;
             Column = col;
             View = view;

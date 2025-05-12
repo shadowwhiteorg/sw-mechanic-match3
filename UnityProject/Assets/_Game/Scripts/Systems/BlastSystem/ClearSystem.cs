@@ -59,7 +59,9 @@ namespace _Game.Systems.MatchSystem
             if (specialType != BlockType.None)
             {
                 var color = BlockColor.None;
-                var special = _factory.CreateBlock(color, specialType, e.TouchOrigin.x, e.TouchOrigin.y);
+                var direction = specialType == BlockType.Rocket ? (BlockDirection)Random.Range(1, 3) : BlockDirection.None;
+                
+                var special = _factory.CreateBlock(color, specialType,direction, e.TouchOrigin.x, e.TouchOrigin.y);
                 special.Settle(true); // protect from falling
             }
 
