@@ -37,7 +37,7 @@ namespace _Game.Core.DI
 
             // Initialize core systems
             var installer = Instantiate(installerPrefab);
-            installer.Initialize(container, eventBus);
+            installer.Initialize(container, eventBus, levelManager);
             // var uiInstaller = Instantiate(uiInstallerPrefab);
             uiInstaller.Initialize(container, eventBus);
 

@@ -4976,7 +4976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 827742806764398140}
   levelNumberText: {fileID: 8075941628164360693}
-  _nextButton: {fileID: 6586167335655770607}
+  nextButton: {fileID: 6586167335655770607}
 --- !u!1 &1075970813282162472
 GameObject:
   m_ObjectHideFlags: 0

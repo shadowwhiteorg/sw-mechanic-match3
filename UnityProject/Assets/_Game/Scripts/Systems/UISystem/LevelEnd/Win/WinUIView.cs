@@ -7,18 +7,13 @@ namespace _Game.Systems.UISystem
     public class WinUIView : BaseUIView
     {
         [SerializeField] private TextMeshProUGUI levelNumberText;
-        [SerializeField] private Button          _nextButton;
-        // [SerializeField] private Button          _retryButton;
+        [SerializeField] private Button          nextButton;
 
-        /// <summary>Invoked when the Next button is clicked.</summary>
         public event System.Action OnNextClicked;
-        /// <summary>Invoked when the Retry button is clicked.</summary>
-        // public event System.Action OnRetryClicked;
 
         protected override void OnBind()
         {
-            _nextButton .onClick.AddListener(() => OnNextClicked?.Invoke());
-            // _retryButton.onClick.AddListener(() => OnRetryClicked?.Invoke());
+            nextButton .onClick.AddListener(() => OnNextClicked?.Invoke());
         }
 
         protected override void OnViewUpdated()

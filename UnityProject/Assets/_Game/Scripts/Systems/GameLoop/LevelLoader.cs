@@ -12,7 +12,6 @@ namespace _Game.Systems.GameLoop
         private readonly IGridHandler    _grid;
         private readonly IBlockFactory   _factory;
         private readonly GridWorldHelper _helper;
-        private readonly IEventBus      _eventBus;
         private readonly LevelManager    _levelManager;
 
         public LevelLoader(IDIContainer container, IEventBus eventBus, LevelManager levelManager)
@@ -20,13 +19,15 @@ namespace _Game.Systems.GameLoop
             _grid    = container.Resolve<IGridHandler>();
             _factory = container.Resolve<IBlockFactory>();
             _helper  = container.Resolve<GridWorldHelper>();
-            _eventBus = eventBus;
-            _levelManager = levelManager;
-            _eventBus.Subscribe<LevelCompleteEvent>(e=>ClearLevel());
-            _eventBus.Subscribe<GameOverEvent>(e=>ClearLevel());
-            _eventBus.Subscribe<LevelInitializedEvent>(e=>LoadLevel(levelManager.CurrentLevel));
-            _eventBus.Subscribe<NextLevelEvent>(e=>_levelManager.LoadNext());
-            _eventBus.Subscribe<RetryLevelEvent>(e => _levelManager.Reload());
+            
+            eventBus.Subscribe<LevelCompleteEvent>(e=>ClearLevel());
+            eventBus.Subscribe<LevelCompleteEvent>(e=>levelManager.LevelUp());
+            eventBus.Subscribe<GameOverEvent>(e=>ClearLevel());
+            eventBus.Subscribe<LevelInitializedEvent>(e=>LoadLevel(levelManager.CurrentLevel));
+            eventBus.Subscribe<NextLevelEvent>(e=>levelManager.LoadLevelScene());
+            eventBus.Subscribe<RetryLevelEvent>(e => levelManager.LoadLevelScene());
+            eventBus.Subscribe<NextLevelEvent>(e=>eventBus.Clear());
+            eventBus.Subscribe<RetryLevelEvent>(e => eventBus.Clear());
         }
 
         public void LoadLevel(LevelData level)

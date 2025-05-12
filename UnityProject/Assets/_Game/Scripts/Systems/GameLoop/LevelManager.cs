@@ -22,36 +22,18 @@ namespace _Game.Systems.GameLoop
         {
             _currentIndex = CurrentLevelIndex;
             // loop through levels
-            
             _currentIndex = (_currentIndex - 1 + allLevels.Count) % allLevels.Count;
-            DontDestroyOnLoad(this);
+            // DontDestroyOnLoad(this);
             
         }
 
-        public bool LoadNext()
+        public void LoadLevelScene()=> SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        public void LevelUp()
         {
-            if (_currentIndex + 1 >= allLevels.Count) return false;
             _currentIndex++;
             PlayerPrefs.SetInt(GameConstants.PlayerPrefsLevel, _currentIndex);
             PlayerPrefs.Save();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            return true;
-        }
-
-        public void Reload() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-        public bool LoadLevel(int index)
-        {
-            if (index < 0 || index >= allLevels.Count) return false;
-            _currentIndex = index;
-            PlayerPrefs.SetInt(GameConstants.PlayerPrefsLevel, _currentIndex);
-            PlayerPrefs.Save();
-            return true;
-        }
-
-        public void RegisterEvents(IEventBus events)
-        {
-            // events.Subscribe<LevelInitializedEvent>(OnLevelInitialized);
         }
     }
 }

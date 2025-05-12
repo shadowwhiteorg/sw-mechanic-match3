@@ -10,9 +10,9 @@ namespace _Game.Systems.UISystem
             base.Construct(model, view, eventBus);
 
             // Show on level complete
-            eventBus.Subscribe<LevelCompleteEvent>(_ =>
+            eventBus.Subscribe<LevelCompleteEvent>(e =>
             {
-                model.SetMessage("Level Complete!");
+                model.SetMessage(e.Level.ToString());
                 Show();
             });
 

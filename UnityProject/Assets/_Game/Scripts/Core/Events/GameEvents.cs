@@ -42,7 +42,15 @@ namespace _Game.Core.Events
         }
     }
 
-    public struct LevelCompleteEvent : IGameEvent { }
+    public struct LevelCompleteEvent : IGameEvent
+    {
+        public int Level { get; }
+        public LevelCompleteEvent(int level)
+        {
+            Level = level;
+            Debug.Log($"Level {level} complete!");
+        }
+    }
     
     public struct GameOverEvent: IGameEvent { }
     

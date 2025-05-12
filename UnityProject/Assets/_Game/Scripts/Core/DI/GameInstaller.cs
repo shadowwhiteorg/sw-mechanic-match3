@@ -1,11 +1,9 @@
-﻿// Core/DI/GameInstaller.cs
-using UnityEngine;
+﻿using UnityEngine;
 using _Game.Interfaces;
 using _Game.Systems.GridSystem;
 using _Game.Systems.BlockSystem;
 using _Game.Systems.MatchSystem;
 using _Game.Systems.CoreSystems;
-using _Game.Core.Events;
 using _Game.Systems.BehaviorSystem;
 using _Game.systems.BlockSystem;
 using _Game.Systems.GameLoop;
@@ -22,8 +20,9 @@ namespace _Game.Core.DI
 
         [Header("Visuals")] [SerializeField] private BlockView blockPrefab;
         [SerializeField] private Transform blockParent;
+        
 
-        public void Initialize(IDIContainer container, IEventBus eventBus)
+        public void Initialize(IDIContainer container, IEventBus eventBus, LevelManager levelManager)
         {
             var level = container.Resolve<LevelData>();
 
@@ -40,7 +39,7 @@ namespace _Game.Core.DI
             // Behavior registry
             var registry = new BehaviorRegistry(behaviorConfig.behaviors);
             container.BindSingleton(registry);
-
+            
             // Factory
             var factory = new BlockFactory(
                 blockTypeConfig,
@@ -59,7 +58,7 @@ namespace _Game.Core.DI
                 new MatchSystem(grid, eventBus, gridConfig.MatchThreshold));
 
             // Gameplay systems
-            container.BindSingleton(new GoalSystem(level, eventBus));
+            container.BindSingleton(new GoalSystem(level, eventBus,levelManager));
             container.BindSingleton(new MoveLimitSystem(level.MoveLimit, eventBus));
 
             // Input
@@ -69,7 +68,7 @@ namespace _Game.Core.DI
 
             // Prepare grid
             var init = new GridInitializer(grid, factory, gridConfig);
-            init.InitializeGrid(); // we fill it in the loader
+            init.InitializeGrid();
         }
     }
 }

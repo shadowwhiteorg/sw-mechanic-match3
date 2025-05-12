@@ -10,11 +10,15 @@ namespace _Game.Systems.GameLoop
     {
         private readonly LevelData _level;
         private readonly IEventBus _events;
+        private readonly LevelManager _levelManager;
+        private bool _levelComplete;
 
-        public GoalSystem(LevelData level, IEventBus events)
+        public GoalSystem(LevelData level, IEventBus events, LevelManager levelManager)
         {
             _level = level;
             _events = events;
+            _levelManager = levelManager;
+            _levelComplete = false;
 
             _events.Subscribe<ClearBlockEvent>(OnBlockCleared);
         }
@@ -44,11 +48,13 @@ namespace _Game.Systems.GameLoop
                 UpdateTypeGoal(goal.Type, goal.Count);
                 Debug.Log($"Goal {goal.Type} Updated: {goal.Count}");
             }
-
+            
             // Check for completion
             if (IsLevelComplete())
             {
-                _events.Fire(new LevelCompleteEvent());
+                if(_levelComplete)return;
+                _levelComplete = true;
+                _events.Fire(new LevelCompleteEvent(_levelManager.CurrentLevelIndex));
                 Debug.Log("Level complete!");
             }
         }
