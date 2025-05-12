@@ -2,6 +2,7 @@
 using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
 using _Game.Systems.UISystem.Move;
+using _Game.Utils;
 using UnityEngine;
 
 namespace _Game.Systems.UISystem
@@ -10,6 +11,7 @@ namespace _Game.Systems.UISystem
     {
         [Header("UI References")] 
         [SerializeField] private GoalUIScreen goalUIScreenPrefab;
+        [SerializeField] private GameObject goalFlyerPrefab;
         [SerializeField] private WinUIScreen winUIScreenPrefab;
         [SerializeField] private LoseUIScreen loseUIScreenPrefab;
         [SerializeField] private MoveUIScreen moveUIScreenPrefab;
@@ -37,6 +39,19 @@ namespace _Game.Systems.UISystem
             // BIND TO SCREEN
             screen.Construct(model, view, eventBus);
             canvasRoot.worldCamera = Camera.main;
+            
+            // ——— Pool & Flyer Service ——
+            var helper = container.Resolve<GridWorldHelper>();
+            var pool   = new GameObjectPool(goalFlyerPrefab, 5, this.transform);
+
+            var flyerService = new GoalFlyerService(
+                eventBus,
+                blockTypeConfig,
+                helper,
+                view,
+                model,
+                pool
+            );
         }
 
         private void InstallWinUI(DIContainer container, IEventBus eventBus)

@@ -9,7 +9,7 @@ using _Game.Systems.GridSystem;
 using _Game.Utils;
 using UnityEngine;
 
-namespace _Game.Systems.GameLoop
+namespace _Game.Systems.MatchSystem
 {
     public class ShuffleSystem : IUpdatableSystem
     {

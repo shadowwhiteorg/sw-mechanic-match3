@@ -455,6 +455,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1710491787}
     - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
+      propertyPath: goalFlyerPrefab
+      value: 
+      objectReference: {fileID: 7885456264223199525, guid: db7697de77db7f342ae6720c8fc910f2, type: 3}
+    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
       propertyPath: winUIScreenPrefab
       value: 
       objectReference: {fileID: 827742806331483711, guid: ed06e8c47176bcc428c701d322e11adc, type: 3}
