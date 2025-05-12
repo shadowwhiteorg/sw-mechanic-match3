@@ -159,8 +159,14 @@ namespace _Game.Systems.MatchSystem
 
         private void TryFireSettledEvent()
         {
-            if (_activeAnimations <= 0)
-                _events.Fire(new TurnEndedEvent());
+            CoroutineRunner.Instance.StartCoroutine(WaitAndProceed());
+
+            IEnumerator WaitAndProceed()
+            {
+                yield return new WaitForEndOfFrame();
+                if (_activeAnimations <= 0)
+                    _events.Fire(new TurnEndedEvent());
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace _Game.Systems.GameLoop
         private readonly IEventBus _events;
         private readonly LevelManager _levelManager;
         private bool _levelComplete;
+        
 
         public GoalSystem(LevelData level, IEventBus events, LevelManager levelManager)
         {
@@ -25,6 +26,7 @@ namespace _Game.Systems.GameLoop
 
         private void OnBlockCleared(ClearBlockEvent e)
         {
+            
             var b = e.Block;
 
             // Update color goals
@@ -75,5 +77,7 @@ namespace _Game.Systems.GameLoop
             return _level.ColorGoals.All(g => g.Count <= 0)
                    && _level.TypeGoals.All(g => g.Count <= 0);
         }
+
+        
     }
 }

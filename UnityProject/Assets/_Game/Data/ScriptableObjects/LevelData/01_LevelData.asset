@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rows: 6
   Columns: 6
-  MoveLimit: 5
+  MoveLimit: 10
   ColorGoals:
   - Color: 4
-    Count: 84
+    Count: 44
   TypeGoals:
   - Type: 3
-    Count: 2
+    Count: 87
   InitialBlocks:
   - Color: 0
     Type: 3
