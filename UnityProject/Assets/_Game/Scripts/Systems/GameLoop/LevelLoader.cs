@@ -21,6 +21,7 @@ namespace _Game.Systems.GameLoop
             _helper  = container.Resolve<GridWorldHelper>();
             
             eventBus.Subscribe<LevelCompleteEvent>(e=>ClearLevel());
+            eventBus.Subscribe<GameOverEvent>(e=>ClearLevel());
             eventBus.Subscribe<LevelCompleteEvent>(e=>levelManager.LevelUp());
             eventBus.Subscribe<LevelInitializedEvent>(e=>LoadLevel(levelManager.CurrentLevel));
             eventBus.Subscribe<NextLevelEvent>(e=>levelManager.LoadLevelScene());

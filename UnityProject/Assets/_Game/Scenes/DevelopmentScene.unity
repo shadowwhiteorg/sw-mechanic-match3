@@ -462,6 +462,10 @@ PrefabInstance:
       propertyPath: loseUIScreenPrefab
       value: 
       objectReference: {fileID: 1550325458992486005, guid: e42ab76bcfe3db447ada51d4037dac45, type: 3}
+    - target: {fileID: 1959331372316502457, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
+      propertyPath: moveUIScreenPrefab
+      value: 
+      objectReference: {fileID: 4113550760660983485, guid: ab940a966063a2c4989cf1ef4883155c, type: 3}
     - target: {fileID: 1959331372316502458, guid: c97ce2cc5a196d444bbca82175b6b28c, type: 3}
       propertyPath: m_RootOrder
       value: 0

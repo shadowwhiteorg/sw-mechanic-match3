@@ -35,7 +35,6 @@ namespace _Game.Systems.GameLoop
                 goal.Count--;
                 _level.ColorGoals[colorIndex] = goal;
                 UpdateColorGoal(goal.Color, goal.Count);
-                Debug.Log($"Goal {goal.Color} Updated: {goal.Count}");
             }
 
             // Update type goals
@@ -55,7 +54,6 @@ namespace _Game.Systems.GameLoop
                 if(_levelComplete)return;
                 _levelComplete = true;
                 _events.Fire(new LevelCompleteEvent(_levelManager.CurrentLevelIndex));
-                Debug.Log("Level complete!");
             }
         }
 

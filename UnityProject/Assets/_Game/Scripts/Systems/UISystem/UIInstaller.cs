@@ -1,6 +1,7 @@
 ﻿using _Game.Core.DI;
 using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
+using _Game.Systems.UISystem.Move;
 using UnityEngine;
 
 namespace _Game.Systems.UISystem
@@ -11,6 +12,7 @@ namespace _Game.Systems.UISystem
         [SerializeField] private GoalUIScreen goalUIScreenPrefab;
         [SerializeField] private WinUIScreen winUIScreenPrefab;
         [SerializeField] private LoseUIScreen loseUIScreenPrefab;
+        [SerializeField] private MoveUIScreen moveUIScreenPrefab;
 
         [SerializeField] private Canvas canvasRoot;
         [SerializeField] private BlockTypeConfig blockTypeConfig;
@@ -18,8 +20,9 @@ namespace _Game.Systems.UISystem
         public void Initialize(DIContainer container, IEventBus eventBus)
         {
             InstallGoalUI(container, eventBus);
-            InstallWinUIScreen(container, eventBus);
-            InstallLoseUIScreen(container, eventBus);
+            InstallWinUI(container, eventBus);
+            InstallLoseUI(container, eventBus);
+            InstallMoveUI(container, eventBus);
         }
 
         private void InstallGoalUI(DIContainer container, IEventBus eventBus)
@@ -31,13 +34,12 @@ namespace _Game.Systems.UISystem
             var screenGO = Instantiate(goalUIScreenPrefab, canvasRoot.transform);
             var view = screenGO.GetComponentInChildren<GoalUIView>();
             var screen = screenGO.GetComponent<GoalUIScreen>();
-            Debug.Log("GoalUIScreen: " + screen + " View: " + view);
             // BIND TO SCREEN
             screen.Construct(model, view, eventBus);
             canvasRoot.worldCamera = Camera.main;
         }
 
-        private void InstallWinUIScreen(DIContainer container, IEventBus eventBus)
+        private void InstallWinUI(DIContainer container, IEventBus eventBus)
         {
             // MODEL
             var model = new WinUIModel();
@@ -46,11 +48,10 @@ namespace _Game.Systems.UISystem
             var screenGO = Instantiate(winUIScreenPrefab, canvasRoot.transform);
             var view = screenGO.GetComponentInChildren<WinUIView>();
             var screen = screenGO.GetComponent<WinUIScreen>();
-            Debug.Log("WinUIScreen: " + screen + " View: " + view);
             // BIND TO SCREEN
             screen.Construct(model, view, eventBus);
         }
-        private void InstallLoseUIScreen(DIContainer container, IEventBus eventBus)
+        private void InstallLoseUI(DIContainer container, IEventBus eventBus)
         {
             // MODEL
             var model = new LoseUIModel();
@@ -59,7 +60,19 @@ namespace _Game.Systems.UISystem
             var screenGO = Instantiate(loseUIScreenPrefab, canvasRoot.transform);
             var view = screenGO.GetComponentInChildren<LoseUIView>();
             var screen = screenGO.GetComponent<LoseUIScreen>();
-            Debug.Log("LoseUIScreen: " + screen + " View: " + view);
+            // BIND TO SCREEN
+            screen.Construct(model, view, eventBus);
+        }
+        
+        private void InstallMoveUI(DIContainer container, IEventBus eventBus)
+        {
+            // MODEL
+            var model = new MoveUIModel();
+            container.BindSingleton(model);
+            // PREFAB
+            var screenGO = Instantiate(moveUIScreenPrefab, canvasRoot.transform);
+            var view = screenGO.GetComponentInChildren<MoveUIView>();
+            var screen = screenGO.GetComponent<MoveUIScreen>();
             // BIND TO SCREEN
             screen.Construct(model, view, eventBus);
         }
