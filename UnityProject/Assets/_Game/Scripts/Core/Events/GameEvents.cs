@@ -1,4 +1,6 @@
 ﻿using _Game.Interfaces;
+using _Game.Systems.GameLoop;
+using UnityEngine;
 
 namespace _Game.Core.Events
 {
@@ -6,6 +8,17 @@ namespace _Game.Core.Events
     {
         public string Message { get; }
         public GameStartedEvent(string message) => Message = message;
+    }
+    public struct LevelInitializedEvent : IGameEvent
+    {
+        public int Level { get; }
+        public LevelData LevelData { get; }
+
+        public LevelInitializedEvent(int level, LevelData levelData)
+        {
+            Level = level;
+            LevelData = levelData;
+        }
     }
     public struct TurnStartedEvent : IGameEvent
     {
@@ -29,7 +42,15 @@ namespace _Game.Core.Events
         }
     }
 
-    public struct LevelCompleteEvent : IGameEvent { }
+    public struct LevelCompleteEvent : IGameEvent
+    {
+        public int Level { get; }
+        public LevelCompleteEvent(int level)
+        {
+            Level = level;
+            Debug.Log($"Level {level} complete!");
+        }
+    }
     
     public struct GameOverEvent: IGameEvent { }
     
@@ -38,4 +59,10 @@ namespace _Game.Core.Events
         public int MovesLeft { get; }
         public MoveUpdatedEvent(int movesLeft) => MovesLeft = movesLeft;
     }
+    public struct NextLevelEvent : IGameEvent
+    {
+        public int Level { get; }
+        public NextLevelEvent(int level) => Level = level;
+    }
+    public struct RetryLevelEvent : IGameEvent{}
 }

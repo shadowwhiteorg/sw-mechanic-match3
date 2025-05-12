@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using _Game.Core.Events;
 using UnityEngine;
 using _Game.Enums;
 using _Game.Interfaces;
 using _Game.Systems.BehaviorSystem;
 using _Game.Systems.BlockSystem;
-using _Game.Systems.MatchSystem;
 using _Game.Utils;
 
 namespace _Game.Systems.GridSystem
@@ -22,6 +22,7 @@ namespace _Game.Systems.GridSystem
         private readonly Transform _parent;
         private readonly BehaviorRegistry _registry;
         private readonly System.Random _rng = new();
+        private bool _canSpawn = true; 
 
         public BlockFactory(
             BlockTypeConfig config,
@@ -40,10 +41,14 @@ namespace _Game.Systems.GridSystem
             _events = events;
             _registry = registry;
             _viewPool = new ObjectPool<BlockView>(viewPrefab, initialPoolSize, parent);
+            _events.Subscribe<LevelCompleteEvent>(e => Activate(false));
+            _events.Subscribe<GameOverEvent>(e => Activate(false));
+            _events.Subscribe<LevelInitializedEvent>(e => Activate(true));
         }
 
         public BlockModel CreateBlock(BlockColor color, BlockType type, int row, int col)
         {
+            if(!_canSpawn) return null;
             var entry = _config.Get(color, type);
             var view = _viewPool.Get();
             view.transform.SetParent(_parent, false);
@@ -64,6 +69,7 @@ namespace _Game.Systems.GridSystem
 
         public BlockModel CreateRandomBlock(int row, int col)
         {
+            if(!_canSpawn) return null;
             var color = Enum.GetValues(typeof(BlockColor)).Cast<BlockColor>().OrderBy(_ => _rng.Next()).First();
             var type = BlockType.None;
             if (color == BlockColor.None) color = BlockColor.Red;
@@ -75,6 +81,11 @@ namespace _Game.Systems.GridSystem
             _grid.SetBlock(model.Row, model.Column, null);
             model.View.gameObject.SetActive(false);
             _viewPool.Return(model.View);
+        }
+
+        private void Activate(bool active)
+        {
+            _canSpawn = active;
         }
     }
 }
