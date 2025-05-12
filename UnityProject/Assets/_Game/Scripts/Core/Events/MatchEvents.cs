@@ -13,7 +13,6 @@ namespace _Game.Core.Events
         public BlockSelectedEvent(int row, int col)
         { 
             (Row, Col) = (row, col);
-            // Debug.Log($"BlockSelectedEvent: Row:{Row} Col:{Col}");
         }
     }
 
@@ -26,20 +25,9 @@ namespace _Game.Core.Events
         {
             Blocks = blocks;
             TouchOrigin = new Vector2Int(row, col);
-            // Debug.Log($"MatchFoundEvent: Row:{row} Col:{col} Count:{blocks.Count}");
+            Debug.Log($"MatchFoundEvent: Row:{row} Col:{col} Count:{blocks.Count}");
         }
     }
-
-    public struct NoMatchFoundEvent : IGameEvent
-    {
-        public int Row { get; }
-        public int Col { get; }
-        public NoMatchFoundEvent(int row, int col) => (Row, Col) = (row, col);
-    }
     
-    public struct BlocksSettledEvent : IGameEvent
-    {
-        public IReadOnlyList<BlockModel> Blocks { get; }
-        public BlocksSettledEvent(IReadOnlyList<BlockModel> blocks) => Blocks = blocks;
-    }
+
 }
