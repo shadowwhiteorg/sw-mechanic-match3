@@ -14,83 +14,117 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Rows: 6
   Columns: 6
-  MoveLimit: 99
+  MoveLimit: 20
   ColorGoals:
   - Color: 4
-    Count: 0
-  TypeGoals:
-  - Type: 3
-    Count: 48
+    Count: 10
+  TypeGoals: []
   InitialBlocks:
   - Color: 0
-    Type: 3
+    Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
-  - Color: 0
-    Type: 3
-  - Color: 0
-    Type: 3
-  - Color: 0
-    Type: 4
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
-  - Color: 0
-    Type: 3
-  - Color: 0
-    Type: 3
+    Direction: 0
   - Color: 0
     Type: 0
-  - Color: 0
-    Type: 4
-  - Color: 0
-    Type: 0
-  - Color: 0
-    Type: 3
-  - Color: 0
-    Type: 3
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
-  - Color: 0
-    Type: 4
-  - Color: 0
-    Type: 3
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
-  - Color: 0
-    Type: 4
-  - Color: 0
-    Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 1
+    Direction: 0
+  - Color: 0
+    Type: 1
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
-  - Color: 0
-    Type: 4
-  - Color: 0
-    Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 1
+    Direction: 0
+  - Color: 0
+    Type: 1
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
   - Color: 0
     Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0
+  - Color: 0
+    Type: 0
+    Direction: 0

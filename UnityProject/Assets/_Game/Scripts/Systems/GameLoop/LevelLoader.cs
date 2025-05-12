@@ -49,13 +49,14 @@ namespace _Game.Systems.GameLoop
                 var def = level.InitialBlocks[i];
                 var color = def.Color;
                 var type  = def.Type;
+                var direction = def.Direction;
                 if(type == BlockType.None && color == BlockColor.None)
                 {
                     type = BlockType.None;
                     color = RandomColor();
                 }
 
-                var blk = _factory.CreateBlock(color, type, r, c);
+                var blk = _factory.CreateBlock(color, type,direction, r, c);
                 blk.View.transform.position = _helper.GetWorldPosition(r, c);
                 blk.Settle(true);
             }

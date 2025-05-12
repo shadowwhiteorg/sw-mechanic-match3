@@ -6,6 +6,7 @@ using _Game.Systems.MatchSystem;
 using _Game.Systems.UISystem.Move;
 using _Game.Utils;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Game.Systems.UISystem
 {
@@ -65,14 +66,12 @@ namespace _Game.Systems.UISystem
 
         private void InstallClearParticles(IEventBus eventBus, DIContainer container)
         {
-            // 1) Build a pool for each ClearParticlePrefab in your config
             var particlePools = new Dictionary<ParticleSystem, GameObjectPool>();
-            foreach (var entry in blockTypeConfig.Entries)  // replace Entries with your actual collection
+            foreach (var entry in blockTypeConfig.Entries)  
             {
                 var psPrefab = entry.ClearParticlePrefab;
                 if (psPrefab != null && !particlePools.ContainsKey(psPrefab))
                 {
-                    // create a pool of GameObjects (each with a ParticleSystem component)
                     var pool = new GameObjectPool(
                         psPrefab.gameObject,
                          10,
@@ -95,14 +94,13 @@ namespace _Game.Systems.UISystem
         private void InstallClearSFXs(DIContainer container, IEventBus eventBus)
         {
             var sfxPools = new Dictionary<AudioClip, GameObjectPool>();
-            foreach (var entry in blockTypeConfig.Entries)  // or your config’s list
+            foreach (var entry in blockTypeConfig.Entries) 
             {
                 var clip = entry.ClearSfxClip;
                 if (clip != null && !sfxPools.ContainsKey(clip))
                 {
-                    // audioSourcePrefab is a prefab with an AudioSource component, spatialBlend=0 for 2D
                     var pool = new GameObjectPool(
-                        audioSourcePrefab,   // assign in inspector
+                        audioSourcePrefab,   
                         10,
                         parent: this.transform
                     );

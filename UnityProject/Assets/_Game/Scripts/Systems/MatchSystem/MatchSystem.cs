@@ -31,7 +31,6 @@ namespace _Game.Systems.MatchSystem
             var group = DetectGroup(e.Row, e.Col, block.Color);
             if (group.Count >= _matchThreshold)
                 _events.Fire(new MatchFoundEvent(group, e.Row, e.Col));
-            Debug.Log($"MatchSystem: OnBlockSelected: Row:{e.Row} Col:{e.Col} Count:{group.Count}");
         }
 
         private List<BlockModel> DetectGroup(int row, int col, BlockColor color)

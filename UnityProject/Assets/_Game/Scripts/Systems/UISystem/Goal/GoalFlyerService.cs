@@ -8,34 +8,30 @@ using _Game.Utils;
 
 namespace _Game.Systems.UISystem
 {
-    /// <summary>
-    /// Spawns a flying sprite whenever a goal block is cleared,
-    /// tweening it into the matching GoalItemView slot.
-    /// Deterministically checks the model at clear time.
-    /// </summary>
+
     public class GoalFlyerService
     {
-        private readonly IEventBus        _events;
-        private readonly BlockTypeConfig  _config;
-        private readonly GridWorldHelper  _helper;
-        private readonly GoalUIView       _goalView;
-        private readonly GoalUIModel      _goalModel;
-        private readonly GameObjectPool   _pool;
+        private readonly IEventBus _events;
+        private readonly BlockTypeConfig _config;
+        private readonly GridWorldHelper _helper;
+        private readonly GoalUIView _goalView;
+        private readonly GoalUIModel  _goalModel;
+        private readonly GameObjectPool _pool;
 
         public GoalFlyerService(
-            IEventBus       events,
+            IEventBus events,
             BlockTypeConfig config,
             GridWorldHelper helper,
-            GoalUIView      goalView,
-            GoalUIModel     goalModel,
-            GameObjectPool  pool)
+            GoalUIView goalView,
+            GoalUIModel goalModel,
+            GameObjectPool pool)
         {
-            _events    = events;
-            _config    = config;
-            _helper    = helper;
-            _goalView  = goalView;
+            _events = events;
+            _config = config;
+            _helper = helper;
+            _goalView = goalView;
             _goalModel = goalModel;
-            _pool      = pool;
+            _pool  = pool;
 
             _events.Subscribe<ClearBlockEvent>(OnBlockCleared);
         }

@@ -1,5 +1,4 @@
-﻿// === BlockFactory.cs ===
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using _Game.Core.Events;
@@ -46,13 +45,16 @@ namespace _Game.Systems.GridSystem
             _events.Subscribe<LevelInitializedEvent>(e => Activate(true));
         }
 
-        public BlockModel CreateBlock(BlockColor color, BlockType type, int row, int col)
+        public BlockModel CreateBlock(BlockColor color, BlockType type,BlockDirection direction, int row, int col)
         {
             if(!_canSpawn) return null;
             var entry = _config.Get(color, type);
             var view = _viewPool.Get();
             view.transform.SetParent(_parent, false);
             view.transform.position = _helper.GetWorldPosition(row, col);
+            view.transform.rotation = Quaternion.identity;
+            if(direction == BlockDirection.Vertical)
+                view.transform.Rotate(0, 0, 90f);
             view.SetSprite(entry.Sprite);
 
             var behaviors = new List<IBlockBehavior>();
@@ -62,7 +64,7 @@ namespace _Game.Systems.GridSystem
                 behaviors.Add(asset);
             }
 
-            var model = new BlockModel(color, type, row, col, view, behaviors);
+            var model = new BlockModel(color, type, row, col, view, behaviors, direction);
             _grid.SetBlock(row, col, model);
             return model;
         }
@@ -72,8 +74,9 @@ namespace _Game.Systems.GridSystem
             if(!_canSpawn) return null;
             var color = Enum.GetValues(typeof(BlockColor)).Cast<BlockColor>().OrderBy(_ => _rng.Next()).First();
             var type = BlockType.None;
+            var direction = BlockDirection.None;
             if (color == BlockColor.None) color = BlockColor.Red;
-            return CreateBlock(color, type, row, col);
+            return CreateBlock(color, type, direction,row, col);
         }
 
         public void RecycleBlock(BlockModel model)

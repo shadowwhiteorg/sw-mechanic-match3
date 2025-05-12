@@ -58,6 +58,7 @@ namespace _Game.Systems.GameLoop
         {
             public BlockColor Color;
             public BlockType  Type;
+            public BlockDirection Direction;
         }
     }
 }

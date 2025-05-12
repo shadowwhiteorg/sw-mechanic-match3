@@ -1,0 +1,342 @@
+{
+    "Rows": 8,
+    "Columns": 8,
+    "MoveLimit": 40,
+    "ColorGoals": [
+        {
+            "Color": 5,
+            "Count": 15
+        },
+        {
+            "Color": 4,
+            "Count": 25
+        },
+        {
+            "Color": 1,
+            "Count": 20
+        }
+    ],
+    "TypeGoals": [],
+    "InitialBlocks": [
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        },
+        {
+            "Color": 0,
+            "Type": 0,
+            "Direction": 0
+        }
+    ]
+}

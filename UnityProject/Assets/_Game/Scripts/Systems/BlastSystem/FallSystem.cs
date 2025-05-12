@@ -12,11 +12,11 @@ namespace _Game.Systems.MatchSystem
 {
     public class FallSystem
     {
-        private readonly IGridHandler       _grid;
-        private readonly GridWorldHelper    _helper;
-        private readonly IBlockFactory      _factory;
-        private readonly IEventBus          _events;
-        private readonly float              _fallSpeed;
+        private readonly IGridHandler _grid;
+        private readonly GridWorldHelper _helper;
+        private readonly IBlockFactory _factory;
+        private readonly IEventBus  _events;
+        private readonly float _fallSpeed;
         private int _activeAnimations;
         private bool _canSpawnNewBlocks = true;
 
@@ -27,10 +27,10 @@ namespace _Game.Systems.MatchSystem
             IEventBus       events,
             float           fallSpeed = 15f
         ) {
-            _grid      = grid;
-            _helper    = helper;
-            _factory   = factory;
-            _events    = events;
+            _grid = grid;
+            _helper = helper;
+            _factory = factory;
+            _events = events;
             _fallSpeed = fallSpeed;
             _events.Subscribe<LevelCompleteEvent>(e => ActivateDeactivate(false));
             _events.Subscribe<GameOverEvent>(e => ActivateDeactivate(false));

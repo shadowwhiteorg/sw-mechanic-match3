@@ -37,9 +37,11 @@ namespace _Game.Systems.BehaviorSystem
         
         private void Launch(BlockModel block)
         {
-            bool horizontal = Random.value < 0.5f;
-            block.View.transform.rotation = Quaternion.Euler(0, 0, horizontal ? 0f : 90f);
-            Vector2 axis = horizontal ? Vector2.right : Vector2.up;
+            var dir = block.Direction;
+            float angle = (dir == BlockDirection.Horizontal) ? 0f : 90f;
+            block.View.transform.rotation = Quaternion.Euler(0, 0, angle);
+            
+            Vector2 axis = (dir == BlockDirection.Horizontal) ? Vector2.right : Vector2.up;
 
             SpawnTrail(block, axis, +1);
             SpawnTrail(block, axis, -1);
@@ -113,7 +115,7 @@ namespace _Game.Systems.BehaviorSystem
             Events.Fire(new ClearBlockEvent(block));
             foreach (var blk in blocksToRemove)
             {
-                if (blk.Type != BlockType.None)
+                if (blk.Type != BlockType.None && blk.Direction != block.Direction)
                     Events.Fire(new BlockSelectedEvent(blk.Row, blk.Column));
                 else
                     Events.Fire(new ClearBlockEvent(blk));

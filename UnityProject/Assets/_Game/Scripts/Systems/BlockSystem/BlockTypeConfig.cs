@@ -4,8 +4,6 @@ using System.Linq;
 using UnityEngine;
 using _Game.Enums;
 using _Game.Interfaces;
-using _Game.Systems.BehaviorSystem;
-using UnityEngine.EventSystems;
 
 namespace _Game.Systems.BlockSystem
 {
@@ -35,11 +33,11 @@ namespace _Game.Systems.BlockSystem
     [Serializable]
     public struct BlockConfigEntry
     {
-        public BlockColor         baseColor;
-        public BlockType  type;
-        public Sprite            Sprite;
-        public IBlockBehavior[]  Behaviors;
-        public ParticleSystem  ClearParticlePrefab;
+        public BlockColor baseColor;
+        public BlockType type;
+        public Sprite Sprite;
+        public IBlockBehavior[] Behaviors;
+        public ParticleSystem ClearParticlePrefab;
         public AudioClip ClearSfxClip;
     }
 

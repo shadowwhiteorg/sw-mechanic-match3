@@ -21,11 +21,7 @@ namespace _Game.Core.Events
             LevelData = levelData;
         }
     }
-
-    public struct TurnStartedEvent : IGameEvent
-    {
-    }
-
+    
     public struct TurnEndedEvent : IGameEvent
     {
     }
