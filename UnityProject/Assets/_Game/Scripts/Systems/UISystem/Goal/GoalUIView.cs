@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// ===== File: GoalUIView.cs =====
+using System.Collections.Generic;
 using _Game.Enums;
 using _Game.Systems.BlockSystem;
-using UnityEditor;
 using UnityEngine;
 
 namespace _Game.Systems.UISystem
@@ -16,31 +16,18 @@ namespace _Game.Systems.UISystem
         [SerializeField] private BlockTypeConfig _blockTypeConfig;
 
         private readonly Dictionary<BlockColor, GoalItemView> _colorViews = new();
-        private readonly Dictionary<BlockType, GoalItemView> _typeViews = new();
+        private readonly Dictionary<BlockType, GoalItemView>  _typeViews  = new();
 
         protected override void OnBind()
         {
-            // foreach (var colorState in ((GoalUIModel)Model).ColorStates)
-            // {
-            //     var view = Instantiate(_itemPrefab, _goalContainer);
-            //     _colorViews[colorState.Color] = view;
-            //     Debug.Log(colorState.Color + ": " + view);
-            // }
-            //
-            // foreach (var typeState in ((GoalUIModel)Model).TypeStates)
-            // {
-            //     var view = Instantiate(_itemPrefab, _goalContainer);
-            //     _typeViews[typeState.Type] = view;
-            //     Debug.Log(typeState.Type + ": " + view);
-            // }
-            //
-            // RefreshAll();
+            // nothing here anymore—instantiation is deferred to OnViewUpdated
         }
 
         protected override void OnViewUpdated()
         {
             var model = (GoalUIModel)Model;
-            // instantiate only when states appear
+
+            // ensure we have a view for each goal state
             if (_colorViews.Count < model.ColorStates.Count ||
                 _typeViews .Count < model.TypeStates .Count)
             {
@@ -53,8 +40,7 @@ namespace _Game.Systems.UISystem
                         _typeViews[t.Type] = Instantiate(_itemPrefab, _goalContainer);
             }
 
-            // now safe to refresh
-            RefreshAll();
+            // refresh visuals
             RefreshAll();
         }
 
@@ -71,6 +57,21 @@ namespace _Game.Systems.UISystem
                 var entry = _blockTypeConfig.Get(BlockColor.None, state.Type);
                 _typeViews[state.Type].Set(state.Remaining, entry.Sprite);
             }
+        }
+
+        // ——— NEW: expose world-space positions for your flyer service ——
+        public Vector3 GetGoalItemWorldPosition(BlockColor color)
+        {
+            if (_colorViews.TryGetValue(color, out var view))
+                return view.transform.position;
+            return Vector3.zero;
+        }
+
+        public Vector3 GetGoalItemWorldPosition(BlockType type)
+        {
+            if (_typeViews.TryGetValue(type, out var view))
+                return view.transform.position;
+            return Vector3.zero;
         }
     }
 }

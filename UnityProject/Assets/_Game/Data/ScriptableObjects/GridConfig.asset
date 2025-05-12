@@ -15,5 +15,5 @@ MonoBehaviour:
   Rows: 6
   Columns: 6
   BlockSize: 1
-  MatchThreshold: 3
+  MatchThreshold: 2
   ShuffleDuration: 0.5

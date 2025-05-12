@@ -20,6 +20,19 @@ namespace _Game.Systems.BehaviorSystem
             base.Initialize(grid, factory, helper, events);
             events.Subscribe<MatchFoundEvent>(OnAnyMatch);
         }
+        
+        public override void OnActivated(BlockModel block)
+        {
+            base.OnActivated(block);
+            Events.Fire(new ClearBlockEvent(block));
+        }
+
+        public override void OnCleared(BlockModel block)
+        {
+            base.OnCleared(block);
+            Events.Fire(new ClearBlockEvent(block));
+        }
+
         private void OnAnyMatch(MatchFoundEvent e)
         {
             foreach (var matched in e.Blocks)
