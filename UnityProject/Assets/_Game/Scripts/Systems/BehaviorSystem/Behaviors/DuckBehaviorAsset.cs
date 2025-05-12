@@ -1,5 +1,4 @@
-﻿// _Game/Systems/BehaviorSystem/DuckBehaviorAsset.cs
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 using _Game.Enums;
 using _Game.Core.Events;

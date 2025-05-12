@@ -8,6 +8,5 @@ namespace _Game.Interfaces
         BlockModel CreateBlock(BlockColor color, BlockType special, BlockDirection direction,int row, int col);
         BlockModel CreateRandomBlock(int row, int col);
         void RecycleBlock(BlockModel model);
-        // BlockModel CreateRandomBlock(int row, int col, bool allowSpecial = false);
     }
 }

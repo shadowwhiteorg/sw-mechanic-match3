@@ -8,14 +8,11 @@ using _Game.Utils;
 
 namespace _Game.Systems.MatchSystem
 {
-    /// <summary>
-    /// Spawns block-specific particles on clear, using per-prefab pools
-    /// and a CoroutineRunner for delayed return.
-    /// </summary>
+
     public class ClearParticleService
     {
-        private readonly BlockTypeConfig                          _config;
-        private readonly GridWorldHelper                          _helper;
+        private readonly BlockTypeConfig _config;
+        private readonly GridWorldHelper _helper;
         private readonly IDictionary<ParticleSystem, GameObjectPool> _pools;
 
         public ClearParticleService(
@@ -36,10 +33,9 @@ namespace _Game.Systems.MatchSystem
             var block = e.Block;
             var entry = _config.Get(block.Color, block.Type);
             var psPrefab = entry.ClearParticlePrefab;
-            if (psPrefab == null) return;                 // no particle for this block
+            if (psPrefab == null) return;                 
             if (!_pools.TryGetValue(psPrefab, out var pool)) return;
 
-            // Get a pooled GameObject, position & play
             var go = pool.Get();
             go.transform.position = _helper.GetWorldPosition(block.Row, block.Column);
 

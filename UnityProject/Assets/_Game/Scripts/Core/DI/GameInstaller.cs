@@ -34,10 +34,10 @@ namespace _Game.Core.DI
             gridConfig.Rows = level.Rows;
             gridConfig.Columns = level.Columns;
             mainCamera.orthographicSize = gridConfig.Columns + 1.5f;
-            // gridBackground.rectTransform.sizeDelta = new Vector2(
-            //     gridConfig.Columns * 100,
-            //     gridConfig.Rows * 100
-            // );
+            gridBackground.rectTransform.sizeDelta = new Vector2(
+                825,
+                gridConfig.Rows * 10 + 800
+            );
 
             // Grid + helper
             var grid = new GridHandler(gridConfig.Rows, gridConfig.Columns);

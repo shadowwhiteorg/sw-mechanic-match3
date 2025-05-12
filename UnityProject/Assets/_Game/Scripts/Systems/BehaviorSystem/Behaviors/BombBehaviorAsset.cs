@@ -27,7 +27,6 @@ namespace _Game.Systems.BehaviorSystem
             if (!_exploded.Add(block))
                 return;
 
-            // Schedule the actual blast for next frame
             CoroutineRunner.Instance.StartCoroutine(DelayedExplode(block));
         }
         
@@ -41,7 +40,6 @@ namespace _Game.Systems.BehaviorSystem
 
         private void Explode(BlockModel block)
         {
-            Debug.Log($"Bomb activated at {block.Row}, {block.Column}");
 
             int r0 = block.Row;
             int c0 = block.Column;
@@ -58,14 +56,10 @@ namespace _Game.Systems.BehaviorSystem
 
                     if (Grid.TryGet(rr, cc, out var neighbor))
                     {
-                        // if (neighbor.Type != BlockType.None)
-                        //     CoroutineRunner.Instance.StartCoroutine(WaitAndActivateBlock(rr, cc)); 
                         if (neighbor.Type != BlockType.None)
                             Events.Fire(new BlockSelectedEvent(rr,cc));
                         else
                             Events.Fire(new ClearBlockEvent(neighbor));
-                        // Optional VFX or debug:
-                        // neighbor.View.transform.localScale *= 0.5f;
                     }
                 }
             }

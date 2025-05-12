@@ -8,9 +8,7 @@ using _Game.Utils;
 
 namespace _Game.Systems.MatchSystem
 {
-    /// <summary>
-    /// Plays a block-specific SFX on clear, using pooled AudioSources.
-    /// </summary>
+
     public class ClearSfxService
     {
         private readonly IEventBus _events;

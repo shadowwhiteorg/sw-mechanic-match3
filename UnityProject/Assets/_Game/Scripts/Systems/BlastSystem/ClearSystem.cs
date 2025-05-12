@@ -12,9 +12,9 @@ namespace _Game.Systems.MatchSystem
 {
     public class ClearSystem
     {
-        private readonly IGridHandler            _grid;
-        private readonly IBlockFactory           _factory;
-        private readonly IEventBus               _events;
+        private readonly IGridHandler _grid;
+        private readonly IBlockFactory _factory;
+        private readonly IEventBus _events;
         private readonly SpecialBlockSpawnConfig _spawnConfig;
 
         private readonly List<(int row, int col)> _pending = new();
@@ -96,7 +96,6 @@ namespace _Game.Systems.MatchSystem
             if (!_batching && !_flushScheduled)
             {
                 _flushScheduled = true;
-                // CoroutineRunner.Instance.StartCoroutine(FlushCoroutine());
                 Flush();
             }
         }
@@ -115,18 +114,6 @@ namespace _Game.Systems.MatchSystem
         {
             CoroutineRunner.Instance.StartCoroutine(FlushCoroutine());
         }
-
-        // private void FlushPending()
-        // {
-        //     if (_pending.Count == 0) return;
-        //     CoroutineRunner.Instance.StartCoroutine(WaitActiveBlocksAndFlush());
-        // }
-        //
-        // private IEnumerator WaitActiveBlocksAndFlush()
-        // {
-        //     yield return new WaitUntil(() => _activeBlockCount == 0);
-        //     _events.Fire(new BlocksClearedEvent(_pending.ToList()));
-        //     _pending.Clear();
-        // }
+        
     }
 }

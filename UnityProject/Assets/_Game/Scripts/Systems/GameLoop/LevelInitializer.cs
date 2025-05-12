@@ -31,7 +31,6 @@ namespace _Game.Systems.GameLoop
                 int c = idx % cols;
                 var def = _level.InitialBlocks[idx];
 
-                // create the block exactly
                 var block = _factory.CreateBlock(def.Color, def.Type,def.Direction, r, c);
                 block.View.transform.position = _helper.GetWorldPosition(r, c);
                 block.Settle(true);

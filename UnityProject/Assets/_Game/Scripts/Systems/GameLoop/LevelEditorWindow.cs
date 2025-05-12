@@ -156,10 +156,7 @@ namespace _Game.Systems.GameLoop
                 EditorGUILayout.EndHorizontal();
             }
         }
-
-        /// <summary>
-        /// Renders an EnumPopup with a background color mapped to the enum value.
-        /// </summary>
+        
         private T ColorCodedEnumPopup<T>(T value, params GUILayoutOption[] options) where T : Enum
         {
             var prev = GUI.backgroundColor;
@@ -168,10 +165,7 @@ namespace _Game.Systems.GameLoop
             GUI.backgroundColor = prev;
             return value;
         }
-
-        /// <summary>
-        /// Maps each BlockColor and BlockType to a distinct Color.
-        /// </summary>
+        
         private Color GetColorFor<T>(T enumVal) where T : Enum
         {
             if (enumVal is BlockColor color)

@@ -64,9 +64,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 4784106198821777708}
-  _goalContainer: {fileID: 4784106199350868262}
-  _itemPrefab: {fileID: 1272454204639062688, guid: 409adf4c7bf24fd40a09bc1b5321d611, type: 3}
-  _blockTypeConfig: {fileID: 11400000, guid: 749be8a3500d3dd47bd8c49d462702f5, type: 2}
+  goalContainer: {fileID: 4784106199350868262}
+  itemPrefab: {fileID: 1272454204639062688, guid: 409adf4c7bf24fd40a09bc1b5321d611, type: 3}
+  blockTypeConfig: {fileID: 11400000, guid: 749be8a3500d3dd47bd8c49d462702f5, type: 2}
 --- !u!1 &4784106199105827648
 GameObject:
   m_ObjectHideFlags: 0

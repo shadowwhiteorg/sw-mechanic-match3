@@ -9,10 +9,7 @@ namespace _Game.Core.Data
     {
         private const string LevelsFolder = "Assets/_Game/Data/ScriptableObjects/LevelData/JSON";
         private const string JsonExt = ".json";
-
-        /// <summary>
-        /// Exports the given LevelData SO to Assets/Levels/{fileName}.json
-        /// </summary>
+        
         public static void Save(LevelData level, string fileName)
         {
             if (!Directory.Exists(LevelsFolder))
@@ -29,10 +26,7 @@ namespace _Game.Core.Data
             UnityEditor.AssetDatabase.Refresh();
 #endif
         }
-
-        /// <summary>
-        /// Creates a new LevelData instance populated from a TextAsset.
-        /// </summary>
+        
         public static LevelData Load(TextAsset jsonAsset)
         {
             if (jsonAsset == null)

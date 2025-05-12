@@ -7,6 +7,5 @@
         Rocket = 2,
         Duck = 3,
         Balloon = 4
-        /* …plus future ones*/
     }
 }
