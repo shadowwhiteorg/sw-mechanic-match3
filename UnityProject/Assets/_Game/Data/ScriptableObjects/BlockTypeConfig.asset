@@ -63,3 +63,8 @@ MonoBehaviour:
     Sprite: {fileID: 21300000, guid: bfae2027062184e76acb8ceaeffc2005, type: 3}
     ClearParticlePrefab: {fileID: 8887787612402079592, guid: 2ae234b5adc3ad84b8d4bc6ac42622f0, type: 3}
     ClearSfxClip: {fileID: 8300000, guid: 58e5b4c185319d742b5c84de1c8a346a, type: 3}
+  - baseColor: 0
+    type: 6
+    Sprite: {fileID: 21300000, guid: bfae2027062184e76acb8ceaeffc2005, type: 3}
+    ClearParticlePrefab: {fileID: 8887787612402079592, guid: 2ae234b5adc3ad84b8d4bc6ac42622f0, type: 3}
+    ClearSfxClip: {fileID: 8300000, guid: 58e5b4c185319d742b5c84de1c8a346a, type: 3}

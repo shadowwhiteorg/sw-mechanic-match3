@@ -92,13 +92,21 @@ namespace _Game.Systems.BehaviorSystem
                 int c = block.Column + (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out var t))
                 {
-                    // Damage boxes first
+                    // Damage boxes and stones first
                     if (t.Type == BlockType.Box)
                     {
                         var boxBehavior = t.GetBehavior<BoxBehaviorAsset>();
                         if (boxBehavior != null)
                         {
                             boxBehavior.TakeDamage(1, DamageSource.Rocket, t);
+                        }
+                    }
+                    else if (t.Type == BlockType.Stone)
+                    {
+                        var stoneBehavior = t.GetBehavior<StoneBehaviorAsset>();
+                        if (stoneBehavior != null)
+                        {
+                            stoneBehavior.TakeDamage(1, DamageSource.Rocket, t);
                         }
                     }
                     
@@ -113,7 +121,7 @@ namespace _Game.Systems.BehaviorSystem
                 c = block.Column - (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out t))
                 {
-                    // Damage boxes first
+                    // Damage boxes and stones first
                     if (t.Type == BlockType.Box)
                     {
                         Debug.Log($"Rocket hitting box at ({r}, {c})");
@@ -125,6 +133,19 @@ namespace _Game.Systems.BehaviorSystem
                         else
                         {
                             Debug.LogWarning("Box behavior not found!");
+                        }
+                    }
+                    else if (t.Type == BlockType.Stone)
+                    {
+                        Debug.Log($"Rocket hitting stone at ({r}, {c})");
+                        var stoneBehavior = t.GetBehavior<StoneBehaviorAsset>();
+                        if (stoneBehavior != null)
+                        {
+                            stoneBehavior.TakeDamage(1, DamageSource.Rocket, block);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Stone behavior not found!");
                         }
                     }
                     

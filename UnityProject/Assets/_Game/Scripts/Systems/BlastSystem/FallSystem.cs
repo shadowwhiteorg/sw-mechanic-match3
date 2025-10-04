@@ -75,8 +75,8 @@ namespace _Game.Systems.MatchSystem
 
                 var blk = _grid.GetBlock(above, col);
                 
-                // Skip boxes - they don't fall down
-                if (blk.Type == BlockType.Box)
+                // Skip boxes and stones - they don't fall down
+                if (blk.Type == BlockType.Box || blk.Type == BlockType.Stone)
                     continue;
                 
                 _grid.SetBlock(row,    col, blk);
@@ -131,7 +131,7 @@ namespace _Game.Systems.MatchSystem
                     for (int checkRow = row - 1; checkRow >= 0; checkRow--)
                     {
                         var blockAbove = _grid.GetBlock(checkRow, col);
-                        if (blockAbove != null && blockAbove.Type != BlockType.Box)
+                        if (blockAbove != null && blockAbove.Type != BlockType.Box && blockAbove.Type != BlockType.Stone)
                         {
                             hasRegularBlocksAbove = true;
                             Debug.Log($"[SpawnNewBlocks] Found regular block above at row {checkRow}, skipping row {row}");

@@ -152,6 +152,16 @@ namespace _Game.Systems.MatchSystem
                             boxBehavior.TakeDamage(1, DamageSource.Blast, block);
                         }
                     }
+                    else if (block.Type == BlockType.Stone)
+                    {
+                        Debug.Log($"Found stone at ({targetRow}, {targetCol}) - block hash: {block.GetHashCode()}");
+                        var stoneBehavior = block.GetBehavior<StoneBehaviorAsset>();
+                        if (stoneBehavior != null)
+                        {
+                            Debug.Log($"Calling TakeDamage with stone at ({block.Row}, {block.Column}) - will be rejected");
+                            stoneBehavior.TakeDamage(1, DamageSource.Blast, block);
+                        }
+                    }
                 }
             }
         }
