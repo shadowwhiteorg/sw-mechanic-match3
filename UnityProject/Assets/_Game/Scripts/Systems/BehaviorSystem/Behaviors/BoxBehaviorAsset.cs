@@ -1,8 +1,6 @@
 using _Game.Core.Events;
 using _Game.Enums;
-using _Game.Interfaces;
 using _Game.Systems.BlockSystem;
-using _Game.Systems.BlockSystem.Components;
 using UnityEngine;
 
 namespace _Game.Systems.BehaviorSystem
@@ -12,29 +10,31 @@ namespace _Game.Systems.BehaviorSystem
     {
         [SerializeField] private int maxHealth = 1;
         
-        private IHealthComponent _healthComponent;
+        private int _currentHealth;
+        private bool _isDestroyed = false;
+        private BlockModel _block;
         
         public override void OnPlaced(BlockModel block)
         {
             base.OnPlaced(block);
-            _healthComponent = new HealthComponent(block, Events, maxHealth);
+            _block = block;
+            _currentHealth = maxHealth;
+            _isDestroyed = false;
             
             // Subscribe to damage events
             Events.Subscribe<BlockDamagedEvent>(OnBlockDamaged);
-            Events.Subscribe<BlockDestroyedEvent>(OnBlockDestroyed);
         }
         
         public override void OnCleared(BlockModel block)
         {
             // Unsubscribe from events when cleared
             Events.Unsubscribe<BlockDamagedEvent>(OnBlockDamaged);
-            Events.Unsubscribe<BlockDestroyedEvent>(OnBlockDestroyed);
         }
         
         public override bool CanClear(BlockModel block)
         {
-            // Box can only be cleared when it has no health
-            return _healthComponent != null && !_healthComponent.IsAlive;
+            // Box can only be cleared when it's destroyed
+            return _isDestroyed;
         }
         
         public override void OnMatched(BlockModel block)
@@ -50,31 +50,18 @@ namespace _Game.Systems.BehaviorSystem
         private void OnBlockDamaged(BlockDamagedEvent e)
         {
             // Check if this block was damaged
-            if (e.Block == null) return;
-            
-            // Find the block in the grid and check if it's a box
-            if (Grid.TryGet(e.Block.Row, e.Block.Column, out var block) && 
-                block.Type == BlockType.Box)
+            if (e.Block != null && e.Block == _block)
             {
-                // If the box is destroyed, clear it
-                if (!_healthComponent.IsAlive)
+                if (_isDestroyed) return;
+                
+                _currentHealth -= e.Damage;
+                
+                if (_currentHealth <= 0)
                 {
-                    Events.Fire(new ClearBlockEvent(block));
+                    _isDestroyed = true;
+                    Events.Fire(new BlockDestroyedEvent(_block, e.Source));
+                    Events.Fire(new ClearBlockEvent(_block));
                 }
-            }
-        }
-        
-        private void OnBlockDestroyed(BlockDestroyedEvent e)
-        {
-            // Check if this block was destroyed
-            if (e.Block == null) return;
-            
-            // Find the block in the grid and check if it's a box
-            if (Grid.TryGet(e.Block.Row, e.Block.Column, out var block) && 
-                block.Type == BlockType.Box)
-            {
-                // Clear the destroyed box
-                Events.Fire(new ClearBlockEvent(block));
             }
         }
     }
