@@ -92,6 +92,37 @@ namespace _Game.Systems.BehaviorSystem
                 int c = block.Column + (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out var t))
                 {
+                    // Damage boxes, stones, and vases first
+                    if (t.Type == BlockType.Box)
+                    {
+                        var boxBehavior = t.GetBehavior<BoxBehaviorAsset>();
+                        if (boxBehavior != null)
+                        {
+                            boxBehavior.TakeDamage(1, DamageSource.Rocket, t);
+                        }
+                    }
+                    else if (t.Type == BlockType.Stone)
+                    {
+                        var stoneBehavior = t.GetBehavior<StoneBehaviorAsset>();
+                        if (stoneBehavior != null)
+                        {
+                            stoneBehavior.TakeDamage(1, DamageSource.Rocket, t);
+                        }
+                    }
+                    else if (t.Type == BlockType.Vase)
+                    {
+                        Debug.Log($"Rocket hitting vase at ({r}, {c})");
+                        var vaseBehavior = t.GetBehavior<VaseBehaviorAsset>();
+                        if (vaseBehavior != null)
+                        {
+                            vaseBehavior.TakeDamage(1, DamageSource.Rocket, t);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Vase behavior not found for rocket damage!");
+                        }
+                    }
+                    
                     if (t.CanClear())
                     {
                         t.View.gameObject.SetActive(false);
@@ -103,6 +134,47 @@ namespace _Game.Systems.BehaviorSystem
                 c = block.Column - (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out t))
                 {
+                    // Damage boxes, stones, and vases first
+                    if (t.Type == BlockType.Box)
+                    {
+                        Debug.Log($"Rocket hitting box at ({r}, {c})");
+                        var boxBehavior = t.GetBehavior<BoxBehaviorAsset>();
+                        if (boxBehavior != null)
+                        {
+                            boxBehavior.TakeDamage(1, DamageSource.Rocket,block);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Box behavior not found!");
+                        }
+                    }
+                    else if (t.Type == BlockType.Stone)
+                    {
+                        Debug.Log($"Rocket hitting stone at ({r}, {c})");
+                        var stoneBehavior = t.GetBehavior<StoneBehaviorAsset>();
+                        if (stoneBehavior != null)
+                        {
+                            stoneBehavior.TakeDamage(1, DamageSource.Rocket, block);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Stone behavior not found!");
+                        }
+                    }
+                    else if (t.Type == BlockType.Vase)
+                    {
+                        Debug.Log($"Rocket hitting vase at ({r}, {c})");
+                        var vaseBehavior = t.GetBehavior<VaseBehaviorAsset>();
+                        if (vaseBehavior != null)
+                        {
+                            vaseBehavior.TakeDamage(1, DamageSource.Rocket, block);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Vase behavior not found for rocket damage!");
+                        }
+                    }
+                    
                     if (t.CanClear())
                     {
                         t.View.gameObject.SetActive(false);

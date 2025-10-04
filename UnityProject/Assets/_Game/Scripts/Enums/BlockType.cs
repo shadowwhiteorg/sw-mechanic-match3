@@ -6,6 +6,9 @@
         Bomb = 1,
         Rocket = 2,
         Duck = 3,
-        Balloon = 4
+        Balloon = 4,
+        Box = 5,
+        Stone = 6,
+        Vase = 7
     }
 }

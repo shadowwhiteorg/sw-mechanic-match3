@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5a6b9a05a49461494b0b330bc1d8ae1, type: 3}
-  m_Name: LevelLibrary
+  m_Script: {fileID: 11500000, guid: cb3008629946a4a7da131fc6d287c52a, type: 3}
+  m_Name: StoneBehavior
   m_EditorClassIdentifier: 
-  levelJsonAssets:
-  - {fileID: 4900000, guid: 0be816d968d7b4114ba01cac1df81c3a, type: 3}
+  type: 6
+  maxHealth: 1
