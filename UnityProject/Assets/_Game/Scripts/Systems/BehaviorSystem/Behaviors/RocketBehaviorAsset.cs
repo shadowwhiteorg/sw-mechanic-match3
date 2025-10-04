@@ -92,6 +92,12 @@ namespace _Game.Systems.BehaviorSystem
                 int c = block.Column + (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out var t))
                 {
+                    // Damage boxes first
+                    if (t.Type == BlockType.Box)
+                    {
+                        Events.Fire(new BlockDamagedEvent(t, 1, DamageSource.Rocket));
+                    }
+                    
                     if (t.CanClear())
                     {
                         t.View.gameObject.SetActive(false);
@@ -103,6 +109,12 @@ namespace _Game.Systems.BehaviorSystem
                 c = block.Column - (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out t))
                 {
+                    // Damage boxes first
+                    if (t.Type == BlockType.Box)
+                    {
+                        Events.Fire(new BlockDamagedEvent(t, 1, DamageSource.Rocket));
+                    }
+                    
                     if (t.CanClear())
                     {
                         t.View.gameObject.SetActive(false);

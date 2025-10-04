@@ -56,6 +56,12 @@ namespace _Game.Systems.BehaviorSystem
 
                     if (Grid.TryGet(rr, cc, out var neighbor))
                     {
+                        // Damage boxes first
+                        if (neighbor.Type == BlockType.Box)
+                        {
+                            Events.Fire(new BlockDamagedEvent(neighbor, 1, DamageSource.Bomb));
+                        }
+                        
                         if (neighbor.Type != BlockType.None)
                             Events.Fire(new BlockSelectedEvent(rr,cc));
                         else
