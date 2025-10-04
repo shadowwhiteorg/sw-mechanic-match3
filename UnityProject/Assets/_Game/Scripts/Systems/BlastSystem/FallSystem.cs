@@ -114,18 +114,67 @@ namespace _Game.Systems.MatchSystem
 
         private void SpawnNewBlocks(int col)
         {
-            var emptyRows = Enumerable
-                .Range(0, _grid.Rows)
-                .Where(r => _grid.GetBlock(r, col) == null)
-                .OrderBy(r => r)
-                .ToList();
+            // Find empty rows that are safe to spawn in
+            var safeEmptyRows = new List<int>();
+            
+            Debug.Log($"[SpawnNewBlocks] Checking column {col}");
+            
+            // Check each empty row to see if it's safe to spawn there
+            for (int row = 0; row < _grid.Rows; row++)
+            {
+                if (_grid.GetBlock(row, col) == null)
+                {
+                    Debug.Log($"[SpawnNewBlocks] Found empty space at row {row}");
+                    
+                    // Check if there are any regular blocks above this empty position that can fall down
+                    bool hasRegularBlocksAbove = false;
+                    for (int checkRow = row - 1; checkRow >= 0; checkRow--)
+                    {
+                        var blockAbove = _grid.GetBlock(checkRow, col);
+                        if (blockAbove != null && blockAbove.Type != BlockType.Box)
+                        {
+                            hasRegularBlocksAbove = true;
+                            Debug.Log($"[SpawnNewBlocks] Found regular block above at row {checkRow}, skipping row {row}");
+                            break;
+                        }
+                    }
+                    
+                    // If there are regular blocks above, they should fall down to fill this space
+                    if (hasRegularBlocksAbove)
+                        continue;
+                    
+                    // Check if there are any boxes above this empty position that would block falling
+                    bool hasBoxesAbove = false;
+                    for (int checkRow = row - 1; checkRow >= 0; checkRow--)
+                    {
+                        var blockAbove = _grid.GetBlock(checkRow, col);
+                        if (blockAbove != null && blockAbove.Type == BlockType.Box)
+                        {
+                            hasBoxesAbove = true;
+                            Debug.Log($"[SpawnNewBlocks] Found box above at row {checkRow}, blocking row {row}");
+                            break;
+                        }
+                    }
+                    
+                    if (!hasBoxesAbove)
+                    {
+                        Debug.Log($"[SpawnNewBlocks] Row {row} is safe to spawn");
+                        safeEmptyRows.Add(row);
+                    }
+                    else
+                    {
+                        Debug.Log($"[SpawnNewBlocks] Row {row} has boxes above, blocking spawn");
+                    }
+                }
+            }
 
-            int toSpawn = emptyRows.Count;
+            Debug.Log($"[SpawnNewBlocks] Safe rows to spawn: [{string.Join(", ", safeEmptyRows)}]");
+            int toSpawn = safeEmptyRows.Count;
             if (toSpawn == 0) return;
 
             for (int i = 0; i < toSpawn; i++)
             {
-                int targetRow   = emptyRows[i];
+                int targetRow   = safeEmptyRows[i];
                 // compute a negative spawnRow so blocks start off-grid
                 int spawnRow    = i - toSpawn-1;   // yields [-toSpawn, …, -1]
                 Vector3 spawnPos = _helper.GetWorldPosition(spawnRow, col);
