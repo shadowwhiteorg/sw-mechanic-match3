@@ -92,7 +92,7 @@ namespace _Game.Systems.BehaviorSystem
                 int c = block.Column + (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out var t))
                 {
-                    // Damage boxes and stones first
+                    // Damage boxes, stones, and vases first
                     if (t.Type == BlockType.Box)
                     {
                         var boxBehavior = t.GetBehavior<BoxBehaviorAsset>();
@@ -109,6 +109,19 @@ namespace _Game.Systems.BehaviorSystem
                             stoneBehavior.TakeDamage(1, DamageSource.Rocket, t);
                         }
                     }
+                    else if (t.Type == BlockType.Vase)
+                    {
+                        Debug.Log($"Rocket hitting vase at ({r}, {c})");
+                        var vaseBehavior = t.GetBehavior<VaseBehaviorAsset>();
+                        if (vaseBehavior != null)
+                        {
+                            vaseBehavior.TakeDamage(1, DamageSource.Rocket, t);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Vase behavior not found for rocket damage!");
+                        }
+                    }
                     
                     if (t.CanClear())
                     {
@@ -121,7 +134,7 @@ namespace _Game.Systems.BehaviorSystem
                 c = block.Column - (int)(axis.x * i);
                 if (Grid.TryGet(r, c, out t))
                 {
-                    // Damage boxes and stones first
+                    // Damage boxes, stones, and vases first
                     if (t.Type == BlockType.Box)
                     {
                         Debug.Log($"Rocket hitting box at ({r}, {c})");
@@ -146,6 +159,19 @@ namespace _Game.Systems.BehaviorSystem
                         else
                         {
                             Debug.LogWarning("Stone behavior not found!");
+                        }
+                    }
+                    else if (t.Type == BlockType.Vase)
+                    {
+                        Debug.Log($"Rocket hitting vase at ({r}, {c})");
+                        var vaseBehavior = t.GetBehavior<VaseBehaviorAsset>();
+                        if (vaseBehavior != null)
+                        {
+                            vaseBehavior.TakeDamage(1, DamageSource.Rocket, block);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Vase behavior not found for rocket damage!");
                         }
                     }
                     

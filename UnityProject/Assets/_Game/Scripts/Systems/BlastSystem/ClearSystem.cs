@@ -23,6 +23,7 @@ namespace _Game.Systems.MatchSystem
         private int _activeBlockCount = 0;
         private bool _batching = false;
         private bool _flushScheduled = false;
+        private int _currentBlastGroupId = 0;
 
         public ClearSystem(
             IGridHandler grid,
@@ -45,6 +46,7 @@ namespace _Game.Systems.MatchSystem
         // MatchFound starts a coroutine that clears the match and spawns the special
         private void OnMatchFound(MatchFoundEvent e)
         {
+            _currentBlastGroupId++; // Increment blast group ID for each match
             CoroutineRunner.Instance.StartCoroutine(ClearMatchAndSpawnSpecial(e));
         }
 
@@ -105,8 +107,8 @@ namespace _Game.Systems.MatchSystem
             
             Debug.Log($"ClearSystem: Processing clear for block at ({blk.Row}, {blk.Column})");
             
-            // Only damage adjacent boxes for regular blasts, not for box destruction
-            if (blk.Type != BlockType.Box)
+            // Only damage adjacent boxes for regular blasts, not for box or vase destruction
+            if (blk.Type != BlockType.Box && blk.Type != BlockType.Vase)
             {
                 DamageAdjacentBoxes(blk.Row, blk.Column);
             }
@@ -160,6 +162,20 @@ namespace _Game.Systems.MatchSystem
                         {
                             Debug.Log($"Calling TakeDamage with stone at ({block.Row}, {block.Column}) - will be rejected");
                             stoneBehavior.TakeDamage(1, DamageSource.Blast, block);
+                        }
+                    }
+                    else if (block.Type == BlockType.Vase)
+                    {
+                        Debug.Log($"Found vase at ({targetRow}, {targetCol}) - block hash: {block.GetHashCode()}");
+                        var vaseBehavior = block.GetBehavior<VaseBehaviorAsset>();
+                        if (vaseBehavior != null)
+                        {
+                            Debug.Log($"Calling TakeDamage with vase at ({block.Row}, {block.Column}) - blast group {_currentBlastGroupId}");
+                            vaseBehavior.TakeDamage(1, DamageSource.Blast, block, _currentBlastGroupId);
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"Vase behavior not found for vase at ({block.Row}, {block.Column})");
                         }
                     }
                 }
