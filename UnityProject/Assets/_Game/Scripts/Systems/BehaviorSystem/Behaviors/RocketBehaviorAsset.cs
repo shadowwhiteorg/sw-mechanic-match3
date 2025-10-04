@@ -95,7 +95,11 @@ namespace _Game.Systems.BehaviorSystem
                     // Damage boxes first
                     if (t.Type == BlockType.Box)
                     {
-                        Events.Fire(new BlockDamagedEvent(t, 1, DamageSource.Rocket));
+                        var boxBehavior = t.GetBehavior<BoxBehaviorAsset>();
+                        if (boxBehavior != null)
+                        {
+                            boxBehavior.TakeDamage(1, DamageSource.Rocket, t);
+                        }
                     }
                     
                     if (t.CanClear())
@@ -112,7 +116,16 @@ namespace _Game.Systems.BehaviorSystem
                     // Damage boxes first
                     if (t.Type == BlockType.Box)
                     {
-                        Events.Fire(new BlockDamagedEvent(t, 1, DamageSource.Rocket));
+                        Debug.Log($"Rocket hitting box at ({r}, {c})");
+                        var boxBehavior = t.GetBehavior<BoxBehaviorAsset>();
+                        if (boxBehavior != null)
+                        {
+                            boxBehavior.TakeDamage(1, DamageSource.Rocket,block);
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Box behavior not found!");
+                        }
                     }
                     
                     if (t.CanClear())

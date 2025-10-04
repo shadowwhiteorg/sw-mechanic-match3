@@ -1,6 +1,10 @@
+// FILE: BoxBehaviorAsset.cs (fixed)
+using System.Collections;
+using System.Collections.Generic;
 using _Game.Core.Events;
 using _Game.Enums;
 using _Game.Systems.BlockSystem;
+using _Game.Utils;
 using UnityEngine;
 
 namespace _Game.Systems.BehaviorSystem
@@ -9,60 +13,108 @@ namespace _Game.Systems.BehaviorSystem
     public class BoxBehaviorAsset : BlockBehaviorAsset
     {
         [SerializeField] private int maxHealth = 1;
-        
-        private int _currentHealth;
-        private bool _isDestroyed = false;
-        private BlockModel _block;
-        
+
+        // Per-block runtime state lives here (asset is shared; state must not be).
+        private readonly Dictionary<BlockModel, BoxState> _state = new();
+
+        private struct BoxState
+        {
+            public int Health;
+            public bool Destroyed;
+        }
+
         public override void OnPlaced(BlockModel block)
         {
             base.OnPlaced(block);
-            _block = block;
-            _currentHealth = maxHealth;
-            _isDestroyed = false;
-            
-            // Subscribe to damage events
-            Events.Subscribe<BlockDamagedEvent>(OnBlockDamaged);
+            _state[block] = new BoxState
+            {
+                Health = Mathf.Max(1, maxHealth),
+                Destroyed = false
+            };
+
+            // Optional: debug
+            Debug.Log($"[Box] Placed at ({block.Row},{block.Column}) with {maxHealth} HP");
         }
-        
-        public override void OnCleared(BlockModel block)
+
+        public override void OnActivated(BlockModel block)
         {
-            // Unsubscribe from events when cleared
-            Events.Unsubscribe<BlockDamagedEvent>(OnBlockDamaged);
+            base.OnActivated(block);
         }
-        
-        public override bool CanClear(BlockModel block)
-        {
-            // Box can only be cleared when it's destroyed
-            return _isDestroyed;
-        }
-        
+
         public override void OnMatched(BlockModel block)
         {
-            // Box doesn't clear on match, only when destroyed by damage
+            // Boxes are not cleared by color-matches; only by damage.
         }
-        
+
         public override void OnFell(BlockModel block)
         {
-            // Box doesn't fall down
+            // Boxes typically don't fall; no-op. Keep if your game allows.
         }
-        
-        private void OnBlockDamaged(BlockDamagedEvent e)
+
+        public override void OnCleared(BlockModel block)
         {
-            // Check if this block was damaged
-            if (e.Block != null && e.Block == _block)
+            // Clean up state when the block is finally removed.
+            if (_state.Remove(block))
             {
-                if (_isDestroyed) return;
-                
-                _currentHealth -= e.Damage;
-                
-                if (_currentHealth <= 0)
-                {
-                    _isDestroyed = true;
-                    Events.Fire(new BlockDestroyedEvent(_block, e.Source));
-                    Events.Fire(new ClearBlockEvent(_block));
-                }
+                // Optional: debug
+                Debug.Log($"[Box] Cleared at ({block.Row},{block.Column}) – state removed");
             }
+        }
+
+        // IMPORTANT: CanClear must be per-block, not from asset-wide flags.
+        public override bool CanClear(BlockModel block)
+        {
+            if (!_state.TryGetValue(block, out var s))
+                return false; // if unknown, treat as not clearable
+            return s.Destroyed;
+        }
+
+        /// <summary>
+        /// Apply damage to this *specific* block.
+        /// Always pass the block you're damaging (blast neighbor, bomb neighbor, rocket sweep neighbor).
+        /// </summary>
+        public void TakeDamage(int damage, DamageSource source, BlockModel block)
+        {
+            if (block == null) return;
+
+            if (!_state.TryGetValue(block, out var s))
+            {
+                // Late-damage edge case: ensure we have state.
+                s = new BoxState { Health = Mathf.Max(1, maxHealth), Destroyed = false };
+            }
+
+            if (s.Destroyed)
+            {
+                // Already dead; ignore further damage.
+                return;
+            }
+
+            s.Health -= Mathf.Max(1, damage);
+
+            Debug.Log($"[Box] Damage {damage} from {source} at ({block.Row},{block.Column}) => HP {s.Health}");
+
+            if (s.Health <= 0)
+            {
+                s.Destroyed = true;
+                _state[block] = s;
+
+                // Notify destruction first (for VFX/SFX), then schedule clear next frame
+                Events.Fire(new BlockDestroyedEvent(block, source));
+
+                // Delay ClearBlockEvent by one frame so ClearSystem.CanClear(block) sees Destroyed=true
+                CoroutineRunner.Instance.StartCoroutine(DelayedClear(block));
+            }
+            else
+            {
+                _state[block] = s;
+            }
+        }
+
+        private IEnumerator DelayedClear(BlockModel block)
+        {
+            yield return null; // one frame
+            // ClearSystem will call CanClear(block) and succeed now that Destroyed==true
+            Events.Fire(new ClearBlockEvent(block));
         }
     }
 }

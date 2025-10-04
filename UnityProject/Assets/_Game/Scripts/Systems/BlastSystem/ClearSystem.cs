@@ -4,7 +4,9 @@ using System.Linq;
 using _Game.Core.Events;
 using _Game.Enums;
 using _Game.Interfaces;
+using _Game.Systems.BehaviorSystem;
 using _Game.systems.BlockSystem;
+using _Game.Systems.BlockSystem;
 using _Game.Utils;
 using UnityEngine;
 
@@ -81,22 +83,76 @@ namespace _Game.Systems.MatchSystem
         private void OnClearBlock(ClearBlockEvent e)
         {
             var blk = e.Block;
-            if(!blk.CanClear()) return;
-            if (!blk.IsSettled) return;
-            if (!_grid.TryGet(blk.Row, blk.Column, out var live) || live != blk)
+            Debug.Log($"ClearSystem: OnClearBlock called for block at ({blk.Row}, {blk.Column}) of type {blk.Type}");
+            
+            if(!blk.CanClear())
+            {
+                Debug.Log($"ClearSystem: Block at ({blk.Row}, {blk.Column}) cannot be cleared (CanClear returned false)");
                 return;
-
+            }
+            
+            if (!blk.IsSettled)
+            {
+                Debug.Log($"ClearSystem: Block at ({blk.Row}, {blk.Column}) is not settled");
+                return;
+            }
+            
+            if (!_grid.TryGet(blk.Row, blk.Column, out var live) || live != blk)
+            {
+                Debug.Log($"ClearSystem: Block at ({blk.Row}, {blk.Column}) not found in grid or not the same instance");
+                return;
+            }
+            
+            Debug.Log($"ClearSystem: Processing clear for block at ({blk.Row}, {blk.Column})");
+            
+            // Only damage adjacent boxes for regular blasts, not for box destruction
+            if (blk.Type != BlockType.Box)
+            {
+                DamageAdjacentBoxes(blk.Row, blk.Column);
+            }
+            
             // Remove from grid and buffer
             _grid.SetBlock(blk.Row, blk.Column, null);
             _factory.RecycleBlock(blk);
             _pending.Add((blk.Row, blk.Column));
             blk.Cleared();
-
+            
+            Debug.Log($"ClearSystem: Block at ({blk.Row}, {blk.Column}) cleared successfully");
+            
             // If not inside match-batch, flush at end of frame (once)
             if (!_batching && !_flushScheduled)
             {
                 _flushScheduled = true;
                 Flush();
+            }
+        }
+        
+        private void DamageAdjacentBoxes(int centerRow, int centerCol)
+        {
+            // Check only 4 cardinal directions (North, South, East, West)
+            int[,] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } }; // N, S, W, E
+            
+            for (int i = 0; i < 4; i++)
+            {
+                int dr = directions[i, 0];
+                int dc = directions[i, 1];
+                
+                int targetRow = centerRow + dr;
+                int targetCol = centerCol + dc;
+                
+                if (_grid.TryGet(targetRow, targetCol, out var block) && block != null)
+                {
+                    if (block.Type == BlockType.Box)
+                    {
+                        Debug.Log($"Found box at ({targetRow}, {targetCol}) - block hash: {block.GetHashCode()}");
+                        var boxBehavior = block.GetBehavior<BoxBehaviorAsset>();
+                        if (boxBehavior != null)
+                        {
+                            Debug.Log($"Calling TakeDamage with block at ({block.Row}, {block.Column})");
+                            boxBehavior.TakeDamage(1, DamageSource.Blast, block);
+                        }
+                    }
+                }
             }
         }
 

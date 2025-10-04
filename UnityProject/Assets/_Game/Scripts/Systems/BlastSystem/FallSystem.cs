@@ -74,6 +74,11 @@ namespace _Game.Systems.MatchSystem
                     continue;
 
                 var blk = _grid.GetBlock(above, col);
+                
+                // Skip boxes - they don't fall down
+                if (blk.Type == BlockType.Box)
+                    continue;
+                
                 _grid.SetBlock(row,    col, blk);
                 _grid.SetBlock(above,  col, null);
                 blk.SetGridPosition(row, col);

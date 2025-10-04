@@ -59,7 +59,11 @@ namespace _Game.Systems.BehaviorSystem
                         // Damage boxes first
                         if (neighbor.Type == BlockType.Box)
                         {
-                            Events.Fire(new BlockDamagedEvent(neighbor, 1, DamageSource.Bomb));
+                            var boxBehavior = neighbor.GetBehavior<BoxBehaviorAsset>();
+                            if (boxBehavior != null)
+                            {
+                                boxBehavior.TakeDamage(1, DamageSource.Bomb, neighbor);
+                            }
                         }
                         
                         if (neighbor.Type != BlockType.None)

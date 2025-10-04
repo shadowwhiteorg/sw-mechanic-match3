@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using _Game.Enums;
 using _Game.Interfaces;
+using UnityEngine;
 
 namespace _Game.Systems.BlockSystem
 {
@@ -83,6 +84,25 @@ namespace _Game.Systems.BlockSystem
         {
             _isSettled = isSettled;
             
+        }
+        
+        public T GetBehavior<T>() where T : class, IBlockBehavior
+        {
+            foreach (var behavior in _behaviors)
+            {
+                if (behavior is T targetBehavior)
+                    return targetBehavior;
+            }
+            return null;
+        }
+        
+        public void DebugBehaviors()
+        {
+            Debug.Log($"Block at ({Row}, {Column}) has {_behaviors.Count} behaviors:");
+            foreach (var behavior in _behaviors)
+            {
+                Debug.Log($"  - {behavior.GetType().Name}");
+            }
         }
     }
 }
