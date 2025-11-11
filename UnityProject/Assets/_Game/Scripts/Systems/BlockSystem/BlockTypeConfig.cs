@@ -39,6 +39,8 @@ namespace _Game.Systems.BlockSystem
         public IBlockBehavior[] Behaviors;
         public ParticleSystem ClearParticlePrefab;
         public AudioClip ClearSfxClip;
+        [Header("Preview Sprites")]
+        public Sprite PreviewSprite;
     }
 
 }

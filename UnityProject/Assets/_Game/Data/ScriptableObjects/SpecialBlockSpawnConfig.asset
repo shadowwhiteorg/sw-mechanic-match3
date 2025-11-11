@@ -15,5 +15,3 @@ MonoBehaviour:
   rules:
   - matchSize: 5
     type: 2
-  - matchSize: 3
-    type: 1

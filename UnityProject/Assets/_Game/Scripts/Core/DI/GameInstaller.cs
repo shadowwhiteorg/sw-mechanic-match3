@@ -63,8 +63,14 @@ namespace _Game.Core.DI
             // Core systems
             container.BindSingleton(new ClearSystem(grid, factory, eventBus, spawnConfig));
             container.BindSingleton(new FallSystem(grid, helper, factory, eventBus));
-            container.BindSingleton<IUpdatableSystem>(
-                new MatchSystem(grid, eventBus, gridConfig.MatchThreshold));
+            var matchSystem = new MatchSystem(grid, eventBus, gridConfig.MatchThreshold);
+            container.BindSingleton<IUpdatableSystem>(matchSystem);
+            container.Resolve<ISystemRunner>().Register(matchSystem);
+            
+            // Special block preview system
+            var specialBlockPreview = new SpecialBlockPreviewSystem(eventBus, spawnConfig, blockTypeConfig, grid, helper);
+            container.BindSingleton<IUpdatableSystem>(specialBlockPreview);
+            container.Resolve<ISystemRunner>().Register(specialBlockPreview);
 
             // Gameplay systems
             
