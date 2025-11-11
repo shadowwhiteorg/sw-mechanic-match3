@@ -56,6 +56,16 @@ namespace _Game.Systems.BehaviorSystem
 
                     if (Grid.TryGet(rr, cc, out var neighbor))
                     {
+                        // Damage boxes first
+                        if (neighbor.Type == BlockType.Box)
+                        {
+                            var boxBehavior = neighbor.GetBehavior<BoxBehaviorAsset>();
+                            if (boxBehavior != null)
+                            {
+                                boxBehavior.TakeDamage(1, DamageSource.Bomb, neighbor);
+                            }
+                        }
+                        
                         if (neighbor.Type != BlockType.None)
                             Events.Fire(new BlockSelectedEvent(rr,cc));
                         else
